@@ -1,0 +1,489 @@
+# depslib dependency file v1.0
+1423242792 source:c:\documents and settings\windu\dokumentumok\c project\fx_racer\elem.cpp
+	"Elem.h"
+
+1423166387 c:\documents and settings\windu\dokumentumok\c project\fx_racer\elem.h
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	<cstring>
+	<cstdio>
+	<cstdlib>
+	<cmath>
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_audio.h"
+	"SDL_cdrom.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_loadso.h"
+	"SDL_mutex.h"
+	"SDL_rwops.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_video.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<iconv.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1326114588 c:\sdl-1.2.15\include\sdl\sdl_config.h
+	"SDL_platform.h"
+	"SDL_config_dreamcast.h"
+	"SDL_config_macos.h"
+	"SDL_config_macosx.h"
+	"SDL_config_symbian.h"
+	"SDL_config_win32.h"
+	"SDL_config_os2.h"
+	"SDL_config_minimal.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_platform.h
+
+1326114594 c:\sdl-1.2.15\include\sdl\sdl_config_win32.h
+	"SDL_platform.h"
+
+1326114600 c:\sdl-1.2.15\include\sdl\begin_code.h
+
+1325742240 c:\sdl-1.2.15\include\sdl\close_code.h
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_cdrom.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_cpuinfo.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_active.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_quit.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_active.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keysym.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_keysym.h
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_video.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1421589082 source:c:\documents and settings\windu\dokumentumok\c project\fx_racer\elem_tarolo.cpp
+	"Elem_tarolo.h"
+
+1421589099 c:\documents and settings\windu\dokumentumok\c project\fx_racer\elem_tarolo.h
+	"Elem.h"
+
+1418831231 source:c:\documents and settings\windu\dokumentumok\c project\fx_racer\hang.cpp
+	"Hang.h"
+
+1415030482 c:\documents and settings\windu\dokumentumok\c project\fx_racer\hang.h
+	"SDL/SDL_mixer.h"
+
+1325789340 c:\sdl-1.2.15\include\sdl\sdl_mixer.h
+	"SDL_types.h"
+	"SDL_rwops.h"
+	"SDL_audio.h"
+	"SDL_endian.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 c:\sdl-1.2.15\include\sdl\sdl_types.h
+	"SDL_stdinc.h"
+
+1423254426 source:c:\documents and settings\windu\dokumentumok\c project\fx_racer\jatek.cpp
+	"Jatek.h"
+
+1423307681 c:\documents and settings\windu\dokumentumok\c project\fx_racer\jatek.h
+	"Elem.h"
+	"Elem_tarolo.h"
+	"Hang.h"
+
+1422111861 source:c:\documents and settings\windu\dokumentumok\c project\fx_racer\menu.cpp
+	"Menu.h"
+
+1420909050 c:\documents and settings\windu\dokumentumok\c project\fx_racer\menu.h
+	"Elem_tarolo.h"
+	"Jatek.h"
+
+1422809635 source:c:\documents and settings\windu\dokumentumok\c project\fx_racer\main.cpp
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	"Alkalmazas.h"
+	"Elem.h"
+	"Elem_tarolo.h"
+	<ctime>
+	<cstdio>
+
+1422907053 c:\documents and settings\windu\dokumentumok\c project\fx_racer\alkalmazas.h
+	<cstdio>
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	"Jatek.h"
+	"Menu.h"
+
+1423241680 source:c:\documents and settings\windu\dokumentumok\c project\fx_racer\alkalmazas.cpp
+	"Alkalmazas.h"
+
+1453490871 source:c:\documents and settings\windu\dokumentumok\c projects\engine\elem.cpp
+	"Elem.h"
+
+1453564525 c:\documents and settings\windu\dokumentumok\c projects\engine\elem.h
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	<cstring>
+	<cstdio>
+	<cstdlib>
+	<cmath>
+
+1421592684 source:c:\documents and settings\windu\dokumentumok\c projects\engine\elem_tarolo.cpp
+	"Elem_tarolo.h"
+
+1421592700 c:\documents and settings\windu\dokumentumok\c projects\engine\elem_tarolo.h
+	"Elem.h"
+
+1418831232 source:c:\documents and settings\windu\dokumentumok\c projects\engine\hang.cpp
+	"Hang.h"
+
+1415030484 c:\documents and settings\windu\dokumentumok\c projects\engine\hang.h
+	"SDL/SDL_mixer.h"
+
+1453564599 source:c:\documents and settings\windu\dokumentumok\c projects\engine\jatek.cpp
+	"Jatek.h"
+
+1453564586 c:\documents and settings\windu\dokumentumok\c projects\engine\jatek.h
+	"Elem.h"
+	"Multi_elem.h"
+	"Hang.h"
+
+1453564757 source:c:\documents and settings\windu\dokumentumok\c projects\engine\menu.cpp
+	"Menu.h"
+
+1453406480 c:\documents and settings\windu\dokumentumok\c projects\engine\menu.h
+	"Multi_elem.h"
+	"Elem.h"
+	"Jatek.h"
+
+1453406480 source:c:\documents and settings\windu\dokumentumok\c projects\engine\main.cpp
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	"Alkalmazas.h"
+	"Elem.h"
+	"Multi_elem.h"
+	<ctime>
+	<cstdio>
+	<cstdlib>
+
+1453024925 c:\documents and settings\windu\dokumentumok\c projects\engine\alkalmazas.h
+	<cstdio>
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	"Jatek.h"
+	"Menu.h"
+
+1453565088 source:c:\documents and settings\windu\dokumentumok\c projects\engine\alkalmazas.cpp
+	"Alkalmazas.h"
+
+1453564566 c:\documents and settings\windu\dokumentumok\c projects\engine\multi_elem.h
+	"Elem.h"
+
+1453477882 source:c:\documents and settings\windu\dokumentumok\c projects\engine\multi_elem.cpp
+	"Multi_elem.h"
+
+1456738766 source:c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\elem.cpp
+	"Elem.h"
+
+1469887904 c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\elem.h
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	<cstring>
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	"list.h"
+	"char_list.h"
+
+1470426308 source:c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\hang.cpp
+	"Hang.h"
+
+1470426308 c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\hang.h
+	"SDL/SDL_mixer.h"
+
+1501274417 source:c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\jatek.cpp
+	"Jatek.h"
+
+1470426435 c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\jatek.h
+	"Object.h"
+	"Hang.h"
+	<dirent.h>
+	<cstring>
+	<cstdio>
+
+1454492552 c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\multi_elem.h
+	"Elem.h"
+
+1499461313 source:c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\menu.cpp
+	"Menu.h"
+
+1470426442 c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\menu.h
+	"Object.h"
+	"Jatek.h"
+	"Hang.h"
+
+1454492553 source:c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\multi_elem.cpp
+	"Multi_elem.h"
+
+1470426491 source:c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\main.cpp
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	"Alkalmazas.h"
+	"Object.h"
+	<ctime>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+
+1499354912 c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\alkalmazas.h
+	<cstdio>
+	<SDL/SDL.h>
+	<GL/gl.h>
+	<gl/glu.h>
+	"Jatek.h"
+	"Menu.h"
+
+1499354912 source:c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\alkalmazas.cpp
+	"Alkalmazas.h"
+
+1452016512 source:c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\resource.rc
+
+1469727676 c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\list.h
+
+1470472929 c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\char_list.h
+	<cstring>
+
+1470469784 c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\object.h
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	<cstring>
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	<dirent.h>
+	<sys/stat.h>
+	"list.h"
+	"char_list.h"
+
+1499336441 source:c:\documents and settings\windu\dokumentumok\c projects\ballbreaker3d2016\object.cpp
+	"Object.h"
+
+1537693501 source:c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\alkalmazas.cpp
+	"Alkalmazas.h"
+
+1499354912 c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\alkalmazas.h
+	<cstdio>
+	<SDL/SDL.h>
+	<GL/gl.h>
+	<gl/glu.h>
+	"Jatek.h"
+	"Menu.h"
+
+1537693816 c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\jatek.h
+	"Object.h"
+	"Hang.h"
+	<dirent.h>
+	<cstring>
+	<cstdio>
+
+1470469784 c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\object.h
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	<cstring>
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	<dirent.h>
+	<sys/stat.h>
+	"list.h"
+	"char_list.h"
+
+1469727676 c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\list.h
+
+1470472929 c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\char_list.h
+	<cstring>
+
+1470426308 c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\hang.h
+	"SDL/SDL_mixer.h"
+
+1517672639 c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\menu.h
+	"Object.h"
+	"Jatek.h"
+	"Hang.h"
+
+1470426308 source:c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\hang.cpp
+	"Hang.h"
+
+1537693467 source:c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\jatek.cpp
+	"Jatek.h"
+
+1470426491 source:c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\main.cpp
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	"Alkalmazas.h"
+	"Object.h"
+	<ctime>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+
+1499336441 source:c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\object.cpp
+	"Object.h"
+
+1452016512 source:c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\resource.rc
+
+1517673191 source:c:\users\alonso\documents\codeblocks projects\ballbreaker3d2016\menu.cpp
+	"Menu.h"
+
