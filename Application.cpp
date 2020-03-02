@@ -1,6 +1,6 @@
-#include "Alkalmazas.h"
+#include "Application.h"
 
-Alkalmazas::Alkalmazas(char *frame_title, char * levelpath)
+Application::Application(char *frame_title, char * levelpath)
 {
     jatekresz = 0;
 
@@ -27,7 +27,7 @@ Alkalmazas::Alkalmazas(char *frame_title, char * levelpath)
     fscanf(file, "fullscreen=%d\n", &temp);
     fullscreen=temp;
 	fscanf(file, "sound=%d\n", &temp);
-	hang= temp;
+	Sound= temp;
 	fscanf(file, "music=%d\n", &temp);
 	zene= temp;
 	fscanf(file, "language=%d\n", &language);
@@ -49,9 +49,9 @@ Alkalmazas::Alkalmazas(char *frame_title, char * levelpath)
 	SDL_WM_SetCaption(frame_title, 0);
 
     menu = new Menu(top, &width, &height, &valtozas, &language);
-    menu->sethangok(&hang, &zene, &fullscreen);
-    jatek = new Jatek(levelpath, top, scorename,  &width, &height, &language);
-    jatek->sethangok(&hang, &zene);
+    menu->sethangok(&Sound, &zene, &fullscreen);
+    game = new Game(levelpath, top, scorename,  &width, &height, &language);
+    game->sethangok(&Sound, &zene);
 
     direction[0] = -0.1;
     direction[1] = 0.1;
@@ -95,7 +95,7 @@ Alkalmazas::Alkalmazas(char *frame_title, char * levelpath)
 
 }
 
-Alkalmazas::~Alkalmazas()
+Application::~Application()
 {
     if (top_valtozas)
     {
@@ -114,7 +114,7 @@ Alkalmazas::~Alkalmazas()
         fprintf(file, "screen_width=%d\n", width);
         fprintf(file, "screen_height=%d\n", height);
         fprintf(file, "fullscreen=%d\n", fullscreen);
-        fprintf(file, "sound=%d\n", hang);
+        fprintf(file, "sound=%d\n", Sound);
         fprintf(file, "music=%d\n", zene);
         fprintf(file, "language=%d\n", language);
 
@@ -126,19 +126,19 @@ Alkalmazas::~Alkalmazas()
     glDisable(GL_NORMALIZE);
     glDisableClientState(GL_NORMAL_ARRAY);
 
-    delete jatek;
+    delete game;
     delete menu;
 }
 
 //a lataotavolsag megadasa
-void Alkalmazas::eLoadProjectionMatrix(int width, int height, float near, float far)
+void Application::eLoadProjectionMatrix(int width, int height, float near, float far)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(45, (float) width / (float) height, _near, _far);
 }
 
-void Alkalmazas::handleSDL2Events(int & quit)
+void Application::handleSDL2Events(int & quit)
 {
     while (SDL_PollEvent(&event))
     {
@@ -148,13 +148,13 @@ void Alkalmazas::handleSDL2Events(int & quit)
                 quit = true;
             if (jatekresz > 0)
             {
-                jatekresz = 0;
-
                 if (jatekresz == 1)
                 {
-                    jatek->zene_stop();
-                    jatek->reset();
+                    game->zene_stop();
+                    game->reset();
                 }
+
+                jatekresz = 0;
 
                 menu->setmaxcursor(6);
                 //menu->setcursor(0);
@@ -165,15 +165,15 @@ void Alkalmazas::handleSDL2Events(int & quit)
         {
 
             if (event.key.keysym.sym == SDLK_LEFT)
-                jatek->balgomb();
+                game->leftKeyDown();
 
             if (event.key.keysym.sym == SDLK_RIGHT)
-                jatek->jobbgomb();
+                game->rightKeyDown();
 
             if (event.key.keysym.sym == SDLK_SPACE)
-                jatek->launch();
+                game->launch();
 
-            if ((jatek->getLife() == 0 || jatek->getCompleted()) && top[9].score < jatek->getScore())
+            if ((game->getLife() == 0 || game->getCompleted()) && top[9].score < game->getScore())
             {
                 static int ci=0;
                 if (keystates[SDLK_BACKSPACE] || keystates[SDLK_DELETE]) {
@@ -317,10 +317,10 @@ void Alkalmazas::handleSDL2Events(int & quit)
         if (event.type == SDL_KEYUP)
         {
             if (event.key.keysym.sym == SDLK_LEFT)
-                jatek->balgomb_fel();
+                game->leftKeyUp();
 
             if (event.key.keysym.sym == SDLK_RIGHT)
-                jatek->jobbgomb_fel();
+                game->rightKeyUp();
         }
 
 
@@ -330,17 +330,17 @@ void Alkalmazas::handleSDL2Events(int & quit)
             {
                 if (event.button.x > 470 && event.button.x < 530 && event.button.y > 310 && event.button.y < 340)
                 {
-                    jatek->mouse_ok(true, jatekresz);
-                    if (top[9].score < jatek->getScore())
+                    Game->mouse_ok(true, jatekresz);
+                    if (top[9].score < Game->getScore())
                     {
                         index=0;
-                        while (top[index].score >= jatek->getScore())
+                        while (top[index].score >= Game->getScore())
                             index++;
 
                         for (int i=9; i>index; i--)
                             top[i] = top[i-1];
 
-                        top[index].score = jatek->getScore();
+                        top[index].score = Game->getScore();
                         strcpy(top[index].name, scorename);
 
                         top_valtozas = true;
@@ -350,22 +350,22 @@ void Alkalmazas::handleSDL2Events(int & quit)
             else
             {
                 if (event.button.x > 470 && event.button.x < 530 && event.button.y > 310 && event.button.y < 340)
-                    jatek->mouse_ok(false, jatekresz);
+                    Game->mouse_ok(false, jatekresz);
             }*/
             if (keystates[SDLK_RETURN])
             {
-                //jatek->enter(jatekresz);
+                //Game->enter(jatekresz);
                 jatekresz = 0;
-                if (top[9].score < jatek->getScore())
+                if (top[9].score < game->getScore())
                 {
                     index=0;
-                    while (top[index].score >= jatek->getScore())
+                    while (top[index].score >= game->getScore())
                         index++;
 
                     for (int i=9; i>index; i--)
                         top[i] = top[i-1];
 
-                    top[index].score = jatek->getScore();
+                    top[index].score = game->getScore();
                     strcpy(top[index].name, scorename);
 
                     top_valtozas = true;
@@ -376,9 +376,9 @@ void Alkalmazas::handleSDL2Events(int & quit)
         if (jatekresz == 0 || jatekresz > 1)
         {
             if (event.button.state == SDL_BUTTON_LEFT)
-                menu->mouse_event(event.button.x, event.button.y, jatekresz, *jatek, quit, true, event.type);
+                menu->mouse_event(event.button.x, event.button.y, jatekresz, *game, quit, true, event.type);
             else
-                menu->mouse_event(event.button.x, event.button.y, jatekresz, *jatek, quit, false, event.type);
+                menu->mouse_event(event.button.x, event.button.y, jatekresz, *game, quit, false, event.type);
 
             if (keystates[SDLK_UP])
                 menu->fel(jatekresz);
@@ -390,7 +390,7 @@ void Alkalmazas::handleSDL2Events(int & quit)
                 menu->jobbra(jatekresz);
 
             if (keystates[SDLK_RETURN])
-                menu->enter(jatekresz, quit, *jatek, width, height, setres);
+                menu->enter(jatekresz, quit, *game, width, height, setres);
 
         }
 
@@ -423,10 +423,10 @@ void Alkalmazas::handleSDL2Events(int & quit)
     }
 
     if (jatekresz == 1)
-        jatek->esemenyek(jatekresz);
+        game->esemenyek(jatekresz);
 }
 
-void Alkalmazas::render()
+void Application::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -440,7 +440,7 @@ void Alkalmazas::render()
     if (jatekresz == 0 || jatekresz > 1 && (jatekresz < 8 || jatekresz == 9))
         menu->rendering(jatekresz);
     if (jatekresz == 1)
-        jatek->rendering(jatekresz);
+        game->rendering(jatekresz);
 
     if (jatekresz == 7 || jatekresz == 8)
         menu->rendering_res(jatekresz, setres);

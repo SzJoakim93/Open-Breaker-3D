@@ -1,13 +1,16 @@
 #ifndef JATEK_H
 #define JATEK_H
 
-#include "Object.h"
-#include "Hang.h"
 #include <dirent.h>
-//#include <windows.h>
-
 #include <cstring>
 #include <cstdio>
+
+#include "Ball.h"
+#include "Player.h"
+#include "Block.h"
+#include "Object.h"
+#include "Sound.h"
+#include "vector.h"
 
 #define MAX_LEVEL 20
 
@@ -17,17 +20,17 @@ typedef struct Top
     char name[20];
 } Top;
 
-class Jatek
+class Game
 {
     public:
-        Jatek(char * level_path, Top * top, char * scorename, int * width, int * height, int * language);
-        ~Jatek();
+        Game(char * level_path, Top * top, char * scorename, int * width, int * height, int * language);
+        ~Game();
         void load(char * path);
         void esemenyek(int & jatekresz);
-        void balgomb();
-        void jobbgomb();
-        void balgomb_fel();
-        void jobbgomb_fel();
+        void leftKeyDown();
+        void rightKeyDown();
+        void leftKeyUp();
+        void rightKeyUp();
         void enter(int & jatekresz);
         void rendering(int & jatekresz);
         void zene(char * eleres);
@@ -39,9 +42,12 @@ class Jatek
         int getLife();
         int getScore();
         bool getCompleted();
+        void setBallSpeed(const float x);
     protected:
     private:
         void print(int x, Object & Object);
+        vector<Block*> level_objects;
+        Ball * balls[3];
         Object * stars[3];
         Object * aljzat;
         Object * fal1;
@@ -50,8 +56,6 @@ class Jatek
         Object * fal4;
         Object * padle;
         Object ** titles;
-        Object ** ball;
-        Object ** Objectek;
         Object ** bonuses;
         Object * life_title;
         Object * ammo_title;
@@ -66,36 +70,23 @@ class Jatek
         Object * r_title;
         Object * textbox;
         Object * text;
-        Hang hangok;
+        Sound sounds;
 
-        int Objectszam;
         float level_size;
         char level_color[30];
 
-        float ballspeed_x[3];
-        float ballspeed_y[3];
-        float ballspeed;
-        int ** flags;
-
-        int life;
         int level;
-        int ammo;
         int blocks;
-        int score;
-        bool megaball;
-        int wall;
-        bool grip;
+
+        Player * player;
 
         bool isCompleted;
 
 
-        bool bal;
-        bool jobb;
+        bool left_key_pressed;
+        bool right_key_pressed;
 
         char * levelpath;
-        char objpath[50][30];
-        char texpath[50][30];
-        int on_board[50];
         bool play_list[8];
         bool * isSound;
         bool * isMusic;

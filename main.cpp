@@ -2,7 +2,7 @@
 #include "SDL/SDL.h"
 #include "gl/glu.h"
 
-#include "Alkalmazas.h"
+#include "Application.h"
 #include "Object.h"
 
 #include <ctime>
@@ -17,26 +17,26 @@ int main(int argc, char *argv[])
     if (argc > 1 && !strcmp(argv[1], "-editor"))
         strcpy(levelpath, argv[2]);
 
-    int quit;/* Az alkalmazas fo ciklusanak a futasat jelzi.
-        Ha az erteke igazra allitodik, akkor az alkalmazas a
+    int quit;/* Az Application fo ciklusanak a futasat jelzi.
+        Ha az erteke igazra allitodik, akkor az Application a
         kovetkezo iteracio elejen kilep.*/
 
-    Alkalmazas * alkalmazas;
+    Application * application;
     srand(time(0));
 
 begin_prog:
 
-    alkalmazas = new Alkalmazas("Ball Breaker 3D v2.0beta2", levelpath); //kepernyo inicializalasa
+    application = new Application("Ball Breaker 3D v2.0beta2", levelpath); //kepernyo inicializalasa
 
     quit = 0; //kilepes feltetele
 
     while (!quit) //a fo ciklus kezdete
     {
-        alkalmazas->handleSDL2Events(quit); //az esemenyvezerlo megnyitasa (pl billentyuzetkezeles)
-        alkalmazas->render(); //kepernyo osszeallitasa
+        application->handleSDL2Events(quit); //az esemenyvezerlo megnyitasa (pl billentyuzetkezeles)
+        application->render(); //kepernyo osszeallitasa
     }
 
-    delete alkalmazas;
+    delete application;
     if (quit == 2)
     {
         SDL_Quit();

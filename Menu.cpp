@@ -26,13 +26,13 @@ Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * lang
 
 
 
-    Objectek[0] = new Object(0.0, 0.0, 0.0, //koordinatak
+    level_objects[0] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.135, 1.0, 0.18, //atmeretezes
                              true, "Textures/title.bmp", 0, "negyzet", 3, 0);
 
 
-    Objectek[1] = new Object(-0.03, -0.098, 0.0, //koordinatak
+    level_objects[1] = new Object(-0.03, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, "Fonts/english/start.bmp", 0, "negyzet", 3, 0);
@@ -40,35 +40,35 @@ Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * lang
     char temp[32];
     strcpy(temp, lang_path);
     strcat(temp, "settings.bmp");
-    Objectek[2] = new Object(0.0, -0.098, 0.0, //koordinatak
+    level_objects[2] = new Object(0.0, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, temp, 0, "negyzet", 3, 0);
 
     strcpy(temp, lang_path);
     strcat(temp, "scores.bmp");
-    Objectek[3] = new Object(0.03, -0.098, 0.0, //koordinatak
+    level_objects[3] = new Object(0.03, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, temp, 0, "negyzet", 3, 0);
 
     strcpy(temp, lang_path);
     strcat(temp, "help.bmp");
-    Objectek[4] = new Object(0.06, -0.098, 0.0, //koordinatak
+    level_objects[4] = new Object(0.06, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, temp, 0, "negyzet", 3, 0);
 
     strcpy(temp, lang_path);
     strcat(temp, "about.bmp");
-    Objectek[5] = new Object(0.09, -0.098, 0.0, //koordinatak
+    level_objects[5] = new Object(0.09, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, temp, 0, "negyzet", 3, 0);
 
     strcpy(temp, lang_path);
     strcat(temp, "quit.bmp");
-    Objectek[6] = new Object(0.12, -0.098, 0.0, //koordinatak
+    level_objects[6] = new Object(0.12, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, temp, 0, "negyzet", 3, 0);
@@ -76,74 +76,74 @@ Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * lang
 
     strcpy(temp, lang_path);
     strcat(temp, "Help_w.bmp");
-    Objectek[7] = new Object(0.0, 0.0, 0.0, //koordinatak
+    level_objects[7] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.22, 1.0, 0.22, //atmeretezes
                              true, temp, 0, "negyzet", 3, 0);
 
     strcpy(temp, lang_path);
     strcat(temp, "About_w.bmp");
-    Objectek[8] = new Object(0.0, 0.00, 0.0, //koordinatak
+    level_objects[8] = new Object(0.0, 0.00, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.11, 1.0, 0.22, //atmeretezes
                              true, temp, 0, "negyzet", 3, 0);
 
-    Objectek[9] = new Object(0.0, -0.08, 0.5, //koordinatak
+    level_objects[9] = new Object(0.0, -0.08, 0.5, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, "Fonts/english/OK.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[10] = new Object(-0.03, -0.098, 0.0, //koordinatak
+    level_objects[10] = new Object(-0.03, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, "Fonts/english/start_c.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[11] = new Object(0.0, -0.098, 0.0, //koordinatak
+    level_objects[11] = new Object(0.0, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, "Fonts/english/settings_c.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[12] = new Object(0.03, -0.098, 0.0, //koordinatak
+    level_objects[12] = new Object(0.03, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, "Fonts/english/scores_c.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[13] = new Object(0.06, -0.098, 0.0, //koordinatak
+    level_objects[13] = new Object(0.06, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, "Fonts/english/help_c.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[14] = new Object(0.09, -0.098, 0.0, //koordinatak
+    level_objects[14] = new Object(0.09, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, "Fonts/english/about_c.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[15] = new Object(0.12, -0.098, 0.0, //koordinatak
+    level_objects[15] = new Object(0.12, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, "Fonts/english/quit_c.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[16] = new Object(0.0, -0.08, 0.5, //koordinatak
+    level_objects[16] = new Object(0.0, -0.08, 0.5, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
                              true, "Fonts/english/OK_c.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[17] = new Object(0.0, 0.0, 0.0, //koordinatak
+    level_objects[17] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.155, 1.0, 0.22, //atmeretezes
                              true, "Fonts/english/Scores_w.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[18] = new Object(0.0, 0.0, 0.0, //koordinatak
+    level_objects[18] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.22, 1.0, 0.22, //atmeretezes
                              true, "Fonts/english/Settings_w.bmp", 0, "negyzet", 3, 0);
 
-    Objectek[19] = new Object(0.0, 0.01, 0.0, //koordinatak
+    level_objects[19] = new Object(0.0, 0.01, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                             0.005, 1.0, 0.0025, //atmeretezes
                              true, "Fonts/letters", 0, "negyzet", 4, 0);
 
-    Objectek[20] = new Object(0.0, 0.0, 0.0, //koordinatak
+    level_objects[20] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.005, 1.0, 0.0025, //atmeretezes
                              true, "Fonts/letters", 0, "negyzet", 4, 0);
@@ -222,7 +222,7 @@ Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * lang
 Menu::~Menu()
 {
     for (int i=0; i<20; i++)
-        delete Objectek[i];
+        delete level_objects[i];
 
 
     for (int i=0; i<10; i++)
@@ -407,70 +407,70 @@ void Menu::setcursor()
 
     /*if  (maxcursor > 9)
     {
-        Objectek[18]->settx(-0.11+(cursor/9)*(0.125));
-        Objectek[18]->setty((cursor%9)*(-0.02)+0.08);
+        level_objects[18]->settx(-0.11+(cursor/9)*(0.125));
+        level_objects[18]->setty((cursor%9)*(-0.02)+0.08);
     }
     else if  (maxcursor == 9)
-        Objectek[18]->setty(cursor*(-0.02)+0.08);
+        level_objects[18]->setty(cursor*(-0.02)+0.08);
     else if (maxcursor == 8)
-        Objectek[18]->setty(cursor*(-0.02)+0.06);
+        level_objects[18]->setty(cursor*(-0.02)+0.06);
     else if  (maxcursor == 7)
-        Objectek[18]->setty(cursor*(-0.02)+0.04);
+        level_objects[18]->setty(cursor*(-0.02)+0.04);
     else if  (maxcursor == 6)
-        Objectek[18]->setty(cursor*(-0.02)+0.02);
+        level_objects[18]->setty(cursor*(-0.02)+0.02);
     else
-        Objectek[18]->setty(cursor*(-0.02));*/
+        level_objects[18]->setty(cursor*(-0.02));*/
 }
 
 void Menu::rendering(int & jatekresz)
 {
     if (jatekresz == 0)
-        Objectek[0]->rendering(0);
+        level_objects[0]->rendering(0);
     if (selected == 0)
-        Objectek[10]->rendering(0);
+        level_objects[10]->rendering(0);
     else
-        Objectek[1]->rendering(0);
+        level_objects[1]->rendering(0);
     if (selected == 1)
-        Objectek[11]->rendering(0);
+        level_objects[11]->rendering(0);
     else
-        Objectek[2]->rendering(0);
+        level_objects[2]->rendering(0);
     if (selected == 2)
-        Objectek[12]->rendering(0);
+        level_objects[12]->rendering(0);
     else
-        Objectek[3]->rendering(0);
+        level_objects[3]->rendering(0);
     if (selected == 3)
-        Objectek[13]->rendering(0);
+        level_objects[13]->rendering(0);
     else
-        Objectek[4]->rendering(0);
+        level_objects[4]->rendering(0);
     if (selected == 4)
-        Objectek[14]->rendering(0);
+        level_objects[14]->rendering(0);
     else
-        Objectek[5]->rendering(0);
+        level_objects[5]->rendering(0);
     if (selected == 5)
-        Objectek[15]->rendering(0);
+        level_objects[15]->rendering(0);
     else
-        Objectek[6]->rendering(0);
+        level_objects[6]->rendering(0);
 
     if (jatekresz > 1 && jatekresz < 7)
     {
         if (selected == 6)
-            Objectek[16]->rendering(0);
+            level_objects[16]->rendering(0);
         else
-            Objectek[9]->rendering(0);
+            level_objects[9]->rendering(0);
     }
 
     if (jatekresz == 4)
-        Objectek[7]->rendering(0);
+        level_objects[7]->rendering(0);
     if (jatekresz == 5)
-        Objectek[8]->rendering(0);
+        level_objects[8]->rendering(0);
     if (jatekresz == 2)
     {
-        if (*hang)
+        if (*enableSound)
             sound_title->gprintf(on_title);
         else
             sound_title->gprintf(off_title);
 
-        if (*zene)
+        if (*enableMusic)
             music_title->gprintf(on_title);
         else
             music_title->gprintf(off_title);
@@ -492,7 +492,7 @@ void Menu::rendering(int & jatekresz)
         if (set_selected)
             frame->rendering(0);
 
-        Objectek[18]->rendering(0);
+        level_objects[18]->rendering(0);
     }
 
     if (jatekresz == 6)
@@ -525,7 +525,7 @@ void Menu::rendering(int & jatekresz)
             score_titles[i]->gprintf(temp);
             player_titles[i]->gprintf(top[i].name);
         }
-        Objectek[17]->rendering(0);
+        level_objects[17]->rendering(0);
 
     }
 
@@ -544,23 +544,23 @@ void Menu::rendering_res(int & jatekresz, int & setres)
     char temp[30];
 
     if (jatekresz == 7)
-        Objectek[19]->gprintf("sz/1less/1g");
+        level_objects[19]->gprintf("sz/1less/1g");
     else if (jatekresz == 8)
-        Objectek[19]->gprintf("magass/0g");
+        level_objects[19]->gprintf("magass/0g");
     sprintf(temp, "%d", setres);
-    Objectek[20]->gprintf(temp);
+    level_objects[20]->gprintf(temp);
 }
 
-void Menu::sethangok(bool * behang, bool * bezene, bool * befullscreen)
+void Menu::sethangok(bool * _sound, bool * _music, bool * _fullscreen)
 {
-    hang = behang;
-    zene = bezene;
-    fullscreen = befullscreen;
-    if (*zene)
-        hangok.play_music("Music/s.mid");
+    enableSound = _sound;
+    enableMusic = _music;
+    fullscreen = _fullscreen;
+    if (*_music)
+        sounds.play_music("Music/s.mid");
 }
 
-void Menu::enter(int & jatekresz, int & quit, Jatek & jatek, int & width, int & height, int & setres)
+void Menu::enter(int & jatekresz, int & quit, Game & Game, int & width, int & height, int & setres)
 {
     switch (jatekresz)
                 {
@@ -581,8 +581,8 @@ void Menu::enter(int & jatekresz, int & quit, Jatek & jatek, int & width, int & 
                             maxcursor = 5;
                             cursor = 0;
                             jatekresz = 2;
-                            Objectek[9]->setty(-0.051);
-                            Objectek[16]->setty(-0.051);
+                            level_objects[9]->setty(-0.051);
+                            level_objects[16]->setty(-0.051);
                             frame->settx(0.04);
                             frame->setty(0.013);
                             frame->setsx(0.012);
@@ -592,20 +592,20 @@ void Menu::enter(int & jatekresz, int & quit, Jatek & jatek, int & width, int & 
                         else if (cursor == 2)
                         {
                             jatekresz = 3;
-                            Objectek[9]->setty(-0.065);
-                            Objectek[16]->setty(-0.065);
+                            level_objects[9]->setty(-0.065);
+                            level_objects[16]->setty(-0.065);
                         }
                         else if (cursor == 3)
                         {
                             jatekresz = 4;
-                            Objectek[9]->setty(-0.08);
-                            Objectek[16]->setty(-0.08);
+                            level_objects[9]->setty(-0.08);
+                            level_objects[16]->setty(-0.08);
                         }
                         else if (cursor == 4)
                         {
                             jatekresz = 5;
-                            Objectek[9]->setty(-0.041);
-                            Objectek[16]->setty(-0.041);
+                            level_objects[9]->setty(-0.041);
+                            level_objects[16]->setty(-0.041);
                         }
                         else if (cursor == 5)
                             quit = 1;
@@ -616,17 +616,17 @@ void Menu::enter(int & jatekresz, int & quit, Jatek & jatek, int & width, int & 
                     {
                         if (cursor == 0)
                         {
-                            if (*hang)
-                                *hang = false;
+                            if (*enableSound)
+                                *enableSound = false;
                             else
-                                *hang = true;
+                                *enableSound = true;
                         }
                         else if (cursor == 1)
                         {
-                            if (*zene)
-                                *zene = false;
+                            if (*enableMusic)
+                                *enableMusic = false;
                             else
-                                *zene = true;
+                                *enableMusic = true;
                         }
                         else if (cursor == 2)
                         {
@@ -788,15 +788,15 @@ void Menu::enter(int & jatekresz, int & quit, Jatek & jatek, int & width, int & 
                     }
                     case 9:
                     {
-                        hangok.stop();
+                        sounds.stop();
                         jatekresz = 1;
-                        jatek.start(cursor*10+1);
+                        Game.start(cursor*10+1);
                         break;
                     }
                 }
 }
 
-void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Jatek & jatek, int & quit, bool isClicked, Uint8 & isMouseMoving)
+void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Game & Game, int & quit, bool isClicked, Uint8 & isMouseMoving)
 {
     float multipler = *s_height / 480.0;
     int offset = (*s_width-640.0*multipler)/2.0;
@@ -825,8 +825,8 @@ void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Jatek & ja
             if (isClicked)
             {
                 jatekresz = 2;
-                Objectek[9]->setty(-0.051);
-                Objectek[16]->setty(-0.051);
+                level_objects[9]->setty(-0.051);
+                level_objects[16]->setty(-0.051);
                 cursor = 0;
                 maxcursor = 5;
                 frame->settx(0.04);
@@ -845,8 +845,8 @@ void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Jatek & ja
                 cursor = 0;
                 maxcursor = 6;
                 jatekresz = 3;
-                Objectek[9]->setty(-0.065);
-                Objectek[16]->setty(-0.065);
+                level_objects[9]->setty(-0.065);
+                level_objects[16]->setty(-0.065);
             }
 
             selected = 2;
@@ -859,8 +859,8 @@ void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Jatek & ja
                 cursor = 0;
                 maxcursor = 6;
                 jatekresz = 4;
-                Objectek[9]->setty(-0.08);
-                Objectek[16]->setty(-0.08);
+                level_objects[9]->setty(-0.08);
+                level_objects[16]->setty(-0.08);
             }
 
             selected = 3;
@@ -875,8 +875,8 @@ void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Jatek & ja
                 cursor = 0;
                 maxcursor = 6;
                 jatekresz = 5;
-                Objectek[9]->setty(-0.041);
-                Objectek[16]->setty(-0.041);
+                level_objects[9]->setty(-0.041);
+                level_objects[16]->setty(-0.041);
             }
             selected = 4;
         }
@@ -912,10 +912,10 @@ void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Jatek & ja
             if (isClicked)
             {
                 *valtozas = true;
-                if (*hang)
-                    *hang = false;
+                if (*enableSound)
+                    *enableSound = false;
                 else
-                    *hang = true;
+                    *enableSound = true;
             }
             set_selected=true;
             frame->setty(0.013);
@@ -925,10 +925,10 @@ void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Jatek & ja
             if (isClicked)
             {
                 *valtozas = true;
-                if (*zene)
-                    *zene = false;
+                if (*enableMusic)
+                    *enableMusic = false;
                 else
-                    *zene = true;
+                    *enableMusic = true;
             }
             set_selected=true;
             frame->setty(0.0);
@@ -1158,9 +1158,9 @@ void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Jatek & ja
 
                 if (temp < max_package)
                 {
-                    hangok.stop();
+                    sounds.stop();
                     jatekresz = 1;
-                    jatek.start(temp*10+1);
+                    Game.start(temp*10+1);
                 }
             }
 

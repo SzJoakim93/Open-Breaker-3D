@@ -1,10 +1,11 @@
-#include "Jatek.h"
+#include "Game.h"
 
-#define N 80
-Jatek::Jatek(char * level_path, Top * top, char * scorename, int * width, int * height, int * language)
+Game::Game(char * level_path, Top * top, char * scorename, int * width, int * height, int * language)
 {
     //ctor
     isCompleted = false;
+
+    player = new Player();
 
     for (int i=0; i<3; i++)
         stars[i] = new Object(-0.2, 1.0, 0.1, //koordinatak
@@ -119,38 +120,33 @@ Jatek::Jatek(char * level_path, Top * top, char * scorename, int * width, int * 
     titles[3]->setsz(0.028);
     titles[3]->setsx(0.028);
 
-    Objectszam = 0;
     for (int i=0; i<8; i++)
                 play_list[i]=true;
-    char ** hangpath= new char*[9];
+    char ** soundpath= new char*[9];
     for (int i=0; i<9; i++)
-        hangpath[i] = new char[32];
+        soundpath[i] = new char[32];
 
-    strcpy(hangpath[0], "Sounds/B1.wav");
-    strcpy(hangpath[1], "Sounds/B2.wav");
-    strcpy(hangpath[2], "Sounds/B3.wav");
-    strcpy(hangpath[3], "Sounds/BONUS.wav");
-    strcpy(hangpath[4], "Sounds/EFFECT0.wav");
-    strcpy(hangpath[5], "Sounds/END_OF_G.wav");
-    strcpy(hangpath[6], "Sounds/END_OF_L.wav");
-    strcpy(hangpath[7], "Sounds/FIRE.wav");
-    strcpy(hangpath[8], "Sounds/STAR.wav");
+    strcpy(soundpath[0], "Sounds/B1.wav");
+    strcpy(soundpath[1], "Sounds/B2.wav");
+    strcpy(soundpath[2], "Sounds/B3.wav");
+    strcpy(soundpath[3], "Sounds/BONUS.wav");
+    strcpy(soundpath[4], "Sounds/EFFECT0.wav");
+    strcpy(soundpath[5], "Sounds/END_OF_G.wav");
+    strcpy(soundpath[6], "Sounds/END_OF_L.wav");
+    strcpy(soundpath[7], "Sounds/FIRE.wav");
+    strcpy(soundpath[8], "Sounds/STAR.wav");
 
-    hangok.hozzaad(hangpath, 9);
+    sounds.hozzaad(soundpath, 9);
 
-    bal = false;
-    jobb = false;
+    left_key_pressed = false;
+    right_key_pressed = false;
 
     this->top = top;
     this->scorename = scorename;
     this->language = language;
-
-    life = 5;
-    ammo = 10;
-    score = 0;
 }
 
-Jatek::~Jatek()
+Game::~Game()
 {
     for (int i=0; i<3; i++)
         delete stars[i];
@@ -179,7 +175,7 @@ Jatek::~Jatek()
 
 }
 
-void Jatek::load(char * path)
+void Game::load(char * path)
 {
     FILE * file = fopen(path, "r");
     fscanf(file, "%f %s", &level_size, level_color);
@@ -188,7 +184,7 @@ void Jatek::load(char * path)
     level_z = 1.0-level_size*2.0;
 
     blocks=0;
-    int i=0;
+
     while(!feof(file))
     {
         float tx;
@@ -200,23 +196,22 @@ void Jatek::load(char * path)
         char texture[30];
         char obj[30];
         int r;
-        fscanf(file, "%f %f %f %f %f %f %d %s %s %d %d %d %d %d %d %d %d %d %d", &tx, &ty, &tz, &sx, &sy, &sz, &r, texture, obj, &flags[i][0], &flags[i][1], &flags[i][2], &flags[i][3], &flags[i][4], &flags[i][5], &flags[i][6], &flags[i][7], &flags[i][8], &flags[i][9]);
-        Objectek[i] = new Object(tx, ty, tz, //koordinatak
+        int * new_flag = new int [10];
+            
+        fscanf(file, "%f %f %f %f %f %f %d %s %s %d %d %d %d %d %d %d %d %d %d", &tx, &ty, &tz, &sx, &sy, &sz, &r, texture, obj, &new_flag[0], &new_flag[1], &new_flag[2], &new_flag[3], &new_flag[4], &new_flag[5], &new_flag[6], &new_flag[7], &new_flag[8], &new_flag[9]);
+        level_objects.insert(new Block(new Object(tx, ty, tz, //koordinatak
                              0, r, 0, //elforgatas
                              sx, sy, sz, //atmeretezes
-                             true, texture, 0, obj, 0, 0);
+                             true, texture, 0, obj, 0, 0), new_flag));
 
-        if (flags[i][0] != -2)
+        if (new_flag[0] != -2)
             blocks++;
-        i++;
     }
 
     fclose(file);
-
-    Objectszam = i;
 }
 
-void Jatek::esemenyek(int & jatekresz)
+void Game::esemenyek(int & jatekresz)
 {
     if (Object::getcx() < level_x - 0.2)
         Object::setcx(Object::getcx() + 0.2);
@@ -227,10 +222,9 @@ void Jatek::esemenyek(int & jatekresz)
     if (Object::getcz() < level_z - 0.2)
         Object::setcz(Object::getcz() + 0.2);
 
-    if (life > 0 && !isCompleted)
+    if (player->getLife() > 0 && !isCompleted)
     {
-        if (wall > 0)
-            wall--;
+        player->wallEvent();
         for (int i=0; i<3; i++)
             if (stars[i]->getty() < 0.9)
             {
@@ -239,160 +233,73 @@ void Jatek::esemenyek(int & jatekresz)
                     stars[i]->trans_lengthical(-0.002);
             }
 
-        if (bal && padle->gettx() - padle->getsx() > 0.5-level_size)
+        if (left_key_pressed && padle->gettx() - padle->getsx() > 0.5-level_size)
             padle->trans_horizontal(-0.015);
-        if (jobb && padle->gettx() + padle->getsx() < 0.5+level_size)
+        if (right_key_pressed && padle->gettx() + padle->getsx() < 0.5+level_size)
             padle->trans_horizontal(+0.015);
 
-        if (ballspeed == 0.0)
-            ball[0]->settx(padle->gettx());
+        /*if (ballspeed == 0.0)
+            ball[0]->settx(padle->gettx());*/
 
 
         for (int i=0; i<3; i++)
-            if (ball[i]->gettz() < 0.5+level_size)
+            if (balls[i]->isActive())
             {
-                ball[i]->trans_horizontal(ballspeed_x[i]*ballspeed);
-                ball[i]->trans_vertical(ballspeed_y[i]*ballspeed);
+                balls[i]->moving();
 
                 for (int j=0; j<3; j++)
-                    if (stars[j]->getty() < 0.2 && *ball[i] == *stars[j])
+                    if (stars[j]->getty() < 0.2 && *balls[i]->getObj() == *stars[j])
                     {
-                        score +=15;
+                        player->increaseScore(15);
                         if (*isSound)
-                            hangok.play_sound(8, -1);
+                            sounds.play_sound(8, -1);
                         stars[j]->setty(1.0);
                     }
 
-                if (ball[i]->gettx() > 0.45 + level_size && ballspeed_x[i] < 0.0 || ball[i]->gettx() < 0.55 - level_size && ballspeed_x[i] > 0.0)
+                balls[i]->pongFromBorder(level_size);
+
+
+                if (balls[i]->collision(padle))
                 {
-                    ballspeed_x[i] *= -1.0;
                     if (*isSound)
-                        hangok.play_sound(0, -1);
-                }
-
-
-                if (ball[i]->gettz() < -0.15 - level_size || wall > 0 && ball[i]->gettz() > -0.25 + level_size)
-                {
-                    ballspeed_y[i] *= -1.0;
-                    if (*isSound)
-                        hangok.play_sound(0, -1);
-                }
-
-
-                if (ball[i]->gettz() > -0.3+level_size && ball[i]->gettz() < -0.25+level_size && ball[i]->gettx() > padle->gettx() - padle->getsx() && ball[i]->gettx() < padle->gettx() + padle->getsx())
-                {
-                    if (*isSound && !grip)
-                        hangok.play_sound(0, -1);
-                    if (grip && i==0)
+                        sounds.play_sound(0, -1);
+                    if (player->isGrip())
                     {
-                        ballspeed=0;
+                        balls[i]->setDefaults(level_size, padle);
                     }
 
-                    if (ball[i]->gettx() < padle->gettx() - padle->getsx() + padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = 0.7;
-                        ballspeed_y[i] = 0.3;
-                    }
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 2*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = 0.6;
-                        ballspeed_y[i] = 0.4;
-                    }
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 3*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = 0.5;
-                        ballspeed_y[i] = 0.5;
-                    }
-
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 4*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = 0.4;
-                        ballspeed_y[i] = 0.6;
-                    }
-
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 5*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = 0.3;
-                        ballspeed_y[i] = 0.7;
-                    }
-
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 6*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = 0.1;
-                        ballspeed_y[i] = 0.9;
-
-                    }
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 7*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = -0.1;
-                        ballspeed_y[i] = 0.9;
-                    }
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 8*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = -0.3;
-                        ballspeed_y[i] = 0.7;
-                    }
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 9*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = -0.4;
-                        ballspeed_y[i] = 0.6;
-                    }
-
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 10*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = -0.5;
-                        ballspeed_y[i] = 0.5;
-                    }
-
-                    else if (ball[i]->gettx() < padle->gettx() - padle->getsx() + 11*padle->getsx()/6)
-                    {
-                        ballspeed_x[i] = -0.6;
-                        ballspeed_y[i] = 0.4;
-                    }
-
-                    else
-                    {
-                        ballspeed_x[i] = -0.7;
-                        ballspeed_y[i] = 0.3;
-                    }
+                    balls[i]->pongFromPaddle(padle);
                 }
             }
 
-        if (ball[0]->gettz() > 0.4+level_size && ball[1]->gettz() > 0.4+level_size && ball[2]->gettz() > 0.4+level_size && life > 0)
+        if (balls[0]->getObj()->gettz() > 0.4+level_size && balls[1]->getObj()->gettz() > 0.4+level_size && balls[2]->getObj()->gettz() > 0.4+level_size && player->getLife() > 0)
         {
-            ballspeed = 0;
-            ballspeed_x[0] = 0.5;
-            ballspeed_y[0] = 0.5;
-            life--;
-            if (life > 0)
-            {
-                ball[0]->settx(padle->gettx());
-                ball[0]->settz(-0.32+level_size);
-            }
-
+            player->decreaseLife();
+            if (player->getLife > 0)
+                balls[0]->setDefaults(level_size, padle);
         }
 
-
-
-        for (int i=0; i<Objectszam; i++)
+        for (int i=0; i<level_objects.size(); i++)
         {
-            if (flags[i][0] > 0 && flags[i][0] < 9 && *ammo_fire == (*Objectek[i]))
+            
+            if (level_objects[i]->isNormal())
             {
-                flags[i][0]--;
+                if (*ammo_fire == (*level_objects[i]->getObj()))
+                    level_objects[i]->hit();
 
-                if (flags[i][0] == 0)
+                if (level_objects[i]->destroyed())
                 {
-                    score+=3;
+                    player->increaseScore(3);
                     blocks--;
-                    Objectek[i]->setGravityRange(Objectek[i]->getsy());
+                    level_objects[i]->setGravityRange(level_objects[i]->getsy());
                     if (*isSound)
-                        hangok.play_sound(2, -1);
+                        sounds.play_sound(2, -1);
                 }
                 else
                 {
-                    score++;
+                    player->increaseScore(1);
                     if (*isSound)
-                        hangok.play_sound(1, -1);
+                        sounds.play_sound(1, -1);
                 }
 
 
@@ -401,76 +308,55 @@ void Jatek::esemenyek(int & jatekresz)
 
                 break;
             }
-            else if (flags[i][0] % 10 == 9 || flags[i][0] == -1)
+            else if (level_objects[i]->isBonus())
             {
-                Objectek[i]->rotateY(1);
+                level_objects[i]->getObj->rotateY(1);
                 if (flags[i][0] == -1)
                     for (int j=0; j<3; j++)
-                        if (ball[j]->gettz() < 0.5+level_size && (*Objectek[i]) == (*ball[j]))
+                        if (balls[j]->isActive() && balls[j]->collision(level_objects[i]->getObj()))
                         {
-                            score +=3;
+                            player->increaseScore(3);
                             if (*isSound)
-                                hangok.play_sound(3, -1);
+                                sounds.play_sound(3, -1);
                             blocks--;
 
                             flags[i][0] = 0;
                             int j = rand() % 10;
-                            bonuses[j]->settx(Objectek[i]->gettx());
-                            bonuses[j]->settz(Objectek[i]->gettz());
+                            bonuses[j]->settx(level_objects[i]->getObj()->gettx());
+                            bonuses[j]->settz(level_objects[i]->getObj()->gettz());
                         }
             }
-            else if (flags[i][0] == -2)
+            else if (level_objects[i]->isMoving())
             {
-                float t_begin = flags[i][1]/100.0;
-                float t_end = flags[i][2]/100.0;
-                float moving = flags[i][3]/1000.0;
-
-                Objectek[i]->trans_horizontal(moving);
-                if (Objectek[i]->gettx() < t_begin || Objectek[i]->gettx() > t_end)
-                    flags[i][3]*=-1;
+                level_objects[i]->moving();
 
                 for (int j=0; j<3; j++)
-                    if (ball[j]->gettz() + ball[j]->getsz() > Objectek[i]->gettz() - Objectek[i]->getsz() && ball[j]->gettz() - ball[j]->getsz() < Objectek[i]->gettz() + Objectek[i]->getsz() &&
-                        ball[j]->gettx() - ball[j]->getsx() < Objectek[i]->gettx() + Objectek[i]->getsx() && ball[j]->gettx() - ball[j]->getsx() > Objectek[i]->gettx() + Objectek[i]->getsx() - 0.02)
-                            flags[i][3]*=-1;
-                    else if (ball[j]->gettz() + ball[j]->getsz() > Objectek[i]->gettz() - Objectek[i]->getsz() && ball[j]->gettz() - ball[j]->getsz() < Objectek[i]->gettz() + Objectek[i]->getsz() &&
-                        ball[j]->gettx() + ball[j]->getsx() > Objectek[i]->gettx() - Objectek[i]->getsx() && ball[j]->gettx() + ball[j]->getsx() < Objectek[i]->gettx() - Objectek[i]->getsx() + 0.02)
-                           flags[i][3]*=-1;
+                    if (balls[j]->collision_left(level_objects[i]->getObj()))
+                        level_objects[i]->reverse_direction();
+                    else if (balls[j]->collision_left(level_objects[i]->getObj()))
+                        level_objects[i]->reverse_direction();
             }
 
 
             for (int j=0; j<3; j++)
-                if (ball[j]->gettz() < 0.5+level_size && (flags[i][0] < 9 && (flags[i][0] > 0 || flags[i][0] == -1 || flags[i][0] == -2) && (*Objectek[i]) == (*ball[j])))
+                if (ball[j]->gettz() < 0.5+level_size && (flags[i][0] < 9 && (flags[i][0] > 0 || flags[i][0] == -1 || flags[i][0] == -2) && (*level_objects[i]) == (*ball[j])))
                 {
-                    if (!megaball || flags[i][0] == -2)
-                    {
-                        if (ball[j]->gettx() + ball[j]->getsx() > Objectek[i]->gettx() - Objectek[i]->getsx() && ball[j]->gettx() - ball[j]->getsx() < Objectek[i]->gettx() + Objectek[i]->getsx() &&
-                        ball[j]->gettz() + ball[j]->getsz() > Objectek[i]->gettz() - Objectek[i]->getsz() && ball[j]->gettz() + ball[j]->getsz() < Objectek[i]->gettz() - Objectek[i]->getsz() + 0.02)
-                            ballspeed_y[j] *=-1;
-                        else if (ball[j]->gettx() + ball[j]->getsx() > Objectek[i]->gettx() - Objectek[i]->getsx() && ball[j]->gettx() - ball[j]->getsx() < Objectek[i]->gettx() + Objectek[i]->getsx() &&
-                        ball[j]->gettz() - ball[j]->getsz() < Objectek[i]->gettz() + Objectek[i]->getsz() && ball[j]->gettz() - ball[j]->getsz() > Objectek[i]->gettz() + Objectek[i]->getsz() - 0.02)
-                            ballspeed_y[j] *=-1;
-                        else if (ball[j]->gettz() + ball[j]->getsz() > Objectek[i]->gettz() - Objectek[i]->getsz() && ball[j]->gettz() - ball[j]->getsz() < Objectek[i]->gettz() + Objectek[i]->getsz() &&
-                        ball[j]->gettx() - ball[j]->getsx() < Objectek[i]->gettx() + Objectek[i]->getsx() && ball[j]->gettx() - ball[j]->getsx() > Objectek[i]->gettx() + Objectek[i]->getsx() - 0.02)
-                            ballspeed_x[j] *=-1;
-                        else if (ball[j]->gettz() + ball[j]->getsz() > Objectek[i]->gettz() - Objectek[i]->getsz() && ball[j]->gettz() - ball[j]->getsz() < Objectek[i]->gettz() + Objectek[i]->getsz() &&
-                        ball[j]->gettx() + ball[j]->getsx() > Objectek[i]->gettx() - Objectek[i]->getsx() && ball[j]->gettx() + ball[j]->getsx() < Objectek[i]->gettx() - Objectek[i]->getsx() + 0.02)
-                            ballspeed_x[j] *=-1;
-                    }
+                    if (!player->getMegaball() || level_objects[i]->isMoving())
+                        balls[j]->collision_block(level_objects[i]->getObj());
 
                     if (flags[i][0] > -2)
                     {
-                        flags[i][0]--;
+                        level_objects[i]->hit();
 
                         if (flags[i][0] == 0)
                         {
                             blocks--;
-                            Objectek[i]->setGravityRange(Objectek[i]->getsy());
-                            score += 5;
+                            level_objects[i]->setGravityRange(level_objects[i]->getsy());
+                            player->increaseScore(5);
                             if (ballspeed > -0.03);
                                 ballspeed-=0.0002;
                             if (*isSound)
-                                hangok.play_sound(2, -1);
+                                sounds.play_sound(2, -1);
 
                             if (blocks % 30 == 0)
                             {
@@ -498,8 +384,8 @@ void Jatek::esemenyek(int & jatekresz)
                         else
                         {
                             if (*isSound)
-                                hangok.play_sound(1, -1);
-                            score +=2;
+                                sounds.play_sound(1, -1);
+                            player->increaseScore(2);
                         }
 
                     }
@@ -510,18 +396,8 @@ void Jatek::esemenyek(int & jatekresz)
 
         collision_detect_end:
 
-        for (int i=0; i<Objectszam; i++)
-            if (Objectek[i]->getGravityRange() > 0.0)
-            {
-                for (int j=1; flags[i][j] > -1 && j<10; j++)
-                    Objectek[flags[i][j]]->trans_lengthical(-0.001);
-
-                Objectek[i]->trans_gravity(-0.0005);
-
-                if (Objectek[i]->getGravityRange() < 0.0)
-                    for (int j=1; flags[i][j] > -1 && j<9; j++)
-                        flags[flags[i][j]][0] -= 10;
-            }
+        for (int i=0; i<level_objects.size(); i++)
+            level_objects[i]->gravityEvents(level_objects);
 
         if (ammo_fire->gettz() < 0.5+level_size)
             ammo_fire->trans_vertical(-0.015);
@@ -538,75 +414,69 @@ void Jatek::esemenyek(int & jatekresz)
                 if (bonuses[i]->gettz() > -0.3+level_size && bonuses[i]->gettz() < -0.29+level_size && bonuses[i]->gettx() > padle->gettx() - padle->getsx() && bonuses[i]->gettx() < padle->gettx() + padle->getsx())
                 {
                     if (*isSound)
-                        hangok.play_sound(4, -1);
+                        sounds.play_sound(4, -1);
                     switch (i)
                     {
                     case 0:
                     {
-                        ammo+=10;
-                        score +=5;
+                        player->increaseAmmo(10);
+                        player->increaseScore(5);
                         break;
                     }
                     case 1:
                     {
-                        life+=3;
-                        score +=10;
+                        player->increaseLife(3);
+                        player->increaseScore(10);
                         break;
                     }
                     case 2:
                     {
                         //triplaball
-                        ball[1]->settx(ball[0]->gettx());
-                        ball[1]->settz(ball[0]->gettz());
-                        ball[2]->settx(ball[0]->gettx());
-                        ball[2]->settz(ball[0]->gettz());
-                        ballspeed_x[1]=ballspeed_x[0]+0.1;
-                        ballspeed_y[1]=ballspeed_y[0]-0.1;
-                        ballspeed_x[2]=ballspeed_x[0]-0.1;
-                        ballspeed_y[2]=ballspeed_y[0]+0.1;
-                        score +=5;
+                        balls[1]->cloneBall(balls[0], 0);
+                        balls[2]->cloneBall(balls[0], 1);
+                        player->increaseScore(5);
                         break;
                     }
                     case 3:
                     {
-                        megaball = true;
-                        score +=5;
+                        player->setMegaBall(true);
+                        player->increaseScore(5);
                         break;
                     }
                     case 4:
                     {
-                        wall = 2000;
-                        score +=5;
+                        player->setWall(2000);
+                        player->increaseScore(5);
                         break;
                     }
                     case 5:
                     {
-                        ballspeed = -0.01;
-                        score +=5;
+                        setBallSpeed(-0.01);
+                        player->increaseScore(5);
                         break;
                     }
                     case 6:
                     {
-                        grip = true;
-                        score +=5;
+                        player->setGrip(true);
+                        player->increaseScore(5);
                         break;
                     }
                     case 7:
                     {
-                        padle->setsx(padle->getsx()+0.05);
-                        score +=5;
+                        padle->setsx(padle->getsx()+0.05f);
+                        player->increaseScore(5);
                         break;
                     }
                     case 8:
                     {
                         padle->setsx(0.05);
-                        score -=10;
+                        player->increaseScore(-10);
                         break;
                     }
                     case 9:
                     {
-                        ballspeed = -0.025;
-                        score -=10;
+                        setBallSpeed(-0.025f);
+                        player->increaseScore(-10);
                         break;
                     }
                     }
@@ -622,14 +492,14 @@ void Jatek::esemenyek(int & jatekresz)
                 if (level % 10 == 0)
                 {
                     if (*isSound)
-                        hangok.play_sound(5, -1);
+                        sounds.play_sound(5, -1);
                 }
                 else
                 {
                     reset();
-                    score +=20;
+                    player->getScore +=20;
                     if (*isSound)
-                        hangok.play_sound(6, -1);
+                        sounds.play_sound(6, -1);
                 }
 
                 SDL_Delay(3000);
@@ -648,27 +518,27 @@ void Jatek::esemenyek(int & jatekresz)
 
 }
 
-void Jatek::balgomb()
+void Game::leftKeyDown()
 {
-    bal = true;
+    left_key_pressed = true;
 }
 
-void Jatek::balgomb_fel()
+void Game::leftKeyUp()
 {
-    bal = false;
+    left_key_pressed = false;
 }
 
-void Jatek::jobbgomb()
+void Game::rightKeyDown()
 {
-    jobb = true;
+    right_key_pressed = true;
 }
 
-void Jatek::jobbgomb_fel()
+void Game::rightKeyUp()
 {
-    jobb = false;
+    right_key_pressed = false;
 }
 
-/*void Jatek::mouse_ok(bool isClicked, int & jatekresz)
+/*void Game::mouse_ok(bool isClicked, int & jatekresz)
 {
     if (life < 1 || isCompleted)
     {
@@ -677,26 +547,29 @@ void Jatek::jobbgomb_fel()
     }
 }*/
 
-void Jatek::launch()
+void Game::launch()
 {
-    if (ammo > 0 && ammo_fire->gettz() > 0.4+level_size && ballspeed < 0.0)
+    if (!balls[0]->isLaunched())
     {
-        if (*isSound)
-            hangok.play_sound(7, -1);
-        ammo--;
-        ammo_fire->settx(padle->gettx());
-        ammo_fire->settz(-0.3+level_size);
+        if (player->getAmmo() > 0 && ammo_fire->gettz() > 0.4f+level_size)
+        {
+            if (*isSound)
+                sounds.play_sound(7, -1);
+            player->decreaseAmmo();
+            ammo_fire->settx(padle->gettx());
+            ammo_fire->settz(-0.3+level_size);
+        }
     }
-    else if (ballspeed > -.0001)
-        ballspeed = -0.018;
+    else 
+        balls[0]->setSpeed(-0.018f);
 }
 
-void Jatek::rendering(int & jatekresz)
+void Game::rendering(int & jatekresz)
 {
 
-    if (life < 1 || isCompleted)
+    if (player->getLife() < 1 || isCompleted)
     {
-        if (score > top[9].score)
+        if (player->getScore() > top[9].score)
         {
             text->gprintf(scorename);
             textbox->rendering(0);
@@ -731,49 +604,49 @@ void Jatek::rendering(int & jatekresz)
 
 
     for (int i=0; i<3; i++)
-        if (stars[i]->getty() < 0.9)
+        if (stars[i]->getty() < 0.9f)
             stars[i]->rendering(0);
 
     aljzat->rendering(0);
     fal1->rendering(0);
     fal2->rendering(0);
     fal3->rendering(0);
-    if (wall > 0 && wall < 20 || wall > 40 && wall < 60 || wall > 80 && wall < 100 || wall > 120)
+    if (player->needRenderWall())
         fal4->rendering(0);
 
     padle->rendering(0);
 
     for (int i=0; i<3; i++)
-        if (ball[i]->gettz() < 1.0)
-            ball[i]->rendering(0);
+        if (balls[i]->isActive)
+            balls[i]->getObj()->rendering(0);
 
     print(blocks, *block_title);
     for (int i=0; i<4; i++)
         titles[i]->rendering(0);
 
-    print(life, *life_title);
-    print(ammo, *ammo_title);
-    print(score, *score_title);
+    print(player->getLife(), *life_title);
+    print(player->getAmmo(), *ammo_title);
+    print(player->getScore(), *score_title);
     print(top[0].score, *best_title);
     print(level, *level_title);
 
 
-    for (int i=0; i<Objectszam; i++)
-        if (flags[i][0] != 0)
-            Objectek[i]->rendering(0);
+    for (int i=0; i<level_objects.size(); i++)
+        if (level_objects[i]->isActive())
+            level_objects[i]->getObj()->rendering(0);
 
     for (int i=0; i<10; i++)
-        if (bonuses[i]->gettz() < 1.0)
+        if (bonuses[i]->gettz() < 1.0f)
             bonuses[i]->rendering(0);
 
 
 
-    if (ammo_fire->gettz() < 1.0)
+    if (ammo_fire->gettz() < 1.0f)
         ammo_fire->rendering(0);
 
 }
 
-void Jatek::print(int x, Object & Object)
+void Game::print(int x, Object & Object)
 {
     char temp[6];
     if (x>9999)
@@ -816,72 +689,56 @@ void Jatek::print(int x, Object & Object)
     Object.gprintf(temp);
 }
 
-void Jatek::zene(char * eleres)
+void Game::zene(char * eleres)
 {
 
 }
 
-void Jatek::zene_stop()
+void Game::zene_stop()
 {
 
 }
 
-void Jatek::reset()
+void Game::reset()
 {
-    for (int i=0; i<Objectszam; i++)
-        delete Objectek[i];
-
-    for (int i=0; i<Objectszam; i++)
-        delete [] flags[i];
+    for (int i=0; i<level_objects.size(); i++)
+        delete level_objects[i];
+    level_objects.clear();
 
     delete fal1;
     delete fal2;
     delete fal3;
     delete fal4;
-    for (int i=0; i<3; i++)
-        delete ball[i];
+    /*for (int i=0; i<3; i++)
+        delete ball[i];*/
 
-    delete [] ball;
+    //delete [] ball;
     delete padle;
     delete aljzat;
     delete ammo_fire;
-    delete [] Objectek;
-    delete [] flags;
 
-    hangok.stop();
+    sounds.stop();
+
+    fprintf(stdout, "reset executed\n");
 }
 
-void Jatek::sethangok(bool * behang, bool * bezene)
+void Game::sethangok(bool * behang, bool * bezene)
 {
     isSound = behang;
     isMusic = bezene;
 }
 
-void Jatek::start(const int & level)
+void Game::start(const int & level)
 {
-    Object::setcz(-10.0);
-    Object::setcy(-10.0);
-    Object::setcz(-10.0);
+    Object::setcz(-10.0f);
+    Object::setcy(-10.0f);
+    Object::setcz(-10.0f);
 
     if (level % 10 == 1)
-    {
-        life = 5;
-        ammo = 10;
-        score = 0;
-    }
+        player->resetGame();
+    player->resetLevel();    
 
     this->level = level;
-
-    for (int i=0; i<3; i++)
-    {
-        ballspeed_x[i]=0.25;
-        ballspeed_y[i]=0.75;
-    }
-
-    ballspeed=0;
-    grip = false;
-    wall = 0;
-    megaball = false;
 
     if (*isMusic)
     {
@@ -902,19 +759,7 @@ void Jatek::start(const int & level)
         play_list[x] = false;
         char mus_path[30];
         sprintf(mus_path, "Music/%d.mid", x+1);
-        hangok.play_music(mus_path);
-    }
-
-    Objectszam = N;
-    Objectek = new Object* [Objectszam];
-    flags = new int* [Objectszam];
-    for (int i=0; i<Objectszam; i++)
-        flags[i] = new int [10];
-
-    for (int i=0; i<Objectszam; i++)
-    {
-        for (int j=0; j<10; j++)
-            flags[i][j] = -1;
+        sounds.play_music(mus_path);
     }
 
     levelpath = new char [30];
@@ -923,67 +768,72 @@ void Jatek::start(const int & level)
 
     delete levelpath;
 
-    aljzat = new Object(0.5, -0.3, -0.2, //koordinatak
+    aljzat = new Object(0.5f, -0.3f, -0.2f, //koordinatak
                       0, 0, 0, //elforgatas
-                      level_size*2.0, 1.0, level_size*2.0, //atmeretezes
+                      level_size*2.0f, 1.0f, level_size*2.0f, //atmeretezes
                       true, level_color, 0, "negyzet", 0, 0);
 
-    fal1 = new Object(0.5 + level_size, -0.27, -0.2, //koordinatak
+    fal1 = new Object(0.5f + level_size, -0.27f, -0.2, //koordinatak
                     0, 0, 0, //elforgatas
-                    0.01, 0.025, level_size, //atmeretezes
+                    0.01f, 0.025f, level_size, //atmeretezes
                     true, level_color, 0, "Objects/cube.obj", 0, 0);
 
     fal2 = new Object(0.5 - level_size, -0.27, -0.2, //koordinatak
                     0, 0, 0, //elforgatas
-                    0.01, 0.025, level_size, //atmeretezes
+                    0.01f, 0.025f, level_size, //atmeretezes
                     true, level_color, 0, "Objects/cube.obj", 0, 0);
 
-    fal3 = new Object(0.5, -0.27, -0.2 - level_size, //koordinatak
+    fal3 = new Object(0.5f, -0.27f, -0.2f - level_size, //koordinatak
                     0, 90, 0, //elforgatas
-                    0.01, 0.025, level_size, //atmeretezes
+                    0.01f, 0.025f, level_size, //atmeretezes
                     true, level_color, 0, "Objects/cube.obj", 0, 0);
 
-    fal4 = new Object(0.5, -0.27, -0.2 + level_size, //koordinatak
+    fal4 = new Object(0.5f, -0.27f, -0.2f + level_size, //koordinatak
                     0, 90, 0, //elforgatas
-                    0.01, 0.025, level_size, //atmeretezes
+                    0.01f, 0.025f, level_size, //atmeretezes
                     true, level_color, 0, "Objects/cube.obj", 0, 0);
 
-    padle = new Object(0.5, -0.27, -0.25 + level_size, //koordinatak
+    padle = new Object(0.5f, -0.27f, -0.25 + level_size, //koordinatak
                      0, 0, 0, //elforgatas
-                     0.1, 0.025, 0.025, //atmeretezes
+                     0.1f, 0.025f, 0.025f, //atmeretezes
                      true, "Colors/gray.bmp", 0, "Objects/padle.obj", 0, 0);
 
-    ammo_fire = new Object(0.5, -0.27, 1.0 + level_size, //koordinatak
+    ammo_fire = new Object(0.5f, -0.27f, 1.0f + level_size, //koordinatak
                          0, 270, 0, //elforgatas
-                         0.08, 1.0, 0.08, //atmeretezes
+                         0.08f, 1.0f, 0.08f, //atmeretezes
                          true, "Textures/ammo.bmp", 0, "negyzet", 0, 0);
 
-    ball = new Object* [3];
-    ball[0] = new Object(0.5, -0.27, -0.32 + level_size, //koordinatak
+    balls[0] = new Ball(new Object(0.5f, -0.27f, -0.32f + level_size, //koordinatak
                        0, 180, 0, //elforgatas
-                       0.04, 0.04, 0.04, //atmeretezes
-                       true, "Colors/red.bmp", 0, "Objects/sphere.obj", 0, 0);
+                       0.04f, 0.04f, 0.04f, //atmeretezes
+                       true, "Colors/red.bmp", 0, "Objects/sphere.obj", 0, 0), true);
+
     for (int i=1; i<3; i++)
-        ball[i] = new Object(0.5, -0.27, 1.0 + level_size, //koordinatak
+        balls[i] = new Ball(new Object(0.5f, -0.27f, 1.0f + level_size, //koordinatak
                            0, 180, 0, //elforgatas
-                           0.04, 0.04, 0.04, //atmeretezes
-                           true, "Colors/red.bmp", 0, "Objects/sphere.obj", 0, 0);
+                           0.04f, 0.04f, 0.04f, //atmeretezes
+                           true, "Colors/red.bmp", 0, "Objects/sphere.obj", 0, 0), false);
 
     isCompleted = false;
 }
 
-int Jatek::getLife()
+int Game::getLife()
 {
-    return life;
+    return player->getLife();
 }
 
-
-int Jatek::getScore()
+int Game::getScore()
 {
-    return score;
+    return player->getScore();
 }
 
-bool Jatek::getCompleted()
+bool Game::getCompleted()
 {
     return isCompleted;
+}
+
+void Game::setBallSpeed(const float x)
+{
+    for (int j=0; j < 3; j++)
+        balls[j]->setSpeed(x);
 }

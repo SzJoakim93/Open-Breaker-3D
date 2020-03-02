@@ -2,8 +2,8 @@
 #define MENU_H
 
 #include "Object.h"
-#include "Jatek.h"
-#include "Hang.h"
+#include "Game.h"
+#include "Sound.h"
 
 class Menu
 {
@@ -21,27 +21,27 @@ class Menu
         void setcursor(int becursor);
         void setcursor();
         void sethangok(bool * behang, bool * bezene, bool * befullscreen);
-        void enter(int & jatekresz, int & quit, Jatek & jatek, int & width, int & height, int & setres);
-        void mouse_event(const int & x, const int & y, int & jatekresz, Jatek & jatek, int & quit, bool isClicked, Uint8 & isMouseMoving);
+        void enter(int & jatekresz, int & quit, Game & Game, int & width, int & height, int & setres);
+        void mouse_event(const int & x, const int & y, int & jatekresz, Game & Game, int & quit, bool isClicked, Uint8 & isMouseMoving);
     protected:
     private:
         int cursor; //kurzor hanyadik menuponton van 0-tol kezdve
         int maxcursor; //maximum hany menupont van
-        //Multi_Object * Objectek;
+        //Multi_Object * level_objects;
         int DB;
-        bool * hang;
-        bool * zene;
+        bool * enableSound;
+        bool * enableMusic;
         bool * fullscreen;
         int * language;
         int * s_width;
         int * s_height;
         bool * valtozas;
-        char zenelista[30][18];
-        char palyalista[30][18];
+        char musicList[30][18];
+        char levelList[30][18];
         int max_package;
         char on_title[4];
         char off_title[4];
-        Object * Objectek[21];
+        Object * level_objects[21];
         Object * score_titles[10];
         Object * player_titles[10];
         Object * sound_title;
@@ -57,7 +57,7 @@ class Menu
         int selected;
         bool set_selected;
         char players[10][10];
-        Hang hangok;
+        Sound sounds;
         Top * top;
 };
 

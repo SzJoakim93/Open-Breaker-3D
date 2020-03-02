@@ -1,0 +1,10 @@
+bin/
+pillanatkepek/
+*.exe
+*.dll
+dokumentacio/
+obj/
+
+Cmake_install.cmake
+CMakeCache.txt
+CMakeFiles

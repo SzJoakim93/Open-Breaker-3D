@@ -1,5 +1,5 @@
-#ifndef ALKALMAZAS_H
-#define ALKALMAZAS_H
+#ifndef Application_H
+#define Application_H
 
 #include <cstdio>
 
@@ -7,21 +7,21 @@
 #include <GL/gl.h>
 #include <gl/glu.h>
 
-#include "Jatek.h"
+#include "Game.h"
 #include "Menu.h"
 
-class Alkalmazas
+class Application
 {
     public:
 
-        Alkalmazas(char *frame_title, char * levelpath);
-        ~Alkalmazas();
+        Application(char *frame_title, char * levelpath);
+        ~Application();
         void eLoadProjectionMatrix(int width, int height, float near, float far);
         void handleSDL2Events(int & quit);
         void render();
     protected:
     private:
-        Jatek * jatek;
+        Game * game;
         Menu * menu;
         int  width; // Az ablak szelessege pixelben.
         int  height; // Az ablak magassaga pixelben.
@@ -39,7 +39,7 @@ class Alkalmazas
         int index;
         char scorename[20];
 
-        bool hang;
+        bool Sound;
         bool zene;
         int language;
         bool valtozas;
@@ -53,4 +53,4 @@ class Alkalmazas
         float ls[4];
 };
 
-#endif // ALKALMAZAS_H
+#endif // Application_H

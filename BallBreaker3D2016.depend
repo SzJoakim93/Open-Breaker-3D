@@ -1,0 +1,70 @@
+# depslib dependency file v1.0
+1537689901 source:d:\alonso\documents\codeblocks projects\ballbreaker3d2016\Application.cpp
+	"Application.h"
+
+1499351312 d:\alonso\documents\codeblocks projects\ballbreaker3d2016\Application.h
+	<cstdio>
+	<SDL/SDL.h>
+	<GL/gl.h>
+	<gl/glu.h>
+	"Game.h"
+	"Menu.h"
+
+1537690216 d:\alonso\documents\codeblocks projects\ballbreaker3d2016\Game.h
+	"Object.h"
+	"Sound.h"
+	<dirent.h>
+	<cstring>
+	<cstdio>
+
+1470466184 d:\alonso\documents\codeblocks projects\ballbreaker3d2016\object.h
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	<cstring>
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	<dirent.h>
+	<sys/stat.h>
+	"list.h"
+	"char_list.h"
+
+1469724076 d:\alonso\documents\codeblocks projects\ballbreaker3d2016\list.h
+
+1470469329 d:\alonso\documents\codeblocks projects\ballbreaker3d2016\char_list.h
+	<cstring>
+
+1470422708 d:\alonso\documents\codeblocks projects\ballbreaker3d2016\Sound.h
+	"SDL/SDL_mixer.h"
+
+1517669039 d:\alonso\documents\codeblocks projects\ballbreaker3d2016\menu.h
+	"Object.h"
+	"Game.h"
+	"Sound.h"
+
+1470422708 source:d:\alonso\documents\codeblocks projects\ballbreaker3d2016\Sound.cpp
+	"Sound.h"
+
+1470422891 source:d:\alonso\documents\codeblocks projects\ballbreaker3d2016\main.cpp
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	"Application.h"
+	"Object.h"
+	<ctime>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+
+1517669591 source:d:\alonso\documents\codeblocks projects\ballbreaker3d2016\menu.cpp
+	"Menu.h"
+
+1499332841 source:d:\alonso\documents\codeblocks projects\ballbreaker3d2016\object.cpp
+	"Object.h"
+
+1452012912 source:d:\alonso\documents\codeblocks projects\ballbreaker3d2016\resource.rc
+
+1537690248 source:d:\alonso\documents\codeblocks projects\ballbreaker3d2016\Game.cpp
+	"Game.h"
+
