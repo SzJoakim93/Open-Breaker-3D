@@ -1,10 +1,15 @@
 #include "Ball.h"
 
+char Ball::active_balls = 0;
+
 Ball::Ball(Object * _ball, bool _active)
 {
     this->ballObj = _ball;
     active = _active;
     setDefaults();
+
+    if (_active)
+        active_balls++;
 }
 
 Ball::~Ball()
@@ -12,24 +17,31 @@ Ball::~Ball()
     delete ballObj;
 }
 
-void Ball::setDefaults(int level_size, Object * padle)
+void Ball::activate()
+{
+    active = true;
+    active_balls++;
+    setDefaults();
+}
+
+void Ball::setDefaults()
 {
     ballspeed = 0;
     ballspeed_x = 0.5;
     ballspeed_y = 0.5;
-    ballObj->settx(padle->gettx());
-    ballObj->settz(-0.32+level_size);
 }
 
 void Ball::cloneBall(Ball * original, char side)
 {
+    active = true;
+    active_balls++;
     ballObj->settx(original->getObj()->gettx());
     ballObj->settz(original->getObj()->gettz());
     ballspeed_x = side == 0 ? original->ballspeed_x+0.1 : original->ballspeed_x-0.1;
     ballspeed_y = side == 0 ? original->ballspeed_y-0.1 : original->ballspeed_y+0.1;
 }
 
-bool Ball::pongFromPaddle(Object * padle)
+void Ball::pongFromPaddle(Object * padle)
 {
     if (ballObj->gettx() < padle->gettx() - padle->getsx() + padle->getsx()/6)
     {
@@ -100,21 +112,21 @@ bool Ball::pongFromPaddle(Object * padle)
 
 }
 
-bool Ball::pongFromBorder(float level_size)
+bool Ball::pongFromBorder(float level_size, const bool wall)
 {
     if (ballObj->gettx() > 0.45 + level_size && ballspeed_x < 0.0 || ballObj->gettx() < 0.55 - level_size && ballspeed_x > 0.0)
     {
         ballspeed_x *= -1.0;
-        if (*isSound)
-            sounds.play_sound(0, -1);
+        /*if (*isSound)
+            sounds.play_sound(0, -1);*/
     }
 
 
     if (ballObj->gettz() < -0.15 - level_size || wall > 0 && ballObj->gettz() > -0.25 + level_size)
     {
         ballspeed_y *= -1.0;
-        if (*isSound)
-            sounds.play_sound(0, -1);
+        /*if (*isSound)
+            sounds.play_sound(0, -1);*/
     }
 }
 
@@ -124,10 +136,16 @@ void Ball::moving()
     ballObj->trans_vertical(ballspeed_y*ballspeed);
 }
 
+int Ball::getSpeed()
+{
+    return ballspeed;
+}
+
 bool Ball::collision(Object * obj)
 {
-    return (ballObj->gettx() + ballObj->getsx() > obj->gettx() - obj->getsx() && ballObj->gettx() - ballObj->getsx() < obj->gettx() + obj->getsx() &&
-    ballObj->gettz() + ballObj->getsz() > obj->gettz() - obj->getsz() && ballObj->gettz() + ballObj->getsz() < obj->gettz() - obj->getsz());
+    return ballObj->getty() > obj->getty() - obj->getsy() &&
+        ballObj->gettx() + ballObj->getsx() > obj->gettx() - obj->getsx() && ballObj->gettx() - ballObj->getsx() < obj->gettx() + obj->getsx() &&
+        ballObj->gettz() + ballObj->getsz() > obj->gettz() - obj->getsz() && ballObj->gettz() - ballObj->getsz() < obj->gettz() + obj->getsz();
 }
 
 bool Ball::collision_front(Object * obj)
@@ -160,11 +178,6 @@ void Ball::reverseDir_X()
     ballspeed_x *=-1;
 }
 
-void Ball::reverseDir_X()
-{
-    ballspeed_y *=-1;
-}
-
 void Ball::reverseDir_Y()
 {
     ballspeed_y *=-1;
@@ -188,4 +201,21 @@ bool Ball::isLaunched()
 void Ball::setSpeed(const float x)
 {
     ballspeed = x;
+}
+
+void Ball::incativate()
+{
+    active = false;
+    active_balls--;
+}
+
+void Ball::increaseSpeed(const float x)
+{
+    if (ballspeed > -0.03);
+        ballspeed += x;
+}
+
+char Ball::getActiveBalls()
+{
+    return active_balls;
 }

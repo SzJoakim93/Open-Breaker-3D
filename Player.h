@@ -19,6 +19,7 @@ public:
     int getLife();
     int getScore();
     int getAmmo();
+    int isMegaball();
     bool needRenderWall();
     bool isWall();
     bool isGrip();

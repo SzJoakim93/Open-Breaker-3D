@@ -45,6 +45,11 @@ int Player::getAmmo()
     return ammo;
 }
 
+int Player::isMegaball()
+{
+    return megaball;
+}
+
 bool Player::needRenderWall()
 {
     return wall > 0 && wall < 20 || wall > 40 && wall < 60 || wall > 80 && wall < 100 || wall > 120;

@@ -71,7 +71,6 @@ Object::Object(float betx, float bety, float betz, int berx, int bery, int berz,
     this->rabsolute = 0;
     this->appear = beapp;
     this->mozaik = bemozaik;
-    this->gravity_range = 0.0;
     this->fenyek = fenyek;
     strcpy(texname, betexture);
     strcpy(objname, beobjname);
@@ -920,11 +919,6 @@ void Object::setrCameraX(int be)
     rCameraX = be;
 }
 
-void Object::setGravityRange(float be)
-{
-    this->gravity_range = be;
-}
-
 void Object::setrx(int bex)
 {
     this->rx = bex;
@@ -1119,11 +1113,6 @@ void Object::trans_vertical(const float & z)
     tz+=z;
 }
 
-void Object::trans_gravity(const float & x)
-{
-    gravity_range += x;
-}
-
 void Object::set_rCameraX(const float & x)
 {
     rCameraX = x;
@@ -1147,11 +1136,6 @@ void Object::doles(const int & x)
 int Object::getrabsolute()
 {
     return rabsolute;
-}
-
-float Object::getGravityRange()
-{
-    return gravity_range;
 }
 
 int Object::getAppear()

@@ -4,6 +4,7 @@ Block::Block(Object * _block, int * _flags)
 {
     this->blockObj = _block;
     this->flags = _flags;
+    this->gravity_range = 0.0;
 }
 
 Block::~Block()
@@ -14,7 +15,7 @@ Block::~Block()
 
 void Block::hit()
 {
-    flags[0]--;
+    flags[0] > 0 ? flags[0]-- : flags[0] = 0;
 }
 
 Object * Block::getObj()
@@ -24,12 +25,12 @@ Object * Block::getObj()
 
 bool Block::isNormal()
 {
-    return flags[0] > 0 && flags[0] < 9;
+    return flags[0] > 0;
 }
 
 bool Block::isBonus()
 {
-    return flags[0] % 10 == 9 || flags[0] == -1;
+    return flags[0] == -1;
 }
 
 bool Block::isSolid()
@@ -70,29 +71,25 @@ bool Block::destroyed()
 
 void Block::gravityEvents(vector<Block*> & obj_list)
 {
-    if (blockObj->getGravityRange() > 0.0)
+    if (gravity_range > 0.0)
     {
         for (int j=1; flags[j] > -1 && j<10; j++)
             obj_list[flags[j]]->getObj()->trans_lengthical(-0.001);
 
-        blockObj->trans_gravity(-0.0005);
+        gravity_range -= 0.0005;
 
-        if (blockObj->getGravityRange() < 0.0)
+        /*if (blockObj->getGravityRange() < 0.0)
             for (int j=1; flags[j] > -1 && j<9; j++)
-                obj_list[flags[j]]->flags[0] -= 10;
+                obj_list[flags[j]]->flags[0] -= 10;*/
     }
 }
 
-/*
-if (level_objects[i]->getGravityRange() > 0.0)
+void Block::addGravityRange()
 {
-    for (int j=1; flags[i][j] > -1 && j<10; j++)
-        level_objects[flags[i][j]]->trans_lengthical(-0.001);
-
-    level_objects[i]->getObj()->trans_gravity(-0.0005);
-
-    if (level_objects[i]->getObj()->getGravityRange() < 0.0)
-        for (int j=1; flags[i][j] > -1 && j<9; j++)
-            flags[flags[i][j]][0] -= 10;
+    gravity_range = blockObj->getsy();
 }
-*/
+
+int * Block::getflag()
+{
+    return flags;
+}

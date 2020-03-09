@@ -9,6 +9,7 @@ class Block
 private:
     Object * blockObj;
     int * flags;
+    float gravity_range;
 public:
     Block(Object * _block, int * _flags);
     ~Block();
@@ -22,7 +23,9 @@ public:
     bool isMoving();
     bool isActive();
     bool destroyed();
+    void addGravityRange();
     void gravityEvents(vector<Block*> & obj_list);
+    int * getflag();
 };
 
 #endif //Block_H

@@ -1,183 +1,3 @@
-//#ifndef ELEM_H
-//#define ELEM_H
-//
-//#include "GL/gl.h"
-//#include "SDL/SDL.h"
-//#include "gl/glu.h"
-//
-//#include <cstring>
-//#include <cstdio>
-//#include <cstdlib>
-//#include <cmath>
-//
-//#include "list.h"
-//#include "char_list.h"
-//
-//typedef struct eCoord3f
-//{
-//    float x;
-//    float y;
-//    float z;
-//} eCoord3f;
-//
-//typedef struct eVertex
-//{
-//    eCoord3f coord;
-//    eCoord3f normal;
-//} eVertex;
-//
-//typedef struct eFace
-//{
-//    eVertex a, b, c;
-//} eFace;
-//
-//typedef struct eMesh
-//{
-//    int max_face_num;
-//    int current_face_num;
-//    eFace *faces;
-//} eMesh;
-//
-//typedef struct eVertexList
-//{
-//    int max_vertex_num;
-//    int current_vertex_num;
-//    eVertex *vertices;
-//} eVertexList;
-//
-//class Elem
-//{
-//    public:
-//        Elem();
-//        Elem(const Elem & masik);
-//        Elem(float betx, float bety, float betz,
-//             int berx, int bery, int berz,
-//             float besx, float besy, float besz,
-//             bool fenyek, char* betexture, int bemozaik, char* betype, int beapp, int beflag);
-//        ~Elem();
-//        static void delete_objects();
-//        void megjelenit(); //elem parameter nelkuli megjelenitese (kep eseten)
-//        void gprintf(char * title); //elem megjelenitese szovegkent
-//        static void celore(const float & x); //kamera mozgasa elore
-//        void aelore(const float & x); //elem mozgasa elore
-//        static void chatra(const float & x); //kamera mozgasa hatra
-//        void ahatra(const float & x); //elem mozgasa hatra
-//        static void cbalra(const int & x); //kamera mozgasa balra
-//        static void cjobbra(const int & x); //kamera mozgasa jobbra
-//        void rotate(const int & x); //elem mozgasa balra
-//        void trans_vertical(const float & x);
-//        void trans_lengthical(const float & y);
-//        void trans_horizontal(const float & z);
-//        void trans_gravity(const float & x);
-//        void tavolsag(const float & x);
-//        void doles(const int & x);
-//        //setterek:
-//        void settx(float bex);
-//        void setty(float bey);
-//        void settz(float bez);
-//        void setsx(float bex);
-//        void setsy(float bey);
-//        void setsz(float bez);
-//        static void setcx(float bex);
-//        static void setcy(float bey);
-//        static void setcz(float bez);
-//        void setrabsolute(int be);
-//        static void setrCameraX(int be);
-//        void setGravityRange(float be);
-//        //getterek:
-//        float gettx();
-//        float getty();
-//        float gettz();
-//        static float getcx();
-//        static float getcy();
-//        static float getcz();
-//        float getsx();
-//        float getsy();
-//        float getsz();
-//        int getrx();
-//        int getry();
-//        int getrz();
-//        int getrabsolute();
-//        float getGravityRange();
-//        float getTzcamera();
-//        char* getTexture();
-//        char* getObjname();
-//        bool operator ==(Elem & other);
-//    protected:
-//    private:
-//    friend class Multi_elem;
-//        //elem koordinatai:
-//        float tx;
-//        float ty;
-//        float tz;
-//        //kamera eltolas:
-//        static float cx;
-//        static float cy;
-//        static float cz;
-//         //elem elforgatasa:
-//        int rx;
-//        int ry;
-//        int rz;
-//         //kamera koruli forgatas
-//        static int rCameraX;
-//        static int rCameraY;
-//        //elem iranya (jelen esetben az ellenfel merre forduljon)
-//        int rabsolute;
-//        static float txcamera;
-//        static float tycamera;
-//        static float tzcamera;
-//        //elem atmeretezese:
-//        float sx;
-//        float sy;
-//        float sz;
-//        bool fenyek; //hassanak-e ra a fenyek
-//        //blender file betoltese eseten az obj file elerese, negyzet eseten a "negyzet" szo
-//        char objname[32];
-//        //textura elerese, szoveg kiirasa eseten csak a mappa nevet kell megadni
-//        char texture[32];
-//        //megjelenes tipusa
-//        int appear;
-//        //mozaik texturazas: 0: nyujtja a texturat 1: a texturazas mozaikokkal torteneik 2: csak vizszintesen nyujtja 3: csak fuggolegesen nyujtja,
-//        int mozaik;
-//        //textura azonositoi
-//        GLuint * textureid;
-//        //tetszoleges flag
-//        float gravity_range;
-//        //az objektumon megjeleno texturak szama
-//        int maxtexture;
-//        //objektumok csucskoordinatai
-//        list<eMesh*>::Iterator mesh;
-//        list<int>::Iterator meshNumIt;
-//        char_list::Iterator meshPathIt;
-//
-//        //objektumok texturakoordinatai
-//        float * texcoords;
-//        int texcoord_number;
-//
-//        static list<eMesh*> global_mesh;
-//        static char_list global_mesh_path;
-//        static list<int> mesh_numbers;
-//
-//        /*static eMesh * global_mesh[100];
-//        static char global_mesh_path[100][30];
-//        static int maxMesh;*/
-//
-//        //ez a 3 mar ismeros :D
-//        char eCreateTextureFromSDLSurface(SDL_Surface *surf, GLuint & textureid);
-//        void eLoadBMPTexture(char *filename, GLuint & textureid);
-//        void square(float red, float green, float blue); //beepitett negyzet kirajzolasa
-//
-//        void eRenderMesh(eMesh *m);
-//        void eLoadMeshFromOBJ(eMesh *mesh, char *file);
-//        void eInitVertexList(eVertexList *vl);
-//        void eAddFaceToMesh(eMesh *mesh, eFace *face);
-//        void eAddVertexToVertexList(eVertexList *vl, eVertex *vertex);
-//        void eInitMesh(eMesh *mesh);
-//        eCoord3f eCrossProduct(eCoord3f a, eCoord3f b);
-//        void eCalcMeshNormals(eMesh *m);
-//};
-//
-//#endif // ELEM_H
 #ifndef OBJECT_H
 #define OBJECT_H
 
@@ -294,7 +114,6 @@ class Object
         static void setcz(float bez);
         void setrabsolute(int be);
         static void setrCameraX(int be);
-        void setGravityRange(float be);
         static void set_rCameraX(const float & x);
         static void set_rCameraY(const float & y);
         //getterek:
@@ -311,7 +130,6 @@ class Object
         int getry();
         int getrz();
         int getrabsolute();
-        float getGravityRange();
         static float getTxcamera();
         static float getTycamera();
         static float getTzcamera();
@@ -357,12 +175,6 @@ class Object
         int appear;
         //mozaik texturazas: 0: nyujtja a texturat 1: a texturazas mozaikokkal torteneik 2: csak vizszintesen nyujtja 3: csak fuggolegesen nyujtja,
         int mozaik;
-        //textura azonositoi
-        //GLuint * textureid;
-        //tetszoleges flag
-        float gravity_range;
-        //az objektumon megjeleno texturak szama
-        //int maxtexture;
 
         list<Texture>::Iterator textureid;
         char_list::Iterator texPathIt;

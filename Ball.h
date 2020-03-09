@@ -12,14 +12,17 @@ private:
     float ballspeed_x;
     float ballspeed_y;
     float ballspeed;
+    static char active_balls;
 public:
     Ball(Object * _ball, bool _active);
     ~Ball();
-    void setDefaults(int level_size, Object * padle);
+    void activate();
+    void setDefaults();
     void cloneBall(Ball * original, char side);
-    bool pongFromPaddle(Object * padle);
-    bool pongFromBorder(const float level_size);
+    void pongFromPaddle(Object * padle);
+    bool pongFromBorder(const float level_size, const bool wall);
     void moving();
+    int getSpeed();
     bool collision(Object * obj);
     bool collision_front(Object * obj);
     bool collision_back(Object * obj);
@@ -31,6 +34,9 @@ public:
     bool isActive();
     bool isLaunched();
     void setSpeed(const float x);
+    void incativate();
+    void increaseSpeed(const float x);
+    static char getActiveBalls();
 };
 
 #endif // Ball_H
