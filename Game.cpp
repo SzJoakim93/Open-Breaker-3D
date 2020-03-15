@@ -3,8 +3,6 @@
 Game::Game(char * level_path, Top * top, char * scorename, int * width, int * height, int * language)
 {
     //ctor
-    isCompleted = false;
-
     player = new Player();
 
     for (int i=0; i<3; i++)
@@ -54,6 +52,23 @@ Game::Game(char * level_path, Top * top, char * scorename, int * width, int * he
             temp2[19]++;
     }
 
+    for (int i=0; i<3; i++)
+        balls[i] = new Ball(new Object(0.5f, -0.27f, -0.32f, //koordinatak
+                           0, 180, 0, //elforgatas
+                           0.04f, 0.04f, 0.04f, //atmeretezes
+                           true, "Colors/red.bmp", 0, "Objects/sphere.obj", 0, 0), false);
+
+    padle = new Object(0.5f, -0.27f, -0.25, //koordinatak
+                     0, 0, 0, //elforgatas
+                     0.1f, 0.025f, 0.025f, //atmeretezes
+                     true, "Colors/gray.bmp", 0, "Objects/padle.obj", 0, 0);
+
+    ammo_fire = new Object(0.5f, -0.27f, 1.0f, //koordinatak
+                         0, 270, 0, //elforgatas
+                         0.08f, 1.0f, 0.08f, //atmeretezes
+                         true, "Textures/ammo.bmp", 0, "negyzet", 0, 0);
+
+    ammo_fire->setActive(false);
 
     level_title = new Object(-0.1+place, -0.067, 0.0, //koordinatak
                            0, 0, 0, //elforgatas
@@ -121,7 +136,7 @@ Game::Game(char * level_path, Top * top, char * scorename, int * width, int * he
     titles[3]->setsx(0.028);
 
     for (int i=0; i<8; i++)
-                play_list[i]=true;
+        play_list[i]=true;
     char ** soundpath= new char*[9];
     for (int i=0; i<9; i++)
         soundpath[i] = new char[32];
@@ -172,59 +187,20 @@ Game::~Game()
     delete text;
     delete textbox;
 
+    for (int i=0; i<3; i++)
+        delete balls[i];
 
-}
+    delete padle;
+    delete ammo_fire;
 
-void Game::load(char * path)
-{
-    FILE * file = fopen(path, "r");
-    fscanf(file, "%f %s", &level_size, level_color);
-    level_x = -0.8+level_size*2.0/1.5;
-    level_y = 1.0-level_size*2.0;
-    level_z = 1.0-level_size*2.0;
-
-    blocks=0;
-
-    while(!feof(file))
-    {
-        float tx;
-        float ty;
-        float tz;
-        float sx;
-        float sy;
-        float sz;
-        char texture[30];
-        char obj[30];
-        int r;
-        int * new_flag = new int [10];
-            
-        fscanf(file, "%f %f %f %f %f %f %d %s %s %d %d %d %d %d %d %d %d %d %d", &tx, &ty, &tz, &sx, &sy, &sz, &r, texture, obj, &new_flag[0], &new_flag[1], &new_flag[2], &new_flag[3], &new_flag[4], &new_flag[5], &new_flag[6], &new_flag[7], &new_flag[8], &new_flag[9]);
-        level_objects.insert(new Block(new Object(tx, ty, tz, //koordinatak
-                             0, r, 0, //elforgatas
-                             sx, sy, sz, //atmeretezes
-                             true, texture, 0, obj, 0, 0), new_flag));
-
-        if (new_flag[0] != -2)
-            blocks++;
-    }
-
-    fclose(file);
 }
 
 void Game::esemenyek(int & jatekresz)
 {
-    if (Object::getcx() < level_x - 0.2)
-        Object::setcx(Object::getcx() + 0.2);
+    level->cameraAnimation();
 
-    if (Object::getcy() < level_y - 0.2)
-        Object::setcy(Object::getcy() + 0.2);
-
-    if (Object::getcz() < level_z - 0.2)
-        Object::setcz(Object::getcz() + 0.2);
-
-    if (player->getLife() > 0 && !isCompleted)
+    if (player->getLife() > 0 && !level->isCompleted())
     {
-        player->wallEvent();
         for (int i=0; i<3; i++)
             if (stars[i]->getty() < 0.9)
             {
@@ -233,9 +209,9 @@ void Game::esemenyek(int & jatekresz)
                     stars[i]->trans_lengthical(-0.002);
             }
 
-        if (left_key_pressed && padle->gettx() - padle->getsx() > 0.5-level_size)
+        if (left_key_pressed && padle->gettx() - padle->getsx() > 0.5-level->getSize())
             padle->trans_horizontal(-0.015);
-        if (right_key_pressed && padle->gettx() + padle->getsx() < 0.5+level_size)
+        if (right_key_pressed && padle->gettx() + padle->getsx() < 0.5+level->getSize())
             padle->trans_horizontal(+0.015);
 
         for (int i=0; i<3; i++)
@@ -247,7 +223,7 @@ void Game::esemenyek(int & jatekresz)
                     balls[i]->getObj()->settx(padle->gettx());
 
                 for (int j=0; j<3; j++)
-                    if (stars[j]->getty() < 0.2 && *balls[i]->getObj() == *stars[j])
+                    if (stars[j]->getty() < 0.2 && balls[i]->collision(stars[j]))
                     {
                         player->increaseScore(15);
                         if (*isSound)
@@ -255,7 +231,7 @@ void Game::esemenyek(int & jatekresz)
                         stars[j]->setty(1.0);
                     }
 
-                balls[i]->pongFromBorder(level_size, player->isWall());
+                balls[i]->pongFromBorder(level->getSize(), level->isWall());
 
 
                 if (balls[i]->collision(padle))
@@ -264,69 +240,39 @@ void Game::esemenyek(int & jatekresz)
                         sounds.play_sound(0, -1);
                     if (player->isGrip())
                     {
-                        //balls[i]->setDefaults();
                         balls[i]->setSpeed(0.0f);
                         balls[i]->getObj()->settx(padle->gettx());
-                        balls[i]->getObj()->settz(-0.32+level_size);
+                        balls[i]->getObj()->settz(-0.32+level->getSize());
                     }
 
                     balls[i]->pongFromPaddle(padle);
                 }
 
-                if (balls[i]->getObj()->gettz() > 0.4+level_size)
-                    balls[i]->incativate();
+                if (balls[i]->getObj()->gettz() > 0.4+level->getSize())
+                    balls[i]->setActive(false);
             }
 
-        //if (balls[0]->getObj()->gettz() > 0.4+level_size && balls[1]->getObj()->gettz() > 0.4+level_size && balls[2]->getObj()->gettz() > 0.4+level_size && player->getLife() > 0)
         if (Ball::getActiveBalls() == 0)
         {
             player->decreaseLife();
             if (player->getLife() > 0)
-                balls[0]->activate();
+            {
+                balls[0]->setActive(true);
                 balls[0]->getObj()->settx(padle->gettx());
-                balls[0]->getObj()->settz(-0.32+level_size);
+                balls[0]->getObj()->settz(-0.32+level->getSize());
+                balls[0]->setDefaults();
+            }
+                
         }
 
-        for (int i=0; i<level_objects.size(); i++)
-        { 
-            if (level_objects[i]->isNormal())
+        level->events();
+
+        vector<Block*> level_objects = level->getObjs();
+
+        for (int j=0; j<3; j++)
+        {  
+            for (int i = 0; i < level_objects.size(); i++)
             {
-                if (*ammo_fire == *(level_objects[i]->getObj()))
-                {
-                    level_objects[i]->hit();
-
-                    if (level_objects[i]->destroyed())
-                    {
-                        player->increaseScore(3);
-                        blocks--;
-                        level_objects[i]->addGravityRange();
-                        if (*isSound)
-                            sounds.play_sound(2, -1);
-                    }
-                    else
-                    {
-                        player->increaseScore(1);
-                        if (*isSound)
-                            sounds.play_sound(1, -1);
-                    }
-
-                    ammo_fire->settz(1.0+level_size);
-
-                    break;
-                }
-                
-            }
-            else if (level_objects[i]->isBonus())
-            {
-                level_objects[i]->getObj()->rotateY(1);
-            }
-            else if (level_objects[i]->isMoving())
-            {
-                level_objects[i]->moving();    
-            }
-
-
-            for (int j=0; j<3; j++)
                 if (balls[j]->isActive() && level_objects[i]->isActive() && balls[j]->collision(level_objects[i]->getObj()))
                 {
                     if (!player->isMegaball() || level_objects[i]->isMoving())
@@ -350,86 +296,38 @@ void Game::esemenyek(int & jatekresz)
                     }
                     else if (level_objects[i]->isBonus())
                     {
-                        level_objects[i]->hit();
-                        blocks--;
-                        level_objects[i]->addGravityRange();
-
-                        player->increaseScore(3);
-                        if (*isSound)
-                            sounds.play_sound(3, -1);
-
-                            int k = rand() % 10;
-                            bonuses[k]->settx(level_objects[k]->getObj()->gettx());
-                            bonuses[k]->settz(level_objects[k]->getObj()->gettz());
+                        hitBonusObject(level_objects[i]);
                     }
                     else
                     {
-                        level_objects[i]->hit();
-
-                        if (level_objects[i]->destroyed())
-                        {
-                            blocks--;
-                            level_objects[i]->addGravityRange();
-                            
-                            player->increaseScore(5);
-                            balls[j]->increaseSpeed(-0.0002);
-                            if (*isSound)
-                                sounds.play_sound(2, -1);
-
-                            if (blocks % 30 == 0)
-                            {
-                                stars[0]->settx(((float)(rand() % 10)/10.0)*level_size*2);
-                                stars[0]->settz(((float)(rand() % 10)/10.0)*level_size*2 - 0.75);
-                                stars[0]->setty(0.8);
-                            }
-
-
-                            if (blocks % 30 == 10)
-                            {
-                                stars[1]->settx(((float)(rand() % 10)/10.0)*level_size*2);
-                                stars[1]->settz(((float)(rand() % 10)/10.0)*level_size*2 - 0.75);
-                                stars[1]->setty(0.8);
-                            }
-
-                            if (blocks % 30 == 20)
-                            {
-                                stars[2]->settx(((float)(rand() % 10)/10.0)*level_size*2);
-                                stars[2]->settz(((float)(rand() % 10)/10.0)*level_size*2 - 0.75);
-                                stars[2]->setty(0.8);
-                            }
-
-                        }
-                        else //object hit but not destroyed
-                        {
-                            if (*isSound)
-                                sounds.play_sound(1, -1);
-                            player->increaseScore(2);
-                        }
-
+                        hitNormalObject(level_objects[i], balls[j]);
                     }
 
-                    goto collision_detect_end;
+                    break;
                 }
+            }
         }
 
-        collision_detect_end:
+        for (int i = 0; i < level_objects.size(); i++)
+            if (*ammo_fire == *(level_objects[i]->getObj()))
+            {
+                hitNormalObject(level_objects[i], NULL);
+                ammo_fire->setActive(false);
+            }
 
-        for (int i=0; i<level_objects.size(); i++)
-            level_objects[i]->gravityEvents(level_objects);
-
-        if (ammo_fire->gettz() < 0.5+level_size)
+        if (ammo_fire->isActive())
             ammo_fire->trans_vertical(-0.015);
 
-        if (ammo_fire->gettz() < -0.2-level_size)
-            ammo_fire->settz(1.0+level_size);
+        if (ammo_fire->gettz() < -0.2-level->getSize())
+            ammo_fire->setActive(false);
 
         for (int i=0; i<10; i++)
-            if (bonuses[i]->gettz() < 0.5+level_size)
+            if (bonuses[i]->isActive())
             {
                 bonuses[i]->trans_vertical(0.005);
                 bonuses[i]->rotateY(1);
 
-                if (bonuses[i]->gettz() > -0.3+level_size && bonuses[i]->gettz() < -0.29+level_size && bonuses[i]->gettx() > padle->gettx() - padle->getsx() && bonuses[i]->gettx() < padle->gettx() + padle->getsx())
+                if (bonuses[i]->gettz() > -0.3+level->getSize() && bonuses[i]->gettz() < -0.29+level->getSize() && bonuses[i]->gettx() > padle->gettx() - padle->getsx() && bonuses[i]->gettx() < padle->gettx() + padle->getsx())
                 {
                     if (*isSound)
                         sounds.play_sound(4, -1);
@@ -463,7 +361,7 @@ void Game::esemenyek(int & jatekresz)
                     }
                     case 4:
                     {
-                        player->setWall(2000);
+                        level->setWall(2000);
                         player->increaseScore(5);
                         break;
                     }
@@ -498,42 +396,102 @@ void Game::esemenyek(int & jatekresz)
                         break;
                     }
                     }
-                    bonuses[i]->settz(0.5+level_size);
+
+                    bonuses[i]->setActive(false);
                 }
             }
 
-        if (blocks < 1)
+
+        if (level->isCompleted())
         {
-
-            if (!isCompleted)
+            if (level->getNum() % 10 == 0)
             {
-                if (level % 10 == 0)
-                {
-                    if (*isSound)
-                        sounds.play_sound(5, -1);
-                }
-                else
-                {
-                    reset();
-                    player->increaseScore(20);
-                    if (*isSound)
-                        sounds.play_sound(6, -1);
-                }
-
-                SDL_Delay(3000);
-
-                if (level % 10 == 0)
-                    isCompleted=true;
-                else
-                {
-                    level++;
-                    start(level);
-                }
+                if (*isSound)
+                    sounds.play_sound(5, -1);
+            }
+            else
+            {
+                if (*isSound)
+                    sounds.play_sound(6, -1);
             }
 
+            SDL_Delay(3000);
+            
+            int level_num = level->getNum();
+            delete level;
+            player->increaseScore(20);
+
+            if (level_num % 10 != 0)
+            {
+                level_num++;
+                level = new Level(level_num);
+            }
         }
     }
 
+}
+
+void Game::hitNormalObject(Block * obj, Ball * ball)
+{
+    obj->hit();
+
+    if (obj->destroyed())
+    {
+        if (ball != NULL)
+            ball->increaseSpeed(-0.0002);
+
+        level->decreaseBlock();
+        obj->addGravityRange();
+        
+        player->increaseScore(5);
+        
+        if (*isSound)
+            sounds.play_sound(2, -1);
+
+        if (level->getBlockNum() % 30 == 0)
+        {
+            stars[0]->settx(((float)(rand() % 10)/10.0)*level->getSize()*2);
+            stars[0]->settz(((float)(rand() % 10)/10.0)*level->getSize()*2 - 0.75);
+            stars[0]->setty(0.8);
+        }
+
+
+        if (level->getBlockNum() % 30 == 10)
+        {
+            stars[1]->settx(((float)(rand() % 10)/10.0)*level->getSize()*2);
+            stars[1]->settz(((float)(rand() % 10)/10.0)*level->getSize()*2 - 0.75);
+            stars[1]->setty(0.8);
+        }
+
+        if (level->getBlockNum() % 30 == 20)
+        {
+            stars[2]->settx(((float)(rand() % 10)/10.0)*level->getSize()*2);
+            stars[2]->settz(((float)(rand() % 10)/10.0)*level->getSize()*2 - 0.75);
+            stars[2]->setty(0.8);
+        }
+
+    }
+    else //object hit but not destroyed
+    {
+        if (*isSound)
+            sounds.play_sound(1, -1);
+        player->increaseScore(2);
+    }
+}
+
+void Game::hitBonusObject(Block * obj)
+{
+    obj->hit();
+    level->decreaseBlock();
+    obj->addGravityRange();
+
+    player->increaseScore(3);
+    if (*isSound)
+        sounds.play_sound(3, -1);
+
+    int k = rand() % 10;
+    bonuses[k]->settx(obj->getObj()->gettx());
+    bonuses[k]->settz(obj->getObj()->gettz());
 }
 
 void Game::leftKeyDown()
@@ -569,13 +527,14 @@ void Game::launch()
 {
     if (balls[0]->isLaunched())
     {
-        if (player->getAmmo() > 0 && ammo_fire->gettz() > 0.4f+level_size)
+        if (player->getAmmo() > 0 && ammo_fire->isActive())
         {
             if (*isSound)
                 sounds.play_sound(7, -1);
             player->decreaseAmmo();
             ammo_fire->settx(padle->gettx());
-            ammo_fire->settz(-0.3+level_size);
+            ammo_fire->settz(padle->gettz());
+            ammo_fire->setActive(true);
         }
     }
     else 
@@ -585,7 +544,7 @@ void Game::launch()
 void Game::rendering(int & jatekresz)
 {
 
-    if (player->getLife() < 1 || isCompleted)
+    if (player->getLife() < 1 || level->isCompleted())
     {
         if (player->getScore() > top[9].score)
         {
@@ -602,7 +561,7 @@ void Game::rendering(int & jatekresz)
         else
             r_title->gprintf("press enter to return");
 
-        if (isCompleted)
+        if (level->isCompleted())
         {
             if (*language == 0)
                 gameover->gprintf("sorozat teljes/2tve");
@@ -625,20 +584,13 @@ void Game::rendering(int & jatekresz)
         if (stars[i]->getty() < 0.9f)
             stars[i]->rendering(0);
 
-    aljzat->rendering(0);
-    fal1->rendering(0);
-    fal2->rendering(0);
-    fal3->rendering(0);
-    if (player->needRenderWall())
-        fal4->rendering(0);
-
     padle->rendering(0);
 
     for (int i=0; i<3; i++)
         if (balls[i]->isActive())
             balls[i]->getObj()->rendering(0);
 
-    print(blocks, *block_title);
+    print(level->getBlockNum(), *block_title);
     for (int i=0; i<4; i++)
         titles[i]->rendering(0);
 
@@ -646,12 +598,10 @@ void Game::rendering(int & jatekresz)
     print(player->getAmmo(), *ammo_title);
     print(player->getScore(), *score_title);
     print(top[0].score, *best_title);
-    print(level, *level_title);
+    print(level->getNum(), *level_title);
 
 
-    for (int i=0; i<level_objects.size(); i++)
-        if (level_objects[i]->isActive())
-            level_objects[i]->getObj()->rendering(0);
+    level->rendering();
 
     for (int i=0; i<10; i++)
         if (bonuses[i]->gettz() < 1.0f)
@@ -719,21 +669,7 @@ void Game::zene_stop()
 
 void Game::reset()
 {
-    for (int i=0; i<level_objects.size(); i++)
-        delete level_objects[i];
-    level_objects.clear();
-
-    delete fal1;
-    delete fal2;
-    delete fal3;
-    delete fal4;
-    /*for (int i=0; i<3; i++)
-        delete ball[i];*/
-
-    //delete [] ball;
-    delete padle;
-    delete aljzat;
-    delete ammo_fire;
+    delete level;
 
     sounds.stop();
 
@@ -746,17 +682,17 @@ void Game::sethangok(bool * behang, bool * bezene)
     isMusic = bezene;
 }
 
-void Game::start(const int & level)
+void Game::start(const int & level_num)
 {
     Object::setcz(-10.0f);
     Object::setcy(-10.0f);
     Object::setcz(-10.0f);
 
-    if (level % 10 == 1)
+    level = new Level(level_num);
+
+    if (level_num % 10 == 1)
         player->resetGame();
     player->resetLevel();    
-
-    this->level = level;
 
     if (*isMusic)
     {
@@ -780,59 +716,17 @@ void Game::start(const int & level)
         sounds.play_music(mus_path);
     }
 
-    levelpath = new char [30];
-    sprintf(levelpath, "Levels/L%d.txt", level);
-    load(levelpath);
+    
 
-    delete levelpath;
+    balls[0]->getObj()->settx(0.5f);
+    balls[0]->getObj()->settz(-0.32f + level->getSize());
+    balls[0]->setDefaults();
+    
+    for (int i = 1; i < 3; i++)
+        balls[i]->setActive(false);
 
-    aljzat = new Object(0.5f, -0.3f, -0.2f, //koordinatak
-                      0, 0, 0, //elforgatas
-                      level_size*2.0f, 1.0f, level_size*2.0f, //atmeretezes
-                      true, level_color, 0, "negyzet", 0, 0);
-
-    fal1 = new Object(0.5f + level_size, -0.27f, -0.2, //koordinatak
-                    0, 0, 0, //elforgatas
-                    0.01f, 0.025f, level_size, //atmeretezes
-                    true, level_color, 0, "Objects/cube.obj", 0, 0);
-
-    fal2 = new Object(0.5 - level_size, -0.27, -0.2, //koordinatak
-                    0, 0, 0, //elforgatas
-                    0.01f, 0.025f, level_size, //atmeretezes
-                    true, level_color, 0, "Objects/cube.obj", 0, 0);
-
-    fal3 = new Object(0.5f, -0.27f, -0.2f - level_size, //koordinatak
-                    0, 90, 0, //elforgatas
-                    0.01f, 0.025f, level_size, //atmeretezes
-                    true, level_color, 0, "Objects/cube.obj", 0, 0);
-
-    fal4 = new Object(0.5f, -0.27f, -0.2f + level_size, //koordinatak
-                    0, 90, 0, //elforgatas
-                    0.01f, 0.025f, level_size, //atmeretezes
-                    true, level_color, 0, "Objects/cube.obj", 0, 0);
-
-    padle = new Object(0.5f, -0.27f, -0.25 + level_size, //koordinatak
-                     0, 0, 0, //elforgatas
-                     0.1f, 0.025f, 0.025f, //atmeretezes
-                     true, "Colors/gray.bmp", 0, "Objects/padle.obj", 0, 0);
-
-    ammo_fire = new Object(0.5f, -0.27f, 1.0f + level_size, //koordinatak
-                         0, 270, 0, //elforgatas
-                         0.08f, 1.0f, 0.08f, //atmeretezes
-                         true, "Textures/ammo.bmp", 0, "negyzet", 0, 0);
-
-    balls[0] = new Ball(new Object(0.5f, -0.27f, -0.32f + level_size, //koordinatak
-                       0, 180, 0, //elforgatas
-                       0.04f, 0.04f, 0.04f, //atmeretezes
-                       true, "Colors/red.bmp", 0, "Objects/sphere.obj", 0, 0), true);
-
-    for (int i=1; i<3; i++)
-        balls[i] = new Ball(new Object(0.5f, -0.27f, 1.0f + level_size, //koordinatak
-                           0, 180, 0, //elforgatas
-                           0.04f, 0.04f, 0.04f, //atmeretezes
-                           true, "Colors/red.bmp", 0, "Objects/sphere.obj", 0, 0), false);
-
-    isCompleted = false;
+    padle->settx(0.5f);
+    padle->settz(-0.25 + level->getSize());
 }
 
 int Game::getLife()
@@ -847,7 +741,7 @@ int Game::getScore()
 
 bool Game::getCompleted()
 {
-    return isCompleted;
+    return level->isCompleted();
 }
 
 void Game::setBallSpeed(const float x)

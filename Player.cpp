@@ -20,14 +20,7 @@ void Player::resetGame()
 void Player::resetLevel()
 {
     megaball = false;
-    wall = 0;
     grip = false;
-}
-
-void Player::wallEvent()
-{
-    if (wall > 0)
-        wall--;
 }
 
 int Player::getLife()
@@ -48,16 +41,6 @@ int Player::getAmmo()
 int Player::isMegaball()
 {
     return megaball;
-}
-
-bool Player::needRenderWall()
-{
-    return wall > 0 && wall < 20 || wall > 40 && wall < 60 || wall > 80 && wall < 100 || wall > 120;
-}
-
-bool Player::isWall()
-{
-    return wall > 0;
 }
 
 bool Player::isGrip()
@@ -98,9 +81,4 @@ void Player::setGrip(const bool x)
 void Player::setMegaBall(const bool x)
 {
     megaball = x;
-}
-
-void Player::setWall(const int x)
-{
-    wall = x;
 }

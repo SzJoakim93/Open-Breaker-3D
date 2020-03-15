@@ -431,7 +431,9 @@ bool Object::is_dir(const char* path) {
 
 void Object::rendering(const int & i)
 {
-    glPushMatrix();
+    if (active)
+    {
+        glPushMatrix();
 
     if (appear < 2)
     {
@@ -462,36 +464,37 @@ void Object::rendering(const int & i)
             glScalef(sx, 1.0, sz);
         else
             glScalef(sx, sy, sz); //nagyitas/kicsinyites
-    }
-    else if (appear == 2)
-    {
-        glTranslatef(0, 2, tz);
-        glRotatef(90, 1, 0, 0);
-        glScalef(sx, 1.0, sz);
-    }
-    else if (appear == 2)
-    {
-        glTranslatef(0, 2, tz);
-        glRotatef(90, 1, 0, 0);
-        glScalef(sx, 1.0, sz);
-    }
-    else if (appear == 3)
-    {
-        glTranslatef(tx, ty, -0.25);
-        glRotatef(rz, 0, 0, 1);
-        glRotatef(-90, 1, 0, 0);
-        glRotatef(90, 0, 1, 0);
-        glScalef(sx, sy, sz);
-    }
+        }
+        else if (appear == 2)
+        {
+            glTranslatef(0, 2, tz);
+            glRotatef(90, 1, 0, 0);
+            glScalef(sx, 1.0, sz);
+        }
+        else if (appear == 2)
+        {
+            glTranslatef(0, 2, tz);
+            glRotatef(90, 1, 0, 0);
+            glScalef(sx, 1.0, sz);
+        }
+        else if (appear == 3)
+        {
+            glTranslatef(tx, ty, -0.25);
+            glRotatef(rz, 0, 0, 1);
+            glRotatef(-90, 1, 0, 0);
+            glRotatef(90, 0, 1, 0);
+            glScalef(sx, sy, sz);
+        }
 
 
-    if (!strncmp(objname, "negyzet", 7))
-        square(i);
-    else
-        eRenderMesh((*mesh_id).mesh);
+        if (!strncmp(objname, "negyzet", 7))
+            square(i);
+        else
+            eRenderMesh((*mesh_id).mesh);
 
 
-    glPopMatrix();
+        glPopMatrix();
+    }
 }
 
 void Object::gprintf(char * title)
@@ -1212,25 +1215,38 @@ void Object::operator = (Object & other)
 
 bool Object::operator ==(Object & other)
 {
-    if (other.getry() == 0 || other.getry() == 180)
+    if (active)
     {
-        if (this->gettx() + this->getsx()  > other.gettx() - (other.getsx()/* *(space/100.0)*/)  &&
-        this->gettx() - this->getsx()  < other.gettx() + (other.getsx()/* *(space/100.0)*/)  &&
-        this->gettz() + this->getsz()  > other.gettz() - (other.getsz()/* *(space/100.0)*/)  &&
-        this->gettz() - this->getsz()  < other.gettz() + (other.getsz()/* *(space/100.0)*/) )
-            return true;
+        if (other.getry() == 0 || other.getry() == 180)
+        {
+            if (this->gettx() + this->getsx()  > other.gettx() - (other.getsx()/* *(space/100.0)*/)  &&
+            this->gettx() - this->getsx()  < other.gettx() + (other.getsx()/* *(space/100.0)*/)  &&
+            this->gettz() + this->getsz()  > other.gettz() - (other.getsz()/* *(space/100.0)*/)  &&
+            this->gettz() - this->getsz()  < other.gettz() + (other.getsz()/* *(space/100.0)*/) )
+                return true;
+            else
+                return false;
+        }
         else
-            return false;
-    }
-    else
-    {
-        if (this->gettx() + this->getsx()  > other.gettx() - (other.getsz()/* *(space/100.0)*/)  &&
-        this->gettx() - this->getsx()  < other.gettx() + (other.getsz()/* *(space/100.0)*/)  &&
-        this->gettz() + this->getsz()  > other.gettz() - (other.getsx()/* *(space/100.0)*/)  &&
-        this->gettz() - this->getsz()  < other.gettz() + (other.getsx()/* *(space/100.0)*/) )
-            return true;
-        else
-            return false;
+        {
+            if (this->gettx() + this->getsx()  > other.gettx() - (other.getsz()/* *(space/100.0)*/)  &&
+            this->gettx() - this->getsx()  < other.gettx() + (other.getsz()/* *(space/100.0)*/)  &&
+            this->gettz() + this->getsz()  > other.gettz() - (other.getsx()/* *(space/100.0)*/)  &&
+            this->gettz() - this->getsz()  < other.gettz() + (other.getsx()/* *(space/100.0)*/) )
+                return true;
+            else
+                return false;
+        }
     }
 
+}
+
+bool Object::isActive()
+{
+    return active;
+}
+
+void Object::setActive(const bool _active)
+{
+    active = _active;
 }

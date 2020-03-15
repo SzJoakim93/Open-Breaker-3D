@@ -10,6 +10,7 @@
 #include "Block.h"
 #include "Object.h"
 #include "Sound.h"
+#include "Level.h"
 #include "vector.h"
 
 #define MAX_LEVEL 20
@@ -43,17 +44,16 @@ class Game
         int getScore();
         bool getCompleted();
         void setBallSpeed(const float x);
+        void hitBonusObject(Block * obj);
+        void hitNormalObject(Block * obj, Ball * ball);
     protected:
     private:
         void print(int x, Object & Object);
-        vector<Block*> level_objects;
+
+        Level * level;
         Ball * balls[3];
         Object * stars[3];
-        Object * aljzat;
-        Object * fal1;
-        Object * fal2;
-        Object * fal3;
-        Object * fal4;
+        
         Object * padle;
         Object ** titles;
         Object ** bonuses;
@@ -72,29 +72,14 @@ class Game
         Object * text;
         Sound sounds;
 
-        float level_size;
-        char level_color[30];
-
-        int level;
-        int blocks;
-
         Player * player;
-
-        bool isCompleted;
-
 
         bool left_key_pressed;
         bool right_key_pressed;
-
-        char * levelpath;
         bool play_list[8];
         bool * isSound;
         bool * isMusic;
         int * language;
-
-        float level_x;
-        float level_y;
-        float level_z;
 
         Top * top;
         char * scorename;

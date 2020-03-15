@@ -16,7 +16,7 @@ private:
 public:
     Ball(Object * _ball, bool _active);
     ~Ball();
-    void activate();
+    void setActive(const bool _active);
     void setDefaults();
     void cloneBall(Ball * original, char side);
     void pongFromPaddle(Object * padle);
@@ -34,7 +34,6 @@ public:
     bool isActive();
     bool isLaunched();
     void setSpeed(const float x);
-    void incativate();
     void increaseSpeed(const float x);
     static char getActiveBalls();
 };

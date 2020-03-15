@@ -140,6 +140,8 @@ class Object
         void operator = (Object & other);
         bool operator ==(Object & other);
         bool isCollision();
+        bool isActive();
+        void setActive(const bool _active);
     protected:
     private:
         //Object koordinatai:
@@ -175,6 +177,7 @@ class Object
         int appear;
         //mozaik texturazas: 0: nyujtja a texturat 1: a texturazas mozaikokkal torteneik 2: csak vizszintesen nyujtja 3: csak fuggolegesen nyujtja,
         int mozaik;
+        bool active;
 
         list<Texture>::Iterator textureid;
         char_list::Iterator texPathIt;

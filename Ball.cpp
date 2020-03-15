@@ -15,13 +15,21 @@ Ball::Ball(Object * _ball, bool _active)
 Ball::~Ball()
 {
     delete ballObj;
+    active_balls--;
 }
 
-void Ball::activate()
+void Ball::setActive(const bool _active)
 {
-    active = true;
-    active_balls++;
-    setDefaults();
+    if (active != _active)
+    {
+        if (active)
+            active_balls++;
+        else
+            active_balls--;
+    }
+
+    active = _active;
+
 }
 
 void Ball::setDefaults()
@@ -201,12 +209,6 @@ bool Ball::isLaunched()
 void Ball::setSpeed(const float x)
 {
     ballspeed = x;
-}
-
-void Ball::incativate()
-{
-    active = false;
-    active_balls--;
 }
 
 void Ball::increaseSpeed(const float x)

@@ -22,6 +22,7 @@ add_executable(BallBreaker3D
 	Ball.cpp
 	Player.cpp
 	Block.cpp
+	Level.cpp
 	resource.rc
 	)
 
