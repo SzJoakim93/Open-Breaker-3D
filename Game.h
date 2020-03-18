@@ -48,8 +48,12 @@ class Game
         void hitNormalObject(Block * obj, Ball * ball);
     protected:
     private:
-        void print(int x, Object & Object);
-
+        inline void print(int x, Object & Object);
+        inline void end_level();
+        inline void ball_events();
+        inline void ballCollisions();
+        inline void ammoEvents();
+        inline void bonusEvents();
         Level * level;
         Ball * balls[3];
         Object * stars[3];

@@ -8,3 +8,4 @@ obj/
 Cmake_install.cmake
 CMakeCache.txt
 CMakeFiles
+Makefile

@@ -110,17 +110,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Platinum_demo
+# Target rules for targets named BallBreaker3D
 
 # Build rule for target.
-Platinum_demo: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 Platinum_demo
-.PHONY : Platinum_demo
+BallBreaker3D: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 BallBreaker3D
+.PHONY : BallBreaker3D
 
 # fast build rule for target.
-Platinum_demo/fast:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/build
-.PHONY : Platinum_demo/fast
+BallBreaker3D/fast:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/build
+.PHONY : BallBreaker3D/fast
 
 Application.obj: Application.cpp.obj
 
@@ -128,7 +128,7 @@ Application.obj: Application.cpp.obj
 
 # target to build an object file
 Application.cpp.obj:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Application.cpp.obj
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Application.cpp.obj
 .PHONY : Application.cpp.obj
 
 Application.i: Application.cpp.i
@@ -137,7 +137,7 @@ Application.i: Application.cpp.i
 
 # target to preprocess a source file
 Application.cpp.i:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Application.cpp.i
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Application.cpp.i
 .PHONY : Application.cpp.i
 
 Application.s: Application.cpp.s
@@ -146,8 +146,62 @@ Application.s: Application.cpp.s
 
 # target to generate assembly for a file
 Application.cpp.s:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Application.cpp.s
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Application.cpp.s
 .PHONY : Application.cpp.s
+
+Ball.obj: Ball.cpp.obj
+
+.PHONY : Ball.obj
+
+# target to build an object file
+Ball.cpp.obj:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Ball.cpp.obj
+.PHONY : Ball.cpp.obj
+
+Ball.i: Ball.cpp.i
+
+.PHONY : Ball.i
+
+# target to preprocess a source file
+Ball.cpp.i:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Ball.cpp.i
+.PHONY : Ball.cpp.i
+
+Ball.s: Ball.cpp.s
+
+.PHONY : Ball.s
+
+# target to generate assembly for a file
+Ball.cpp.s:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Ball.cpp.s
+.PHONY : Ball.cpp.s
+
+Block.obj: Block.cpp.obj
+
+.PHONY : Block.obj
+
+# target to build an object file
+Block.cpp.obj:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Block.cpp.obj
+.PHONY : Block.cpp.obj
+
+Block.i: Block.cpp.i
+
+.PHONY : Block.i
+
+# target to preprocess a source file
+Block.cpp.i:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Block.cpp.i
+.PHONY : Block.cpp.i
+
+Block.s: Block.cpp.s
+
+.PHONY : Block.s
+
+# target to generate assembly for a file
+Block.cpp.s:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Block.cpp.s
+.PHONY : Block.cpp.s
 
 Game.obj: Game.cpp.obj
 
@@ -155,7 +209,7 @@ Game.obj: Game.cpp.obj
 
 # target to build an object file
 Game.cpp.obj:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Game.cpp.obj
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Game.cpp.obj
 .PHONY : Game.cpp.obj
 
 Game.i: Game.cpp.i
@@ -164,7 +218,7 @@ Game.i: Game.cpp.i
 
 # target to preprocess a source file
 Game.cpp.i:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Game.cpp.i
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Game.cpp.i
 .PHONY : Game.cpp.i
 
 Game.s: Game.cpp.s
@@ -173,8 +227,35 @@ Game.s: Game.cpp.s
 
 # target to generate assembly for a file
 Game.cpp.s:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Game.cpp.s
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Game.cpp.s
 .PHONY : Game.cpp.s
+
+Level.obj: Level.cpp.obj
+
+.PHONY : Level.obj
+
+# target to build an object file
+Level.cpp.obj:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Level.cpp.obj
+.PHONY : Level.cpp.obj
+
+Level.i: Level.cpp.i
+
+.PHONY : Level.i
+
+# target to preprocess a source file
+Level.cpp.i:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Level.cpp.i
+.PHONY : Level.cpp.i
+
+Level.s: Level.cpp.s
+
+.PHONY : Level.s
+
+# target to generate assembly for a file
+Level.cpp.s:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Level.cpp.s
+.PHONY : Level.cpp.s
 
 Menu.obj: Menu.cpp.obj
 
@@ -182,7 +263,7 @@ Menu.obj: Menu.cpp.obj
 
 # target to build an object file
 Menu.cpp.obj:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Menu.cpp.obj
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Menu.cpp.obj
 .PHONY : Menu.cpp.obj
 
 Menu.i: Menu.cpp.i
@@ -191,7 +272,7 @@ Menu.i: Menu.cpp.i
 
 # target to preprocess a source file
 Menu.cpp.i:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Menu.cpp.i
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Menu.cpp.i
 .PHONY : Menu.cpp.i
 
 Menu.s: Menu.cpp.s
@@ -200,7 +281,7 @@ Menu.s: Menu.cpp.s
 
 # target to generate assembly for a file
 Menu.cpp.s:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Menu.cpp.s
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Menu.cpp.s
 .PHONY : Menu.cpp.s
 
 Object.obj: Object.cpp.obj
@@ -209,7 +290,7 @@ Object.obj: Object.cpp.obj
 
 # target to build an object file
 Object.cpp.obj:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Object.cpp.obj
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Object.cpp.obj
 .PHONY : Object.cpp.obj
 
 Object.i: Object.cpp.i
@@ -218,7 +299,7 @@ Object.i: Object.cpp.i
 
 # target to preprocess a source file
 Object.cpp.i:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Object.cpp.i
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Object.cpp.i
 .PHONY : Object.cpp.i
 
 Object.s: Object.cpp.s
@@ -227,8 +308,35 @@ Object.s: Object.cpp.s
 
 # target to generate assembly for a file
 Object.cpp.s:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Object.cpp.s
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Object.cpp.s
 .PHONY : Object.cpp.s
+
+Player.obj: Player.cpp.obj
+
+.PHONY : Player.obj
+
+# target to build an object file
+Player.cpp.obj:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Player.cpp.obj
+.PHONY : Player.cpp.obj
+
+Player.i: Player.cpp.i
+
+.PHONY : Player.i
+
+# target to preprocess a source file
+Player.cpp.i:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Player.cpp.i
+.PHONY : Player.cpp.i
+
+Player.s: Player.cpp.s
+
+.PHONY : Player.s
+
+# target to generate assembly for a file
+Player.cpp.s:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Player.cpp.s
+.PHONY : Player.cpp.s
 
 Sound.obj: Sound.cpp.obj
 
@@ -236,7 +344,7 @@ Sound.obj: Sound.cpp.obj
 
 # target to build an object file
 Sound.cpp.obj:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Sound.cpp.obj
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Sound.cpp.obj
 .PHONY : Sound.cpp.obj
 
 Sound.i: Sound.cpp.i
@@ -245,7 +353,7 @@ Sound.i: Sound.cpp.i
 
 # target to preprocess a source file
 Sound.cpp.i:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Sound.cpp.i
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Sound.cpp.i
 .PHONY : Sound.cpp.i
 
 Sound.s: Sound.cpp.s
@@ -254,7 +362,7 @@ Sound.s: Sound.cpp.s
 
 # target to generate assembly for a file
 Sound.cpp.s:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/Sound.cpp.s
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Sound.cpp.s
 .PHONY : Sound.cpp.s
 
 main.obj: main.cpp.obj
@@ -263,7 +371,7 @@ main.obj: main.cpp.obj
 
 # target to build an object file
 main.cpp.obj:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/main.cpp.obj
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/main.cpp.obj
 .PHONY : main.cpp.obj
 
 main.i: main.cpp.i
@@ -272,7 +380,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -281,8 +389,17 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles\Platinum_demo.dir\build.make CMakeFiles/Platinum_demo.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/main.cpp.s
 .PHONY : main.cpp.s
+
+resource.obj: resource.rc.obj
+
+.PHONY : resource.obj
+
+# target to build an object file
+resource.rc.obj:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/resource.rc.obj
+.PHONY : resource.rc.obj
 
 # Help Target
 help:
@@ -290,27 +407,40 @@ help:
 	@echo ... all (the default if no target is provided)
 	@echo ... clean
 	@echo ... depend
-	@echo ... Platinum_demo
+	@echo ... BallBreaker3D
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... Application.obj
 	@echo ... Application.i
 	@echo ... Application.s
+	@echo ... Ball.obj
+	@echo ... Ball.i
+	@echo ... Ball.s
+	@echo ... Block.obj
+	@echo ... Block.i
+	@echo ... Block.s
 	@echo ... Game.obj
 	@echo ... Game.i
 	@echo ... Game.s
+	@echo ... Level.obj
+	@echo ... Level.i
+	@echo ... Level.s
 	@echo ... Menu.obj
 	@echo ... Menu.i
 	@echo ... Menu.s
 	@echo ... Object.obj
 	@echo ... Object.i
 	@echo ... Object.s
+	@echo ... Player.obj
+	@echo ... Player.i
+	@echo ... Player.s
 	@echo ... Sound.obj
 	@echo ... Sound.i
 	@echo ... Sound.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... resource.obj
 .PHONY : help
 
 

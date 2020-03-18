@@ -72,6 +72,7 @@ Object::Object(float betx, float bety, float betz, int berx, int bery, int berz,
     this->appear = beapp;
     this->mozaik = bemozaik;
     this->fenyek = fenyek;
+    this->active = true;
     strcpy(texname, betexture);
     strcpy(objname, beobjname);
 
@@ -1215,7 +1216,7 @@ void Object::operator = (Object & other)
 
 bool Object::operator ==(Object & other)
 {
-    if (active)
+    if (active && other.active)
     {
         if (other.getry() == 0 || other.getry() == 180)
         {
