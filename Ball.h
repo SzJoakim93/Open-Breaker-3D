@@ -28,7 +28,10 @@ public:
     bool collision_back(Object * obj);
     bool collision_left(Object * obj);
     bool collision_right(Object * obj);
-    void reverseDir_X();
+    void setPositiveDir_X();
+    void setNegativeDir_X();
+    void setPositiveDir_Y();
+    void setNegativeDir_Y();
     void reverseDir_Y();
     Object * getObj();
     bool isActive();

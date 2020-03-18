@@ -67,7 +67,7 @@ Game::Game(char * level_path, Top * top, char * scorename, int * width, int * he
                      0.1f, 0.025f, 0.025f, //atmeretezes
                      true, "Colors/gray.bmp", 0, "Objects/padle.obj", 0, 0);
 
-    ammo_fire = new Object(0.5f, -0.27f, 1.0f, //koordinatak
+    ammo_fire = new Object(0.5f, -0.27f, -0.32f, //koordinatak
                          0, 270, 0, //elforgatas
                          0.08f, 0.01f, 0.08f, //atmeretezes
                          true, "Textures/ammo.bmp", 0, "negyzet", 0, 0);
@@ -205,13 +205,7 @@ void Game::esemenyek(int & jatekresz)
 
     if (player->getLife() > 0 && !level->isCompleted())
     {
-        for (int i=0; i<3; i++)
-            if (stars[i]->isActive())
-            {
-                stars[i]->rotateY(1);
-                if (stars[i]->getty() > -0.2)
-                    stars[i]->trans_lengthical(-0.002);
-            }
+        starEvents();
 
         if (left_key_pressed && padle->gettx() - padle->getsx() > 0.5-level->getSize())
             padle->trans_horizontal(-0.015);
@@ -233,6 +227,17 @@ void Game::esemenyek(int & jatekresz)
             end_level();
     }
 
+}
+
+void Game::starEvents()
+{
+    for (int i=0; i<3; i++)
+        if (stars[i]->isActive())
+        {
+            stars[i]->rotateY(1);
+            if (stars[i]->getty() > -0.2)
+                stars[i]->trans_lengthical(-0.002);
+        }
 }
 
 void Game::ball_events()
@@ -303,13 +308,13 @@ void Game::ballCollisions()
                 if (!player->isMegaball() || level_objects[i]->isMoving())
                 {
                     if (balls[j]->collision_front(level_objects[i]->getObj()))
-                        balls[j]->reverseDir_Y();
+                        balls[j]->setPositiveDir_Y();
                     else if (balls[j]->collision_left(level_objects[i]->getObj()))
-                        balls[j]->reverseDir_X();
+                        balls[j]->setNegativeDir_X();
                     else if (balls[j]->collision_back(level_objects[i]->getObj()))
-                        balls[j]->reverseDir_Y();
+                        balls[j]->setNegativeDir_Y();
                     else if (balls[j]->collision_right(level_objects[i]->getObj()))
-                        balls[j]->reverseDir_X();
+                        balls[j]->setPositiveDir_X();
                 }
 
                 if (level_objects[i]->isMoving())
@@ -339,7 +344,7 @@ void Game::ammoEvents()
     vector<Block*> level_objects = level->getObjs();
 
     for (int i = 0; i < level_objects.size(); i++)
-        if (*ammo_fire == *(level_objects[i]->getObj()))
+        if (level_objects[i]->getObj()->getty() - level_objects[i]->getObj()->getsy() + 0.2f < 0.05f && *ammo_fire == *(level_objects[i]->getObj()))
         {
             hitNormalObject(level_objects[i], NULL);
             ammo_fire->setActive(false);
@@ -740,6 +745,7 @@ void Game::start(const int & level_num)
 
     balls[0]->getObj()->settx(0.5f);
     balls[0]->getObj()->settz(-0.32f + level->getSize());
+    balls[0]->setActive(true);
     balls[0]->setDefaults();
     
     for (int i = 1; i < 3; i++)

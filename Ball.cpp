@@ -22,7 +22,7 @@ void Ball::setActive(const bool _active)
 {
     if (active != _active)
     {
-        if (active)
+        if (_active)
             active_balls++;
         else
             active_balls--;
@@ -181,13 +181,27 @@ bool Ball::collision_right(Object * obj)
      
 }
 
-void Ball::reverseDir_X()
+void Ball::setPositiveDir_X()
 {
-    ballspeed_x *=-1;
+    if (ballspeed_x < 0.0f)
+        ballspeed_x *=-1;
 }
 
-void Ball::reverseDir_Y()
+void Ball::setNegativeDir_X()
 {
+    if (ballspeed_x > 0.0f)
+        ballspeed_x *=-1;
+}
+
+void Ball::setPositiveDir_Y()
+{
+    if (ballspeed_y < 0.0f)
+    ballspeed_y *=-1;
+}
+
+void Ball::setNegativeDir_Y()
+{
+    if (ballspeed_y > 0.0f)
     ballspeed_y *=-1;
 }
 

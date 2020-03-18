@@ -49,6 +49,7 @@ class Game
     protected:
     private:
         inline void print(int x, Object & Object);
+        inline void starEvents();
         inline void end_level();
         inline void ball_events();
         inline void ballCollisions();

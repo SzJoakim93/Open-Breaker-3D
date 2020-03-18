@@ -91,8 +91,7 @@ void Level::load(char * path)
 void Level::rendering()
 {
     for (int i=0; i<level_objects.size(); i++)
-        if (level_objects[i]->isActive())
-            level_objects[i]->getObj()->rendering(0);
+        level_objects[i]->getObj()->rendering(0);
 
     aljzat->rendering(0);
     fal1->rendering(0);

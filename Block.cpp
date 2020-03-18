@@ -15,7 +15,14 @@ Block::~Block()
 
 void Block::hit()
 {
-    flags[0] > 0 ? flags[0]-- : flags[0] = 0;
+    if (flags[0] != 0)
+    {
+        flags[0] > 0 ? flags[0]-- : flags[0] = 0;
+
+        if (flags[0] == 0)
+            blockObj->setActive(false);
+    }
+    
 }
 
 Object * Block::getObj()
