@@ -92,7 +92,6 @@ Application::Application(char *frame_title, char * levelpath)
 
     glEnable(GL_LIGHT0);
     glEnableClientState(GL_NORMAL_ARRAY);
-
 }
 
 Application::~Application()
@@ -150,7 +149,6 @@ void Application::handleSDL2Events(int & quit)
             {
                 if (jatekresz == 1)
                 {
-                    game->zene_stop();
                     game->reset();
                 }
 

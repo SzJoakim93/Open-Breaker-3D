@@ -53,6 +53,13 @@ class list
                 return false;
         }
 
+        bool operator == (Iterator other) {
+            if (i == other.i)
+                return true;
+            else
+                return false;
+        }
+
         T & operator * () {
             return i->value;
         }
@@ -91,17 +98,30 @@ class list
         return Iterator(new_item);
     }
 
-    void remove(Iterator i)
+    void remove(T value)
     {
-        i.i->prev->next = i.i->next;
-        i.i->next->prev = i.i->prev;
+        ListItem * i = head->next;
+        for (; i != head && i->value != value; i = i->next);
 
-        delete i.i;
+        if (i!= head)
+        {
+            i->prev->next = i->next;
+            i->next->prev = i->prev;
+
+            delete i;
+        }
     }
 
     void edit(Iterator i, T newValue)
     {
         i.i->value = newValue;
+    }
+
+    void replace(Iterator i, Iterator j)
+    {
+        T temp = i.i->value;
+        i.i->value = j.i->value;
+        j.i->value = temp;
     }
 
     Iterator begin() const{

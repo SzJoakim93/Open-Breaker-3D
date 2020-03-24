@@ -29,49 +29,48 @@ Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * lang
     level_objects[0] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.135, 1.0, 0.18, //atmeretezes
-                             true, "Textures/title.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Textures/title.bmp", "rectangle");
 
 
     level_objects[1] = new Object(-0.03, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, "Fonts/english/start.bmp", 0, "negyzet", 3, 0);
-
+                             STRECH_TEXTURED, "Fonts/english/start.bmp","rectangle");
     char temp[32];
     strcpy(temp, lang_path);
     strcat(temp, "settings.bmp");
     level_objects[2] = new Object(0.0, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, temp, 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, temp, "rectangle");
 
     strcpy(temp, lang_path);
     strcat(temp, "scores.bmp");
     level_objects[3] = new Object(0.03, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, temp, 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, temp, "rectangle");
 
     strcpy(temp, lang_path);
     strcat(temp, "help.bmp");
     level_objects[4] = new Object(0.06, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, temp, 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, temp, "rectangle");
 
     strcpy(temp, lang_path);
     strcat(temp, "about.bmp");
     level_objects[5] = new Object(0.09, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, temp, 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, temp, "rectangle");
 
     strcpy(temp, lang_path);
     strcat(temp, "quit.bmp");
     level_objects[6] = new Object(0.12, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, temp, 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, temp, "rectangle");
 
 
     strcpy(temp, lang_path);
@@ -79,115 +78,115 @@ Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * lang
     level_objects[7] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.22, 1.0, 0.22, //atmeretezes
-                             true, temp, 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, temp, "rectangle");
 
     strcpy(temp, lang_path);
     strcat(temp, "About_w.bmp");
     level_objects[8] = new Object(0.0, 0.00, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.11, 1.0, 0.22, //atmeretezes
-                             true, temp, 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, temp, "rectangle");
 
     level_objects[9] = new Object(0.0, -0.08, 0.5, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, "Fonts/english/OK.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/OK.bmp", "rectangle");
 
     level_objects[10] = new Object(-0.03, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, "Fonts/english/start_c.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/start_c.bmp", "rectangle");
 
     level_objects[11] = new Object(0.0, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, "Fonts/english/settings_c.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/settings_c.bmp", "rectangle");
 
     level_objects[12] = new Object(0.03, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, "Fonts/english/scores_c.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/scores_c.bmp", "rectangle");
 
     level_objects[13] = new Object(0.06, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, "Fonts/english/help_c.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/help_c.bmp", "rectangle");
 
     level_objects[14] = new Object(0.09, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, "Fonts/english/about_c.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/about_c.bmp", "rectangle");
 
     level_objects[15] = new Object(0.12, -0.098, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, "Fonts/english/quit_c.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/quit_c.bmp", "rectangle");
 
     level_objects[16] = new Object(0.0, -0.08, 0.5, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 1.0, 0.028, //atmeretezes
-                             true, "Fonts/english/OK_c.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/OK_c.bmp", "rectangle");
 
     level_objects[17] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.155, 1.0, 0.22, //atmeretezes
-                             true, "Fonts/english/Scores_w.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/Scores_w.bmp", "rectangle");
 
     level_objects[18] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.22, 1.0, 0.22, //atmeretezes
-                             true, "Fonts/english/Settings_w.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/english/Settings_w.bmp", "rectangle");
 
-    level_objects[19] = new Object(0.0, 0.01, 0.0, //koordinatak
+    /*level_objects[19] = new Object(0.0, 0.01, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                             0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "negyzet", 4, 0);
+                             true, "Fonts/letters", 0, "rectangle", 4, 0);
 
     level_objects[20] = new Object(0.0, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "negyzet", 4, 0);
+                             true, "Fonts/letters", 0, "rectangle", 4, 0);
     for (int i=0; i<10; i++)
         score_titles[i] = new Object(0.02, 0.053-0.0105*i, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "negyzet", 4, 0);
+                             true, "Fonts/letters", 0, "rectangle", 4, 0);
 
     for (int i=0; i<10; i++)
         player_titles[i] = new Object(-0.05, 0.053-0.0105*i, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "negyzet", 4, 0);
+                             true, "Fonts/letters", 0, "rectangle", 4, 0);
 
     sound_title = new Object(0.035, 0.013, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "negyzet", 4, 0);
+                             true, "Fonts/letters", 0, "rectangle", 4, 0);
 
     music_title = new Object(0.035, 0.0, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "negyzet", 4, 0);
+                             true, "Fonts/letters", 0, "rectangle", 4, 0);
 
     screen_title = new Object(0.035, -0.013, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "negyzet", 4, 0);
+                             true, "Fonts/letters", 0, "rectangle", 4, 0);*/
 
     frame = new Object(0.04, -0.013, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.012, 1.0, 0.027, //atmeretezes
-                             true, "Fonts/frame.bmp", 0, "negyzet", 3, 0);
+                             STRECH_TEXTURED, "Fonts/frame.bmp", "rectangle");
 
-    lang_title = new Object(0.03, -0.039, 0.0, //koordinatak
+    /*lang_title = new Object(0.03, -0.039, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "negyzet", 4, 0);
+                             true, "Fonts/letters", 0, "rectangle", 4, 0);
 
     res_title = new Object(0.03, -0.026, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "negyzet", 4, 0);
+                             true, "Fonts/letters", 0, "rectangle", 4, 0);*/
 
     screen_settings = new Object* [16];
 
@@ -195,7 +194,7 @@ Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * lang
         screen_settings[i] = new Object(-0.06+0.1*(i/9), 0.06-0.01*(i%9), 0.0, //koordinatak
                                 0, 0, 0, //elforgatas
                                 0.005, 1.0, 0.0025, //atmeretezes
-                                true, "Fonts/letters", 0, "negyzet", 4, 0);
+                                STRECH_TEXTURED, "Fonts/letters", "rectangle");
 
     FILE * packages = fopen("Levels/Packages.txt", "r");
     fscanf(packages, "%d\n", &max_package);
@@ -208,7 +207,7 @@ Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * lang
         obj_game_titles[j] = new Object(-0.06+0.06*j, 0.06, 0.0, //koordinatak
                                 0, 0, 0, //elforgatas
                                 0.05, 1.0, 0.05, //atmeretezes
-                                true, char_game_titles, 0, "negyzet", 3, 0);
+                                STRECH_TEXTURED, char_game_titles, "rectangle");
     }
 
     fclose(packages);
@@ -221,11 +220,11 @@ Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * lang
 
 Menu::~Menu()
 {
-    for (int i=0; i<20; i++)
+    for (int i=0; i<19; i++)
         delete level_objects[i];
 
 
-    for (int i=0; i<10; i++)
+    /*for (int i=0; i<10; i++)
         delete score_titles[i];
 
     for (int i=0; i<10; i++)
@@ -233,10 +232,10 @@ Menu::~Menu()
 
     delete sound_title;
     delete music_title;
-    delete screen_title;
+    delete screen_title;*/
     delete frame;
-    delete lang_title;
-    delete res_title;
+    /*delete lang_title;
+    delete res_title;*/
 
 
 
@@ -465,7 +464,7 @@ void Menu::rendering(int & jatekresz)
         level_objects[8]->rendering(0);
     if (jatekresz == 2)
     {
-        if (*enableSound)
+        /*if (*enableSound)
             sound_title->gprintf(on_title);
         else
             sound_title->gprintf(off_title);
@@ -487,7 +486,7 @@ void Menu::rendering(int & jatekresz)
         if (*language == 0)
             lang_title->gprintf("magyar");
         else
-            lang_title->gprintf("english");
+            lang_title->gprintf("english");*/
 
         if (set_selected)
             frame->rendering(0);
@@ -497,7 +496,7 @@ void Menu::rendering(int & jatekresz)
 
     if (jatekresz == 6)
     {
-        screen_settings[0]->gprintf("320x200");
+        /*screen_settings[0]->gprintf("320x200");
         screen_settings[1]->gprintf("320x240");
         screen_settings[2]->gprintf("400x300");
         screen_settings[3]->gprintf("640x480");
@@ -512,19 +511,19 @@ void Menu::rendering(int & jatekresz)
         screen_settings[12]->gprintf("1280x1024");
         screen_settings[13]->gprintf("1366x768");
         screen_settings[14]->gprintf("1366x1024");
-        screen_settings[15]->gprintf("custom");
+        screen_settings[15]->gprintf("custom");*/
         frame->rendering(0);
     }
 
     if (jatekresz == 3)
     {
-        for (int i=0; i<10; i++)
+        /*for (int i=0; i<10; i++)
         {
             char temp[7];
             sprintf(temp, "%d", top[i].score);
             score_titles[i]->gprintf(temp);
             player_titles[i]->gprintf(top[i].name);
-        }
+        }*/
         level_objects[17]->rendering(0);
 
     }
@@ -541,14 +540,14 @@ void Menu::rendering(int & jatekresz)
 
 void Menu::rendering_res(int & jatekresz, int & setres)
 {
-    char temp[30];
+    /*char temp[30];
 
     if (jatekresz == 7)
         level_objects[19]->gprintf("sz/1less/1g");
     else if (jatekresz == 8)
         level_objects[19]->gprintf("magass/0g");
     sprintf(temp, "%d", setres);
-    level_objects[20]->gprintf(temp);
+    level_objects[20]->gprintf(temp);*/
 }
 
 void Menu::sethangok(bool * _sound, bool * _music, bool * _fullscreen)

@@ -10,7 +10,7 @@ Game::Game(char * level_path, Top * top, char * scorename, int * width, int * he
         stars[i] = new Object(-0.2, 1.0, 0.1, //koordinatak
                               0, 0, 0, //elforgatas
                               0.025, 0.025, 0.01, //atmeretezes
-                              true, "Colors/brown.bmp", 0, "Objects/star1.obj", 0, 0);
+                              NULL, "Colors/brown.bmp", "Objects/star1.obj");
         stars[i]->setActive(false);
     }
         
@@ -22,7 +22,7 @@ Game::Game(char * level_path, Top * top, char * scorename, int * width, int * he
         bonuses[i] = new Object(0.5, -0.29, 1.0, //koordinatak
                               0, 0, 0, //elforgatas
                               0.1, 0.1, 0.1, //atmeretezes
-                              true, temp, 0, "negyzet", 0, 0);
+                              STRECH_TEXTURED, temp, "rectangle");
 
         temp[14]++;
     }
@@ -48,7 +48,7 @@ Game::Game(char * level_path, Top * top, char * scorename, int * width, int * he
         titles[i] = new Object(-0.109+place, -0.025*i, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 0.0, 0.055, //atmeretezes
-                             true, temp2, 0, "negyzet", 3, 0);
+                             NULL, temp2, "rectangle");
 
         if (*language == 0)
             temp2[21]++;
@@ -60,79 +60,79 @@ Game::Game(char * level_path, Top * top, char * scorename, int * width, int * he
         balls[i] = new Ball(new Object(0.5f, -0.27f, -0.32f, //koordinatak
                            0, 180, 0, //elforgatas
                            0.04f, 0.04f, 0.04f, //atmeretezes
-                           true, "Colors/red.bmp", 0, "Objects/sphere.obj", 0, 0), false);
+                           NULL, "Colors/red.bmp", "Objects/sphere.obj"), false);
 
     padle = new Object(0.5f, -0.27f, -0.25, //koordinatak
                      0, 0, 0, //elforgatas
                      0.1f, 0.025f, 0.025f, //atmeretezes
-                     true, "Colors/gray.bmp", 0, "Objects/padle.obj", 0, 0);
+                     NULL, "Colors/gray.bmp", "Objects/padle.obj");
 
     ammo_fire = new Object(0.5f, -0.27f, -0.32f, //koordinatak
                          0, 270, 0, //elforgatas
                          0.08f, 0.01f, 0.08f, //atmeretezes
-                         true, "Textures/ammo.bmp", 0, "negyzet", 0, 0);
+                         STRECH_TEXTURED, "Textures/ammo.bmp", "rectangle");
 
     ammo_fire->setActive(false);
 
     level_title = new Object(-0.1+place, -0.067, 0.0, //koordinatak
                            0, 0, 0, //elforgatas
                            0.0066, 1.0, 0.0044, //atmeretezes
-                           true, "fonts/numbers", 0, "negyzet", 4, 0);
+                           STRECH_TEXTURED, "fonts/numbers", "rectangle");
 
     life_title = new Object(-0.1+place, -0.075, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.0066, 1.0, 0.0044, //atmeretezes
-                          true, "fonts/numbers", 0, "negyzet", 4, 0);
+                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
 
     ammo_title = new Object(-0.1+place, -0.083, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.0066, 1.0, 0.0044, //atmeretezes
-                          true, "fonts/numbers", 0, "negyzet", 4, 0);
+                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
 
     block_title = new Object(-0.134+place, -0.057, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.0066, 1.0, 0.0044, //atmeretezes
-                          true, "fonts/numbers", 0, "negyzet", 4, 0);
+                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
 
     score_title = new Object(-0.134+place, -0.037, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.0066, 1.0, 0.0044, //atmeretezes
-                          true, "fonts/numbers", 0, "negyzet", 4, 0);
+                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
 
     gamebox = new Object(0.0, 0.0, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.074, 1.0, 0.166, //atmeretezes
-                          true, "fonts/english/w.bmp", 0, "negyzet", 3, 0);
+                          STRECH_TEXTURED, "fonts/english/w.bmp", "rectangle");
 
     gameover = new Object(-0.015, 0.02, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.005, 1.0, 0.0025, //atmeretezes
-                          true, "fonts/letters", 0, "negyzet", 4, 0);
+                          STRECH_TEXTURED, "fonts/letters", "rectangle");
 
     g_title = new Object(-0.022, 0.01, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.005, 1.0, 0.0025,
-                          true, "fonts/letters", 0, "negyzet", 4, 0);
+                          STRECH_TEXTURED, "fonts/letters", "rectangle");
 
     r_title = new Object(-0.028, -0.025, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.005, 1.0, 0.0025,
-                          true, "fonts/letters", 0, "negyzet", 4, 0);
+                          STRECH_TEXTURED, "fonts/letters", "rectangle");
 
     best_title = new Object(-0.134+place, 0.08, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.0066, 1.0, 0.0044, //atmeretezes
-                          true, "fonts/numbers", 0, "negyzet", 4, 0);
+                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
 
     text = new Object(-0.03, -0.01, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.005, 1.0, 0.0025, //atmeretezes
-                          true, "fonts/letters", 0, "negyzet", 4, 0);
+                          STRECH_TEXTURED, "fonts/letters", "rectangle");
 
     textbox = new Object(0.00, -0.01, 0.0, //koordinatak
                           0, 0, 0, //elforgatas
                           0.012, 1.0, 0.08, //atmeretezes
-                          true, "fonts/frame.bmp", 0, "negyzet", 3, 0);
+                          STRECH_TEXTURED, "fonts/frame.bmp", "rectangle");
 
     titles[0]->setty(0.09);
     titles[3]->settx(-0.123+place);
@@ -575,7 +575,7 @@ void Game::rendering(int & jatekresz)
 
     if (player->getLife() < 1 || level->isCompleted())
     {
-        if (player->getScore() > top[9].score)
+        /*if (player->getScore() > top[9].score)
         {
             text->gprintf(scorename);
             textbox->rendering(0);
@@ -603,7 +603,7 @@ void Game::rendering(int & jatekresz)
                 gameover->gprintf("v/1ge a j/0t/1knak");
             else
                 gameover->gprintf("game over");
-        }
+        }*/
 
         gamebox->rendering(0);
     }
@@ -622,11 +622,11 @@ void Game::rendering(int & jatekresz)
     for (int i=0; i<4; i++)
         titles[i]->rendering(0);
 
-    print(player->getLife(), *life_title);
+    /*print(player->getLife(), *life_title);
     print(player->getAmmo(), *ammo_title);
     print(player->getScore(), *score_title);
     print(top[0].score, *best_title);
-    print(level->getNum(), *level_title);
+    print(level->getNum(), *level_title);*/
 
 
     level->rendering();
@@ -682,17 +682,7 @@ void Game::print(int x, Object & Object)
         temp[2] = 0;
     }
 
-    Object.gprintf(temp);
-}
-
-void Game::zene(char * eleres)
-{
-
-}
-
-void Game::zene_stop()
-{
-
+    //Object.gprintf(temp);
 }
 
 void Game::reset()

@@ -12,28 +12,28 @@ Level::Level(const int level)
 
     aljzat = new Object(0.5f, -0.3f, -0.2f, //koordinatak
                       0, 0, 0, //elforgatas
-                      size*2.0f, 1.0f, size*2.0f, //atmeretezes
-                      true, color, 0, "negyzet", 0, 0);
+                      size, 1.0f, size, //atmeretezes
+                      NULL, color, "rectangle");
 
     fal1 = new Object(0.5f + size, -0.27f, -0.2, //koordinatak
                     0, 0, 0, //elforgatas
                     0.01f, 0.025f, size, //atmeretezes
-                    true, color, 0, "Objects/cube.obj", 0, 0);
+                    NULL, color, "Objects/cube.obj");
 
     fal2 = new Object(0.5 - size, -0.27, -0.2, //koordinatak
                     0, 0, 0, //elforgatas
                     0.01f, 0.025f, size, //atmeretezes
-                    true, color, 0, "Objects/cube.obj", 0, 0);
+                    NULL, color, "Objects/cube.obj");
 
     fal3 = new Object(0.5f, -0.27f, -0.2f - size, //koordinatak
                     0, 90, 0, //elforgatas
                     0.01f, 0.025f, size, //atmeretezes
-                    true, color, 0, "Objects/cube.obj", 0, 0);
+                    NULL, color, "Objects/cube.obj");
 
     fal4 = new Object(0.5f, -0.27f, -0.2f + size, //koordinatak
                     0, 90, 0, //elforgatas
                     0.01f, 0.025f, size, //atmeretezes
-                    true, color, 0, "Objects/cube.obj", 0, 0);
+                    NULL, color, "Objects/cube.obj");
 
     completed = false;
 }
@@ -56,9 +56,9 @@ void Level::load(char * path)
 {
     FILE * file = fopen(path, "r");
     fscanf(file, "%f %s", &size, color);
-    level_x = -0.8+size*2.0/1.5;
-    level_y = 1.0-size*2.0;
-    level_z = 1.0-size*2.0;
+    level_x = -0.8f+size*2.0f/1.5f;
+    level_y = 0.3f-size*2.0f;
+    level_z = 0.3f-size*2.0f;
 
     blocks=0;
 
@@ -79,7 +79,7 @@ void Level::load(char * path)
         level_objects.insert(new Block(new Object(tx, ty, tz, //koordinatak
                              0, r, 0, //elforgatas
                              sx, sy, sz, //atmeretezes
-                             true, texture, 0, obj, 0, 0), new_flag));
+                             NULL, texture, obj), new_flag));
 
         if (new_flag[0] != -2)
             blocks++;

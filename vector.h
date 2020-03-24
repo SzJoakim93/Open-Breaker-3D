@@ -47,6 +47,11 @@ public:
         return values[i];
     }
 
+    T & at(const int & i) const
+    {
+        return values[i];
+    }
+
     void insert(const T & new_value)
     {
         if (current_num+1 > max_num)

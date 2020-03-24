@@ -203,6 +203,33 @@ Block.cpp.s:
 	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Block.cpp.s
 .PHONY : Block.cpp.s
 
+FileManager.obj: FileManager.cpp.obj
+
+.PHONY : FileManager.obj
+
+# target to build an object file
+FileManager.cpp.obj:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/FileManager.cpp.obj
+.PHONY : FileManager.cpp.obj
+
+FileManager.i: FileManager.cpp.i
+
+.PHONY : FileManager.i
+
+# target to preprocess a source file
+FileManager.cpp.i:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/FileManager.cpp.i
+.PHONY : FileManager.cpp.i
+
+FileManager.s: FileManager.cpp.s
+
+.PHONY : FileManager.s
+
+# target to generate assembly for a file
+FileManager.cpp.s:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/FileManager.cpp.s
+.PHONY : FileManager.cpp.s
+
 Game.obj: Game.cpp.obj
 
 .PHONY : Game.obj
@@ -283,6 +310,33 @@ Menu.s: Menu.cpp.s
 Menu.cpp.s:
 	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Menu.cpp.s
 .PHONY : Menu.cpp.s
+
+Model.obj: Model.cpp.obj
+
+.PHONY : Model.obj
+
+# target to build an object file
+Model.cpp.obj:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Model.cpp.obj
+.PHONY : Model.cpp.obj
+
+Model.i: Model.cpp.i
+
+.PHONY : Model.i
+
+# target to preprocess a source file
+Model.cpp.i:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Model.cpp.i
+.PHONY : Model.cpp.i
+
+Model.s: Model.cpp.s
+
+.PHONY : Model.s
+
+# target to generate assembly for a file
+Model.cpp.s:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Model.cpp.s
+.PHONY : Model.cpp.s
 
 Object.obj: Object.cpp.obj
 
@@ -365,6 +419,33 @@ Sound.cpp.s:
 	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Sound.cpp.s
 .PHONY : Sound.cpp.s
 
+Texture.obj: Texture.cpp.obj
+
+.PHONY : Texture.obj
+
+# target to build an object file
+Texture.cpp.obj:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Texture.cpp.obj
+.PHONY : Texture.cpp.obj
+
+Texture.i: Texture.cpp.i
+
+.PHONY : Texture.i
+
+# target to preprocess a source file
+Texture.cpp.i:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Texture.cpp.i
+.PHONY : Texture.cpp.i
+
+Texture.s: Texture.cpp.s
+
+.PHONY : Texture.s
+
+# target to generate assembly for a file
+Texture.cpp.s:
+	$(MAKE) -f CMakeFiles\BallBreaker3D.dir\build.make CMakeFiles/BallBreaker3D.dir/Texture.cpp.s
+.PHONY : Texture.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -419,6 +500,9 @@ help:
 	@echo ... Block.obj
 	@echo ... Block.i
 	@echo ... Block.s
+	@echo ... FileManager.obj
+	@echo ... FileManager.i
+	@echo ... FileManager.s
 	@echo ... Game.obj
 	@echo ... Game.i
 	@echo ... Game.s
@@ -428,6 +512,9 @@ help:
 	@echo ... Menu.obj
 	@echo ... Menu.i
 	@echo ... Menu.s
+	@echo ... Model.obj
+	@echo ... Model.i
+	@echo ... Model.s
 	@echo ... Object.obj
 	@echo ... Object.i
 	@echo ... Object.s
@@ -437,6 +524,9 @@ help:
 	@echo ... Sound.obj
 	@echo ... Sound.i
 	@echo ... Sound.s
+	@echo ... Texture.obj
+	@echo ... Texture.i
+	@echo ... Texture.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

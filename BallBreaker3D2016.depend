@@ -68,3 +68,137 @@
 1537690248 source:d:\alonso\documents\codeblocks projects\ballbreaker3d2016\Game.cpp
 	"Game.h"
 
+1585125599 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\application.cpp
+	"Application.h"
+
+1582715892 d:\alonso\documents\visual studio code\ballbreaker3d2016\application.h
+	<cstdio>
+	<SDL/SDL.h>
+	<GL/gl.h>
+	<gl/glu.h>
+	"Game.h"
+	"Menu.h"
+
+1584993920 d:\alonso\documents\visual studio code\ballbreaker3d2016\game.h
+	<dirent.h>
+	<cstring>
+	<cstdio>
+	"Ball.h"
+	"Player.h"
+	"Block.h"
+	"Object.h"
+	"Sound.h"
+	"Level.h"
+	"vector.h"
+
+1584516149 d:\alonso\documents\visual studio code\ballbreaker3d2016\ball.h
+	"Object.h"
+	"Sound.h"
+
+1585078513 d:\alonso\documents\visual studio code\ballbreaker3d2016\object.h
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	<cstring>
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	<dirent.h>
+	<sys/stat.h>
+	"list.h"
+	"char_list.h"
+	"Texture.h"
+	"Model.h"
+
+1578401350 d:\alonso\documents\visual studio code\ballbreaker3d2016\list.h
+
+1470469329 d:\alonso\documents\visual studio code\ballbreaker3d2016\char_list.h
+	<cstring>
+
+1584992384 d:\alonso\documents\visual studio code\ballbreaker3d2016\texture.h
+	<SDL/SDL.h>
+	<GL/gl.h>
+	<gl/glu.h>
+	"FileManager.h"
+
+1578504700 d:\alonso\documents\visual studio code\ballbreaker3d2016\filemanager.h
+	<dirent.h>
+	<sys/stat.h>
+	"char_list.h"
+	"list.h"
+	"vector.h"
+
+1582886379 d:\alonso\documents\visual studio code\ballbreaker3d2016\vector.h
+
+1585081636 d:\alonso\documents\visual studio code\ballbreaker3d2016\model.h
+	<cstdio>
+	"FileManager.h"
+	"Coord.h"
+
+1582806601 d:\alonso\documents\visual studio code\ballbreaker3d2016\coord.h
+
+1582712171 d:\alonso\documents\visual studio code\ballbreaker3d2016\sound.h
+	"SDL/SDL_mixer.h"
+
+1584293469 d:\alonso\documents\visual studio code\ballbreaker3d2016\player.h
+
+1583700120 d:\alonso\documents\visual studio code\ballbreaker3d2016\block.h
+	"Object.h"
+	"vector.h"
+
+1584304821 d:\alonso\documents\visual studio code\ballbreaker3d2016\level.h
+	"Block.h"
+	"Ball.h"
+
+1582723258 d:\alonso\documents\visual studio code\ballbreaker3d2016\menu.h
+	"Object.h"
+	"Game.h"
+	"Sound.h"
+
+1584516118 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\ball.cpp
+	"Ball.h"
+
+1584558163 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\block.cpp
+	"Block.h"
+
+1584948707 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\filemanager.cpp
+	"FileManager.h"
+	<cstdio>
+
+1585078513 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\game.cpp
+	"Game.h"
+
+1585078513 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\level.cpp
+	"Level.h"
+
+1582714691 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\main.cpp
+	"GL/gl.h"
+	"SDL/SDL.h"
+	"gl/glu.h"
+	"Application.h"
+	"Object.h"
+	<ctime>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+
+1585125970 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\menu.cpp
+	"Menu.h"
+
+1585131925 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\model.cpp
+	"Model.h"
+
+1585138897 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\object.cpp
+	"Object.h"
+
+1584293442 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\player.cpp
+	"Player.h"
+
+1452012912 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\resource.rc
+
+1582712171 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\sound.cpp
+	"Sound.h"
+
+1584992387 source:d:\alonso\documents\visual studio code\ballbreaker3d2016\texture.cpp
+	"Texture.h"
+

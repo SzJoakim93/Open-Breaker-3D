@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.0)
 
 set(CMAKE_CXX_COMPILER "g++")
 
@@ -16,6 +16,9 @@ add_executable(BallBreaker3D
 	main.cpp
 	Application.cpp
 	Object.cpp
+	Texture.cpp
+	Model.cpp
+	FileManager.cpp
 	Sound.cpp
 	Game.cpp
 	Menu.cpp

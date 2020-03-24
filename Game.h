@@ -34,8 +34,6 @@ class Game
         void rightKeyUp();
         void enter(int & jatekresz);
         void rendering(int & jatekresz);
-        void zene(char * eleres);
-        void zene_stop();
         void reset();
         void sethangok(bool * behang, bool * bezene);
         void start(const int & level);
