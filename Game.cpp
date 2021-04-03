@@ -1,6 +1,7 @@
 #include "Game.h"
 
-Game::Game(char * level_path, Top * top, char * scorename, int * width, int * height, int * language)
+Game::Game(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, char * level_path, Top * top) :
+    sounds(appsettings), State(appsettings, event, keystates)
 {
     //ctor
     player = new Player();
@@ -27,34 +28,101 @@ Game::Game(char * level_path, Top * top, char * scorename, int * width, int * he
         temp[14]++;
     }
 
-    titles = new Object* [4];
+    titles = new UI* [4];
     char temp2[32];
-    if (*language == 0)
-        strcpy(temp2, "fonts/hungarian/title0.bmp");
+    if (appsettings->getLanguage() == HUN)
+        strcpy(temp2, "Fonts/hungarian/title0.bmp");
     else
-        strcpy(temp2, "fonts/english/title0.bmp");
+        strcpy(temp2, "Fonts/english/title0.bmp");
     float place = 0.0;
-    if ((float)(*width)/(float)(*height) < 1.3) //5:4
+    if ((float)(appsettings->getWidth())/(float)(appsettings->getHeight()) < 1.3) //5:4
         place = 0.008;
-    else if ((float)(*width)/(float)(*height) < 1.4) //4:3
+    else if ((float)(appsettings->getWidth())/(float)(appsettings->getHeight()) < 1.4) //4:3
         place = 0.0;
-    else if ((float)(*width)/(float)(*height) < 1.7) //16:10
+    else if ((float)(appsettings->getWidth())/(float)(appsettings->getHeight()) < 1.7) //16:10
         place = -0.028;
-    else if ((float)(*width)/(float)(*height) < 1.8) //16:9
+    else if ((float)(appsettings->getWidth())/(float)(appsettings->getHeight()) < 1.8) //16:9
         place = -0.046;
 
-    for (int i=0; i<4; i++)
+    /*for (int i=0; i<4; i++)
     {
-        titles[i] = new Object(-0.109+place, -0.025*i, 0.0, //koordinatak
+        titles[i] = new UI(-0.109+place, -0.025*i, 0.0, //koordinatak
                              0, 0, 0, //elforgatas
                              0.014, 0.0, 0.055, //atmeretezes
                              NULL, temp2, "rectangle");
 
-        if (*language == 0)
+        if (appsettings->getLanguage() == HUN)
             temp2[21]++;
         else
             temp2[19]++;
     }
+
+    level_title = new UI(-0.1+place, -0.067, 0.0, //koordinatak
+                           0, 0, 0, //elforgatas
+                           0.0066, 1.0, 0.0044, //atmeretezes
+                           STRECH_TEXTURED, "Fonts/numbers", "rectangle");
+
+    life_title = new UI(-0.1+place, -0.075, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.0066, 1.0, 0.0044, //atmeretezes
+                          STRECH_TEXTURED, "Fonts/numbers", "rectangle");
+
+    ammo_title = new UI(-0.1+place, -0.083, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.0066, 1.0, 0.0044, //atmeretezes
+                          STRECH_TEXTURED, "Fonts/numbers", "rectangle");
+
+    block_title = new UI(-0.134+place, -0.057, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.0066, 1.0, 0.0044, //atmeretezes
+                          STRECH_TEXTURED, "Fonts/numbers", "rectangle");
+
+    score_title = new UI(-0.134+place, -0.037, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.0066, 1.0, 0.0044, //atmeretezes
+                          STRECH_TEXTURED, "Fonts/numbers", "rectangle");
+
+    gamebox = new UI(0.0, 0.0, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.074, 1.0, 0.166, //atmeretezes
+                          STRECH_TEXTURED, "Fonts/english/w.bmp", "rectangle");
+
+    gameover = new UI(-0.015, 0.02, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.005, 1.0, 0.0025, //atmeretezes
+                          STRECH_TEXTURED, "Fonts/letters", "rectangle");
+
+    g_title = new UI(-0.022, 0.01, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.005, 1.0, 0.0025,
+                          STRECH_TEXTURED, "Fonts/letters", "rectangle");
+
+    r_title = new UI(-0.028, -0.025, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.005, 1.0, 0.0025,
+                          STRECH_TEXTURED, "Fonts/letters", "rectangle");
+
+    best_title = new UI(-0.134+place, 0.08, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.0066, 1.0, 0.0044, //atmeretezes
+                          STRECH_TEXTURED, "Fonts/numbers", "rectangle");
+
+    text = new UI(-0.03, -0.01, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.005, 1.0, 0.0025, //atmeretezes
+                          STRECH_TEXTURED, "Fonts/letters", "rectangle");
+
+    textbox = new UI(0.00, -0.01, 0.0, //koordinatak
+                          0, 0, 0, //elforgatas
+                          0.012, 1.0, 0.08, //atmeretezes
+                          STRECH_TEXTURED, "Fonts/frame.bmp", "rectangle");
+
+    titles[0]->setTY(0.09);
+    titles[3]->setTX(-0.123+place);
+    titles[3]->setSZ(0.028);
+    titles[3]->setSX(0.028);*/
+
+
 
     for (int i=0; i<3; i++)
         balls[i] = new Ball(new Object(0.5f, -0.27f, -0.32f, //koordinatak
@@ -74,95 +142,29 @@ Game::Game(char * level_path, Top * top, char * scorename, int * width, int * he
 
     ammo_fire->setActive(false);
 
-    level_title = new Object(-0.1+place, -0.067, 0.0, //koordinatak
-                           0, 0, 0, //elforgatas
-                           0.0066, 1.0, 0.0044, //atmeretezes
-                           STRECH_TEXTURED, "fonts/numbers", "rectangle");
-
-    life_title = new Object(-0.1+place, -0.075, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.0066, 1.0, 0.0044, //atmeretezes
-                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
-
-    ammo_title = new Object(-0.1+place, -0.083, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.0066, 1.0, 0.0044, //atmeretezes
-                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
-
-    block_title = new Object(-0.134+place, -0.057, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.0066, 1.0, 0.0044, //atmeretezes
-                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
-
-    score_title = new Object(-0.134+place, -0.037, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.0066, 1.0, 0.0044, //atmeretezes
-                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
-
-    gamebox = new Object(0.0, 0.0, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.074, 1.0, 0.166, //atmeretezes
-                          STRECH_TEXTURED, "fonts/english/w.bmp", "rectangle");
-
-    gameover = new Object(-0.015, 0.02, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.005, 1.0, 0.0025, //atmeretezes
-                          STRECH_TEXTURED, "fonts/letters", "rectangle");
-
-    g_title = new Object(-0.022, 0.01, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.005, 1.0, 0.0025,
-                          STRECH_TEXTURED, "fonts/letters", "rectangle");
-
-    r_title = new Object(-0.028, -0.025, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.005, 1.0, 0.0025,
-                          STRECH_TEXTURED, "fonts/letters", "rectangle");
-
-    best_title = new Object(-0.134+place, 0.08, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.0066, 1.0, 0.0044, //atmeretezes
-                          STRECH_TEXTURED, "fonts/numbers", "rectangle");
-
-    text = new Object(-0.03, -0.01, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.005, 1.0, 0.0025, //atmeretezes
-                          STRECH_TEXTURED, "fonts/letters", "rectangle");
-
-    textbox = new Object(0.00, -0.01, 0.0, //koordinatak
-                          0, 0, 0, //elforgatas
-                          0.012, 1.0, 0.08, //atmeretezes
-                          STRECH_TEXTURED, "fonts/frame.bmp", "rectangle");
-
-    titles[0]->setty(0.09);
-    titles[3]->settx(-0.123+place);
-    titles[3]->setsz(0.028);
-    titles[3]->setsx(0.028);
-
     for (int i=0; i<8; i++)
         play_list[i]=true;
     char ** soundpath= new char*[9];
     for (int i=0; i<9; i++)
         soundpath[i] = new char[32];
 
-    strcpy(soundpath[0], "Sounds/B1.wav");
-    strcpy(soundpath[1], "Sounds/B2.wav");
-    strcpy(soundpath[2], "Sounds/B3.wav");
-    strcpy(soundpath[3], "Sounds/BONUS.wav");
-    strcpy(soundpath[4], "Sounds/EFFECT0.wav");
-    strcpy(soundpath[5], "Sounds/END_OF_G.wav");
-    strcpy(soundpath[6], "Sounds/END_OF_L.wav");
-    strcpy(soundpath[7], "Sounds/FIRE.wav");
-    strcpy(soundpath[8], "Sounds/STAR.wav");
+    strcpy(soundpath[0], "Sounds/B1.WAV");
+    strcpy(soundpath[1], "Sounds/B2.WAV");
+    strcpy(soundpath[2], "Sounds/B3.WAV");
+    strcpy(soundpath[3], "Sounds/BONUS.WAV");
+    strcpy(soundpath[4], "Sounds/EFFECT0.WAV");
+    strcpy(soundpath[5], "Sounds/END_OF_G.WAV");
+    strcpy(soundpath[6], "Sounds/END_OF_L.WAV");
+    strcpy(soundpath[7], "Sounds/FIRE.WAV");
+    strcpy(soundpath[8], "Sounds/STAR.WAV");
 
-    sounds.hozzaad(soundpath, 9);
+    sounds.add(soundpath, 9);
 
     left_key_pressed = false;
     right_key_pressed = false;
 
     this->top = top;
     this->scorename = scorename;
-    this->language = language;
 }
 
 Game::~Game()
@@ -174,7 +176,7 @@ Game::~Game()
         delete bonuses[i];
     delete [] bonuses;
 
-    for (int i=0; i<4; i++)
+    /*for (int i=0; i<4; i++)
         delete titles[i];
     delete [] titles;
 
@@ -189,7 +191,7 @@ Game::~Game()
     delete r_title;
     delete best_title;
     delete text;
-    delete textbox;
+    delete textbox;*/
 
     for (int i=0; i<3; i++)
         delete balls[i];
@@ -199,29 +201,28 @@ Game::~Game()
 
 }
 
-void Game::esemenyek(int & jatekresz)
+void Game::handleEvents()
 {
+    if (keystates[SDLK_SPACE])
+        launch();
+
     level->cameraAnimation();
 
     if (player->getLife() > 0 && !level->isCompleted())
     {
         starEvents();
 
-        if (left_key_pressed && padle->gettx() - padle->getsx() > 0.5-level->getSize())
-            padle->trans_horizontal(-0.015);
-        if (right_key_pressed && padle->gettx() + padle->getsx() < 0.5+level->getSize())
-            padle->trans_horizontal(+0.015);
+        if (keystates[SDLK_LEFT] && padle->gettx() - padle->getsx() > 0.5-level->getSize())
+            padle->translateX(-0.015);
+
+        if (keystates[SDLK_RIGHT] && padle->gettx() + padle->getsx() < 0.5+level->getSize())
+            padle->translateX(+0.015);
 
         ball_events();
-
         level->events();
-
         ballCollisions();
-
         ammoEvents();
-
         bonusEvents();
-
 
         if (level->isCompleted())
             end_level();
@@ -236,7 +237,7 @@ void Game::starEvents()
         {
             stars[i]->rotateY(1);
             if (stars[i]->getty() > -0.2)
-                stars[i]->trans_lengthical(-0.002);
+                stars[i]->translateY(-0.002);
         }
 }
 
@@ -248,20 +249,19 @@ void Game::ball_events()
             balls[i]->moving();
 
             if (!balls[i]->isLaunched())
-                balls[i]->getObj()->settx(padle->gettx());
+                balls[i]->getObj()->setTX(padle->gettx());
 
             balls[i]->pongFromBorder(level->getSize(), level->isWall());
 
 
             if (balls[i]->collision(padle))
             {
-                if (*isSound)
-                    sounds.play_sound(0, -1);
+                sounds.play_sound(0, -1);
                 if (player->isGrip())
                 {
                     balls[i]->setSpeed(0.0f);
-                    balls[i]->getObj()->settx(padle->gettx());
-                    balls[i]->getObj()->settz(-0.32+level->getSize());
+                    balls[i]->getObj()->setTX(padle->gettx());
+                    balls[i]->getObj()->setTZ(-0.32+level->getSize());
                 }
 
                 balls[i]->pongFromPaddle(padle);
@@ -277,8 +277,8 @@ void Game::ball_events()
         if (player->getLife() > 0)
         {
             balls[0]->setActive(true);
-            balls[0]->getObj()->settx(padle->gettx());
-            balls[0]->getObj()->settz(-0.32+level->getSize());
+            balls[0]->getObj()->setTX(padle->gettx());
+            balls[0]->getObj()->setTZ(-0.32+level->getSize());
             balls[0]->setDefaults();
         }
             
@@ -295,8 +295,7 @@ void Game::ballCollisions()
             if (stars[i]->getty() < 0.2 && *(balls[j]->getObj()) == *stars[i])
             {
                 player->increaseScore(15);
-                if (*isSound)
-                    sounds.play_sound(8, -1);
+                sounds.play_sound(8, -1);
                 stars[i]->setActive(false);
                 break;
             }
@@ -351,7 +350,7 @@ void Game::ammoEvents()
         }
 
     if (ammo_fire->isActive())
-        ammo_fire->trans_vertical(-0.015);
+        ammo_fire->translateZ(-0.015);
 
     if (ammo_fire->gettz() < -0.2-level->getSize())
         ammo_fire->setActive(false);
@@ -362,13 +361,12 @@ void Game::bonusEvents()
     for (int i=0; i<10; i++)
         if (bonuses[i]->isActive())
         {
-            bonuses[i]->trans_vertical(0.005);
+            bonuses[i]->translateZ(0.005);
             bonuses[i]->rotateY(1);
 
             if (bonuses[i]->gettz() > -0.3+level->getSize() && bonuses[i]->gettz() < -0.29+level->getSize() && bonuses[i]->gettx() > padle->gettx() - padle->getsx() && bonuses[i]->gettx() < padle->gettx() + padle->getsx())
             {
-                if (*isSound)
-                    sounds.play_sound(4, -1);
+                sounds.play_sound(4, -1);
                 switch (i)
                 {
                 case 0:
@@ -417,13 +415,13 @@ void Game::bonusEvents()
                 }
                 case 7:
                 {
-                    padle->setsx(padle->getsx()+0.05f);
+                    padle->setSX(padle->getsx()+0.05f);
                     player->increaseScore(5);
                     break;
                 }
                 case 8:
                 {
-                    padle->setsx(0.05);
+                    padle->setSX(0.05);
                     player->increaseScore(-10);
                     break;
                 }
@@ -443,20 +441,14 @@ void Game::bonusEvents()
 void Game::end_level()
 {
     if (level->getNum() % 10 == 0)
-    {
-        if (*isSound)
-            sounds.play_sound(5, -1);
-    }
+        sounds.play_sound(5, -1);
     else
-    {
-        if (*isSound)
-            sounds.play_sound(6, -1);
-    }
+        sounds.play_sound(6, -1);
 
     SDL_Delay(3000);
     
     int level_num = level->getNum();
-    reset();
+    stop();
     player->increaseScore(20);
 
     if (level_num % 10 != 0)
@@ -480,39 +472,37 @@ void Game::hitNormalObject(Block * obj, Ball * ball)
         
         player->increaseScore(5);
         
-        if (*isSound)
-            sounds.play_sound(2, -1);
+        sounds.play_sound(2, -1);
 
         if (level->getBlockNum() % 30 == 0)
         {
-            stars[0]->settx(((float)(rand() % 10)/10.0)*level->getSize()*2);
-            stars[0]->settz(((float)(rand() % 10)/10.0)*level->getSize()*2 - 0.75);
-            stars[0]->setty(0.8);
+            stars[0]->setTX(((float)(rand() % 10)/10.0)*level->getSize()*2);
+            stars[0]->setTZ(((float)(rand() % 10)/10.0)*level->getSize()*2 - 0.75);
+            stars[0]->setTY(0.8);
             stars[0]->setActive(true);
         }
 
 
         if (level->getBlockNum() % 30 == 10)
         {
-            stars[1]->settx(((float)(rand() % 10)/10.0)*level->getSize()*2);
-            stars[1]->settz(((float)(rand() % 10)/10.0)*level->getSize()*2 - 0.75);
-            stars[1]->setty(0.8);
+            stars[1]->setTX(((float)(rand() % 10)/10.0)*level->getSize()*2);
+            stars[1]->setTZ(((float)(rand() % 10)/10.0)*level->getSize()*2 - 0.75);
+            stars[1]->setTY(0.8);
             stars[1]->setActive(true);
         }
 
         if (level->getBlockNum() % 30 == 20)
         {
-            stars[2]->settx(((float)(rand() % 10)/10.0)*level->getSize()*2);
-            stars[2]->settz(((float)(rand() % 10)/10.0)*level->getSize()*2 - 0.75);
-            stars[2]->setty(0.8);
+            stars[2]->setTX(((float)(rand() % 10)/10.0)*level->getSize()*2);
+            stars[2]->setTZ(((float)(rand() % 10)/10.0)*level->getSize()*2 - 0.75);
+            stars[2]->setTY(0.8);
             stars[2]->setActive(true);
         }
 
     }
     else //object hit but not destroyed
     {
-        if (*isSound)
-            sounds.play_sound(1, -1);
+        sounds.play_sound(1, -1);
         player->increaseScore(2);
     }
 }
@@ -524,32 +514,11 @@ void Game::hitBonusObject(Block * obj)
     obj->addGravityRange();
 
     player->increaseScore(3);
-    if (*isSound)
-        sounds.play_sound(3, -1);
+    sounds.play_sound(3, -1);
 
     int k = rand() % 10;
-    bonuses[k]->settx(obj->getObj()->gettx());
-    bonuses[k]->settz(obj->getObj()->gettz());
-}
-
-void Game::leftKeyDown()
-{
-    left_key_pressed = true;
-}
-
-void Game::leftKeyUp()
-{
-    left_key_pressed = false;
-}
-
-void Game::rightKeyDown()
-{
-    right_key_pressed = true;
-}
-
-void Game::rightKeyUp()
-{
-    right_key_pressed = false;
+    bonuses[k]->setTX(obj->getObj()->gettx());
+    bonuses[k]->setTZ(obj->getObj()->gettz());
 }
 
 void Game::launch()
@@ -558,11 +527,10 @@ void Game::launch()
     {
         if (player->getAmmo() > 0 && !ammo_fire->isActive())
         {
-            if (*isSound)
-                sounds.play_sound(7, -1);
+            sounds.play_sound(7, -1);
             player->decreaseAmmo();
-            ammo_fire->settx(padle->gettx());
-            ammo_fire->settz(padle->gettz());
+            ammo_fire->setTX(padle->gettx());
+            ammo_fire->setTZ(padle->gettz());
             ammo_fire->setActive(true);
         }
     }
@@ -570,7 +538,7 @@ void Game::launch()
         balls[0]->setSpeed(-0.018f);
 }
 
-void Game::rendering(int & jatekresz)
+void Game::rendering()
 {
 
     if (player->getLife() < 1 || level->isCompleted())
@@ -618,11 +586,11 @@ void Game::rendering(int & jatekresz)
         if (balls[i]->isActive())
             balls[i]->getObj()->rendering(0);
 
-    print(level->getBlockNum(), *block_title);
+    /*print(level->getBlockNum(), *block_title);
     for (int i=0; i<4; i++)
-        titles[i]->rendering(0);
+        titles[i]->rendering();
 
-    /*print(player->getLife(), *life_title);
+    print(player->getLife(), *life_title);
     print(player->getAmmo(), *ammo_title);
     print(player->getScore(), *score_title);
     print(top[0].score, *best_title);
@@ -685,16 +653,10 @@ void Game::print(int x, Object & Object)
     //Object.gprintf(temp);
 }
 
-void Game::reset()
+void Game::stop()
 {
     delete level;
     sounds.stop();
-}
-
-void Game::sethangok(bool * behang, bool * bezene)
-{
-    isSound = behang;
-    isMusic = bezene;
 }
 
 void Game::start(const int & level_num)
@@ -709,7 +671,7 @@ void Game::start(const int & level_num)
         player->resetGame();
     player->resetLevel();    
 
-    if (*isMusic)
+    if (appsettings->isMusicEnabled())
     {
         int x = rand() % 8;
         int _try = -1;
@@ -727,22 +689,22 @@ void Game::start(const int & level_num)
 
         play_list[x] = false;
         char mus_path[30];
-        sprintf(mus_path, "Music/%d.mid", x+1);
+        sprintf(mus_path, "Music/%d.wav", x+1);
         sounds.play_music(mus_path);
     }
 
     
 
-    balls[0]->getObj()->settx(0.5f);
-    balls[0]->getObj()->settz(-0.32f + level->getSize());
+    balls[0]->getObj()->setTX(0.5f);
+    balls[0]->getObj()->setTZ(-0.32f + level->getSize());
     balls[0]->setActive(true);
     balls[0]->setDefaults();
     
     for (int i = 1; i < 3; i++)
         balls[i]->setActive(false);
 
-    padle->settx(0.5f);
-    padle->settz(-0.25 + level->getSize());
+    padle->setTX(0.5f);
+    padle->setTZ(-0.25 + level->getSize());
 }
 
 int Game::getLife()

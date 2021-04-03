@@ -1,64 +1,68 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "Object.h"
+#include "UI_Label.h"
+#include "UI_Button.h"
+#include "State.h"
 #include "Game.h"
 #include "Sound.h"
 
-class Menu
+struct StartGameParams
+{
+    void* application;
+    int level;
+} typedef StartGameParams;
+
+class Menu : public State
 {
     public:
-        Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * language);
-        ~Menu();
-        void fel(int & jatekresz); //kurzor elmozditasa felfele
-        void le(int & jatekresz); //kurzor elmozditasa lefele
-        void balra(int & jatekresz); //kurzor elmozditasa balra
-        void jobbra(int & jatekresz); //kurzor elmozditasa jobbra
-        void rendering(int & jatekresz); //menu Objecteinek rendering(0)ese
-        void rendering_res(int & jatekresz, int & setres); //menu Objecteinek rendering(0)ese
-        int getcursor();
-        void setmaxcursor(int becursor);
-        void setcursor(int becursor);
-        void setcursor();
-        void sethangok(bool * behang, bool * bezene, bool * befullscreen);
-        void enter(int & jatekresz, int & quit, Game & Game, int & width, int & height, int & setres);
-        void mouse_event(const int & x, const int & y, int & jatekresz, Game & Game, int & quit, bool isClicked, Uint8 & isMouseMoving);
+        Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top * top, ApplicationState * appState,
+            void (*startGame)(void*),void* application);
+        virtual ~Menu();
+        virtual void handleEvents();
+        virtual void rendering();
     protected:
     private:
         int cursor; //kurzor hanyadik menuponton van 0-tol kezdve
         int maxcursor; //maximum hany menupont van
-        //Multi_Object * level_objects;
+        //Multi_UI * level_UIs;
+        ApplicationState * appState;
+        StartGameParams * startGameParams;
         int DB;
-        bool * enableSound;
-        bool * enableMusic;
-        bool * fullscreen;
-        int * language;
-        int * s_width;
-        int * s_height;
-        bool * valtozas;
+
         char musicList[30][18];
         char levelList[30][18];
         int max_package;
         char on_title[4];
         char off_title[4];
-        Object * level_objects[21];
-        Object * score_titles[10];
-        Object * player_titles[10];
-        Object * sound_title;
-        Object * music_title;
-        Object * screen_title;
-        Object ** screen_settings;
-        Object * custom_title;
-        Object * custom_res;
-        Object * frame;
-        Object ** obj_game_titles;
-        Object * lang_title;
-        Object * res_title;
+        UI_Button * mainButtons[7];
+        UI * title;
+        UI * panels[4];
+        UI_Label * score_titles[10];
+        UI_Label * player_titles[10];
+        UI * sound_title;
+        UI * music_title;
+        UI ** screen_settings;
+        UI * custom_title;
+        UI * custom_res;
+        UI * frame;
+        UI_Button ** levelTitles;
+        UI * lang_title;
+        UI * res_title;
         int selected;
         bool set_selected;
         char players[10][10];
         Sound sounds;
         Top * top;
+        void hideAll();
+
+        friend void showLevels(void* _menu);
+        friend void showMain(void* _menu);
+        friend void showSettings(void* _menu);
+        friend void showScores(void* _menu);
+        friend void showHelp(void* _menu);
+        friend void showAbout(void* _menu);
+        friend void doQuit(void* _menu);
 };
 
 #endif // MENU_H

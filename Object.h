@@ -1,9 +1,9 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "GL/gl.h"
-#include "SDL/SDL.h"
-#include "gl/glu.h"
+#include <SDL/SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #include <cstring>
 #include <cstdio>
@@ -31,34 +31,30 @@ class Object
             Uint32 flags, char* texname, char* objname);
         ~Object();
         void rendering(const int & i);
-        static void cVertical(const float & x); //kamera mozgasa elore
-        static void cHorizontal(const float & x); //kamera mozgasa oldalra
-        static void cLenghtical(const float & x); //kamera mozgasa fel
-        void aelore(const float & x); //Object mozgasa elore
-        void ahatra(const float & x); //Object mozgasa hatra
-        static void cbalra(const int & x); //kamera mozgasa balra
-        static void cjobbra(const int & x); //kamera mozgasa jobbra
-        static void cfel(const int & x); //kamera mozgasa fel
-        static void cle(const int & x); //kamera mozgasa le
+        static void cameraTranslateZ(const float & x); //kamera mozgasa elore
+        static void cameraTranslateX(const float & x); //kamera mozgasa oldalra
+        static void cameraTranslateY(const float & x); //kamera mozgasa fel
+        static void cameraRotateX(const int & x); //kamera mozgasa balra
+        static void cameraRotateY(const int & x); //kamera mozgasa fel
         static int get_rCameraX();
         static int get_rCameraY();
-        void trans_vertical(const float & x);
-        void trans_lengthical(const float & y);
-        void trans_horizontal(const float & z);
+        void translateZ(const float & x);
+        void translateY(const float & y);
+        void translateX(const float & z);
         void trans_gravity(const float & x);
         void rotateX(const int & x);
         void rotateY(const int & x);
         void rotateZ(const int & x);
         //setterek:
-        void settx(const float & x);
-        void setty(const float & y);
-        void settz(const float & z);
-        void setsx(const float & x);
-        void setsy(const float & y);
-        void setsz(const float & z);
-        void setrx(const int & bex);
-        void setry(const int & bey);
-        void setrz(const int & bez);
+        void setTX(const float & x);
+        void setTY(const float & y);
+        void setTZ(const float & z);
+        void setSX(const float & x);
+        void setSY(const float & y);
+        void setSZ(const float & z);
+        void setRX(const int & bex);
+        void setRY(const int & bey);
+        void setRZ(const int & bez);
         static void setcx(float bex);
         static void setcy(float bey);
         static void setcz(float bez);

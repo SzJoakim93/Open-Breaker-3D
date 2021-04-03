@@ -43,8 +43,8 @@ void Ball::cloneBall(Ball * original, char side)
 {
     active = true;
     active_balls++;
-    ballObj->settx(original->getObj()->gettx());
-    ballObj->settz(original->getObj()->gettz());
+    ballObj->setTX(original->getObj()->gettx());
+    ballObj->setTZ(original->getObj()->gettz());
     ballspeed_x = side == 0 ? original->ballspeed_x+0.1 : original->ballspeed_x-0.1;
     ballspeed_y = side == 0 ? original->ballspeed_y-0.1 : original->ballspeed_y+0.1;
 }
@@ -140,8 +140,8 @@ bool Ball::pongFromBorder(float level_size, const bool wall)
 
 void Ball::moving()
 {
-    ballObj->trans_horizontal(ballspeed_x*ballspeed);
-    ballObj->trans_vertical(ballspeed_y*ballspeed);
+    ballObj->translateX(ballspeed_x*ballspeed);
+    ballObj->translateZ(ballspeed_y*ballspeed);
 }
 
 int Ball::getSpeed()

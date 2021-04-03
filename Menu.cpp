@@ -1,239 +1,215 @@
 #include "Menu.h"
 
-Menu::Menu(Top * top, int * s_width, int * s_height, bool * valtozas, int * language)
+void showMain(void * _menu)
+{
+    Menu * menu = (Menu*)_menu;
+    menu->hideAll();
+    menu->title->setActive(true);
+}
+
+void showLevels(void* _menu)
+{
+    Menu* menu = (Menu*)_menu;
+    menu->hideAll();
+    menu->frame->setActive(true);
+    for (int i=0; i<menu->max_package; i++)
+        menu->levelTitles[i]->setActive(true);
+}
+
+void showSettings(void * _menu)
+{
+    Menu* menu = (Menu*)_menu;
+    menu->hideAll();
+    menu->panels[3]->setActive(true);
+    menu->mainButtons[6]->setActive(true);
+}
+
+void showScores(void * _menu)
+{
+    Menu* menu = (Menu*)_menu;
+    menu->hideAll();
+    for (int i = 0; i < 10; i++)
+    {
+        menu->score_titles[i]->setActive(true);
+        menu->player_titles[i]->setActive(true);
+    }
+
+    menu->panels[2]->setActive(true);
+    menu->mainButtons[6]->setActive(true);
+}
+
+void showHelp(void * _menu)
+{
+    Menu* menu = (Menu*)_menu;
+    menu->hideAll();
+    menu->panels[0]->setActive(true);
+    menu->mainButtons[6]->setActive(true);
+}
+
+void showAbout(void * _menu)
+{
+    Menu* menu = (Menu*)_menu;
+    menu->hideAll();
+    menu->panels[1]->setActive(true);
+    menu->mainButtons[6]->setActive(true);
+}
+
+void doQuit(void * _menu)
+{
+    Menu* menu = (Menu*)_menu;
+    *(menu->appState) = QUIT;
+}
+
+Menu::Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top * top, ApplicationState * appState,
+    void (*startGame)(void*), void* application) :
+    appState(appState), sounds(appsettings), State(appsettings, event, keystates)
 {
     cursor = 0;
     maxcursor = 6;
-    this->language = language;
-    int i=0;
 
-    bool van=true;
-
-    /**A menu Objectei:**/
+    /**A menu UIei:**/
     char lang_path[32];
-    if (*language == 0)
+    if (appsettings->getLanguage() == HUN)
     {
-        strcpy(lang_path, "Fonts/hungarian/");
+        strcpy(lang_path, "Fonts/hungarian");
         strcpy(on_title, "be");
         strcpy(off_title, "ki");
     }
     else
     {
-        strcpy(lang_path, "Fonts/english/");
+        strcpy(lang_path, "Fonts/english");
         strcpy(on_title, "on");
         strcpy(off_title, "off");
     }
 
+    title = new UI(0.0, 0.0, //koordinatak
+                             0.0675, 0.09, //atmeretezes
+                             "Textures/title.bmp", STRECH_TEXTURED);
 
 
-    level_objects[0] = new Object(0.0, 0.0, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.135, 1.0, 0.18, //atmeretezes
-                             STRECH_TEXTURED, "Textures/title.bmp", "rectangle");
-
-
-    level_objects[1] = new Object(-0.03, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/start.bmp","rectangle");
+    mainButtons[0] = new UI_Button(-0.03, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             "Fonts/english/start.bmp;Fonts/english/start_c.bmp", &showLevels, this);
     char temp[32];
-    strcpy(temp, lang_path);
-    strcat(temp, "settings.bmp");
-    level_objects[2] = new Object(0.0, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, temp, "rectangle");
+    sprintf(temp, "%s/settings.bmp;%s/settings_c.bmp", lang_path, lang_path);
+    mainButtons[1] = new UI_Button(0.0, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &showSettings, this);
+
+    sprintf(temp, "%s/scores.bmp;%s/scores_c.bmp", lang_path, lang_path);
+    mainButtons[2] = new UI_Button(0.03, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &showScores, this);
+
+    sprintf(temp, "%s/help.bmp;%s/help_c.bmp", lang_path, lang_path);
+    mainButtons[3] = new UI_Button(0.06, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &showHelp, this);
+
+    sprintf(temp, "%s/about.bmp;%s/about_c.bmp", lang_path, lang_path);
+    mainButtons[4] = new UI_Button(0.09, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &showAbout, this);
+
+    sprintf(temp, "%s/quit.bmp;%s/quit_c.bmp", lang_path, lang_path);
+    mainButtons[5] = new UI_Button(0.12, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &doQuit, this);
+
+    mainButtons[6] = new UI_Button(0.0, -0.08, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             "Fonts/english/ok.bmp;Fonts/english/ok_c.bmp",
+                             &showMain, this);
 
     strcpy(temp, lang_path);
-    strcat(temp, "scores.bmp");
-    level_objects[3] = new Object(0.03, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, temp, "rectangle");
+    strcat(temp, "/Help_w.bmp");
+    panels[0] = new UI(0.0, 0.0, //koordinatak
+                             0.11, 0.11, //atmeretezes
+                             temp, STRECH_TEXTURED);
 
     strcpy(temp, lang_path);
-    strcat(temp, "help.bmp");
-    level_objects[4] = new Object(0.06, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, temp, "rectangle");
+    strcat(temp, "/About_w.bmp");
+    printf("%s\n", temp);
+    panels[1] = new UI(0.0, 0.0, //koordinatak
+                             0.055, 0.11, //atmeretezes
+                             temp, STRECH_TEXTURED);
 
-    strcpy(temp, lang_path);
-    strcat(temp, "about.bmp");
-    level_objects[5] = new Object(0.09, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, temp, "rectangle");
+    panels[2] = new UI(0.0, 0.0, //koordinatak
+                             0.0775, 0.11, //atmeretezes
+                             "Fonts/english/scores_w.bmp", STRECH_TEXTURED);
 
-    strcpy(temp, lang_path);
-    strcat(temp, "quit.bmp");
-    level_objects[6] = new Object(0.12, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, temp, "rectangle");
+    panels[3] = new UI(0.0, 0.0, //koordinatak
+                             0.11, 0.11, //atmeretezes
+                             "Fonts/english/settings_w.bmp", STRECH_TEXTURED);
 
+    frame = new UI(-0.06, 0.06, //koordinatak
+                             0.03, 0.03, //atmeretezes
+                             "Fonts/frame.bmp", STRECH_TEXTURED);
 
-    strcpy(temp, lang_path);
-    strcat(temp, "Help_w.bmp");
-    level_objects[7] = new Object(0.0, 0.0, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.22, 1.0, 0.22, //atmeretezes
-                             STRECH_TEXTURED, temp, "rectangle");
-
-    strcpy(temp, lang_path);
-    strcat(temp, "About_w.bmp");
-    level_objects[8] = new Object(0.0, 0.00, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.11, 1.0, 0.22, //atmeretezes
-                             STRECH_TEXTURED, temp, "rectangle");
-
-    level_objects[9] = new Object(0.0, -0.08, 0.5, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/OK.bmp", "rectangle");
-
-    level_objects[10] = new Object(-0.03, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/start_c.bmp", "rectangle");
-
-    level_objects[11] = new Object(0.0, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/settings_c.bmp", "rectangle");
-
-    level_objects[12] = new Object(0.03, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/scores_c.bmp", "rectangle");
-
-    level_objects[13] = new Object(0.06, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/help_c.bmp", "rectangle");
-
-    level_objects[14] = new Object(0.09, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/about_c.bmp", "rectangle");
-
-    level_objects[15] = new Object(0.12, -0.098, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/quit_c.bmp", "rectangle");
-
-    level_objects[16] = new Object(0.0, -0.08, 0.5, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.014, 1.0, 0.028, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/OK_c.bmp", "rectangle");
-
-    level_objects[17] = new Object(0.0, 0.0, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.155, 1.0, 0.22, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/Scores_w.bmp", "rectangle");
-
-    level_objects[18] = new Object(0.0, 0.0, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.22, 1.0, 0.22, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/english/Settings_w.bmp", "rectangle");
-
-    /*level_objects[19] = new Object(0.0, 0.01, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                            0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "rectangle", 4, 0);
-
-    level_objects[20] = new Object(0.0, 0.0, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "rectangle", 4, 0);
-    for (int i=0; i<10; i++)
-        score_titles[i] = new Object(0.02, 0.053-0.0105*i, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "rectangle", 4, 0);
-
-    for (int i=0; i<10; i++)
-        player_titles[i] = new Object(-0.05, 0.053-0.0105*i, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "rectangle", 4, 0);
-
-    sound_title = new Object(0.035, 0.013, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "rectangle", 4, 0);
-
-    music_title = new Object(0.035, 0.0, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "rectangle", 4, 0);
-
-    screen_title = new Object(0.035, -0.013, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "rectangle", 4, 0);*/
-
-    frame = new Object(0.04, -0.013, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.012, 1.0, 0.027, //atmeretezes
-                             STRECH_TEXTURED, "Fonts/frame.bmp", "rectangle");
-
-    /*lang_title = new Object(0.03, -0.039, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "rectangle", 4, 0);
-
-    res_title = new Object(0.03, -0.026, 0.0, //koordinatak
-                             0, 0, 0, //elforgatas
-                             0.005, 1.0, 0.0025, //atmeretezes
-                             true, "Fonts/letters", 0, "rectangle", 4, 0);*/
-
-    screen_settings = new Object* [16];
+    screen_settings = new UI* [16];
 
     for (int i=0; i<16; i++)
-        screen_settings[i] = new Object(-0.06+0.1*(i/9), 0.06-0.01*(i%9), 0.0, //koordinatak
-                                0, 0, 0, //elforgatas
-                                0.005, 1.0, 0.0025, //atmeretezes
-                                STRECH_TEXTURED, "Fonts/letters", "rectangle");
+        screen_settings[i] = new UI(-0.06+0.1*(i/9), 0.06-0.01*(i%9), //koordinatak
+                                0.0025, 0.0012, //atmeretezes
+                                "Fonts/letters", STRECH_TEXTURED);
 
     FILE * packages = fopen("Levels/Packages.txt", "r");
     fscanf(packages, "%d\n", &max_package);
-    obj_game_titles = new Object* [max_package];
+    levelTitles = new UI_Button* [max_package];
+    startGameParams = new StartGameParams [max_package];
     char char_game_titles[32];
 
     for (int j=0; j<max_package; j++)
     {
+        startGameParams[j].application = application;
+        startGameParams[j].level = (j*10)+1;
         fscanf(packages, "%s\n", char_game_titles);
-        obj_game_titles[j] = new Object(-0.06+0.06*j, 0.06, 0.0, //koordinatak
-                                0, 0, 0, //elforgatas
-                                0.05, 1.0, 0.05, //atmeretezes
-                                STRECH_TEXTURED, char_game_titles, "rectangle");
+        levelTitles[j] = new UI_Button(-0.06+0.06*j, 0.06, //koordinatak
+                                0.025, 0.025, //atmeretezes
+                                char_game_titles, startGame, &startGameParams[j]);
     }
 
     fclose(packages);
 
     this->top = top;
-    this->s_width = s_width;
-    this->s_height = s_height;
-    this->valtozas = valtozas;
+
+    for (int i=0; i<10; i++)
+    {
+        sprintf(temp, "%d", top[i].score);
+        score_titles[i] = new UI_Label(0.02, 0.053-0.0105*i, //koordinatak
+                             0.0025, 0.0012, //atmeretezes
+                             "Fonts/letters", temp);
+
+        player_titles[i] = new UI_Label(-0.05, 0.053-0.0105*i, //koordinatak
+                             0.0025, 0.0012, //atmeretezes
+                             "Fonts/letters", top[i].name);
+    }
+
+    sounds.play_music("Music/s.wav");
+
+    hideAll();
+    showMain(this);
 }
 
 Menu::~Menu()
 {
-    for (int i=0; i<19; i++)
-        delete level_objects[i];
+    for (int i=0; i<7; i++)
+        delete mainButtons[i];
+    for (int i=0; i<4; i++)
+        delete panels[i];
+    delete title;
+    delete frame;
 
-
-    /*for (int i=0; i<10; i++)
+    for (int i=0; i<10; i++)
         delete score_titles[i];
 
     for (int i=0; i<10; i++)
         delete player_titles[i];
 
-    delete sound_title;
+    /*delete sound_title;
     delete music_title;
     delete screen_title;*/
-    delete frame;
+
     /*delete lang_title;
     delete res_title;*/
 
@@ -244,932 +220,46 @@ Menu::~Menu()
     delete [] screen_settings;
 
     for (int j=0; j<max_package; j++)
-        delete obj_game_titles[j];
-    delete [] obj_game_titles;
+        delete levelTitles[j];
+    delete [] levelTitles;
+    delete [] startGameParams;
 }
 
-void Menu::fel(int & jatekresz)
+void Menu::handleEvents()
 {
-    if (jatekresz == 9)
-        cursor-=3;
-    else
-        cursor--;
-
-    if (cursor < 0)
-        cursor = maxcursor - 1;
-
-    if (jatekresz == 2)
-    {
-        if (cursor == 0)
-            frame->setty(0.013);
-        else if (cursor == 1)
-            frame->setty(0.0);
-        else if (cursor == 2)
-        frame->setty(-0.013);
-        else if (cursor == 3)
-            frame->setty(-0.026);
-        else if (cursor == 4)
-            frame->setty(-0.039);
-    }
-    else if (jatekresz == 6)
-    {
-        frame->settx(-0.05+(cursor/9)*0.105);
-        frame->setty(0.06-(cursor%9)*0.01);
-    }
-    else if (jatekresz == 9)
-    {
-        frame->settx(-0.06+(cursor%3)*0.06);
-        frame->setty(0.06-(cursor/3)*0.06);
-    }
-
-    set_selected = true;
-    selected = cursor;
-}
-
-void Menu::le(int & jatekresz)
-{
-    if (jatekresz == 9)
-        cursor+=3;
-    else
-        cursor++;
-
-    if (cursor >= maxcursor)
-        cursor = 0;
-
-    if (jatekresz == 9)
-    {
-        frame->settx(-0.06+(cursor%3)*0.06);
-        frame->setty(0.06-(cursor/3)*0.06);
-    }
-    else if (jatekresz == 6)
-    {
-        frame->settx(-0.05+(cursor/9)*0.105);
-        frame->setty(0.06-(cursor%9)*0.01);
-    }
-    else if (jatekresz == 2)
-    {
-        if (cursor == 0)
-            frame->setty(0.013);
-        else if (cursor == 1)
-            frame->setty(0.0);
-        else if (cursor == 2)
-            frame->setty(-0.013);
-        else if (cursor == 3)
-            frame->setty(-0.026);
-        else if (cursor == 4)
-            frame->setty(-0.039);
-    }
-
-    set_selected = true;
-    selected = cursor;
 
 }
 
-void Menu::balra(int & jatekresz)
+void Menu::rendering()
 {
-    if (jatekresz == 6)
-        cursor-=9;
-    else
-        cursor --;
-
-    if (cursor < 0)
-        cursor = 0;
-
-    if (jatekresz == 9)
+    for (int i=0; i<10; i++)
     {
-        frame->settx(-0.06+(cursor%3)*0.06);
-        frame->setty(0.06-(cursor/3)*0.06);
+        score_titles[i]->rendering();
+        player_titles[i]->rendering();
     }
-    else if (jatekresz == 6)
-    {
-        frame->settx(-0.05+(cursor/9)*0.105);
-        frame->setty(0.06-(cursor%9)*0.01);
-    }
-
-    set_selected = true;
-    selected = cursor;
-
+    for (int i = 0; i < 7; i++)
+        mainButtons[i]->rendering();
+    for (int i = 0; i < 4; i++)
+        panels[i]->rendering();
+    title->rendering();
+    for (int i = 0; i < max_package; i++)
+        levelTitles[i]->rendering();
+    frame->rendering();
 }
 
-void Menu::jobbra(int & jatekresz)
+void Menu::hideAll()
 {
-    /*if (jatekresz == 9 && cursor < maxcursor-1)
+    for (int i=0; i<4; i++)
+        panels[i]->setActive(false);
+    for (int i=0; i<max_package; i++)        
+        levelTitles[i]->setActive(false);
+    frame->setActive(false);
+    title->setActive(false);
+    mainButtons[6]->setActive(false);
+
+    for (int i = 0; i < 10; i++)
     {
-        frame->trans_horizontal(0.06);
-        if (frame->gettx() > 0.06)
-            frame->settz(-0.06);
-    }*/
-
-    if (jatekresz == 6)
-        cursor+=9;
-    else
-        cursor++;
-
-    if (cursor >= maxcursor)
-        cursor = maxcursor - 1;
-
-    if (jatekresz == 9)
-    {
-        frame->settx(-0.06+(cursor%3)*0.06);
-        frame->setty(0.06-(cursor/3)*0.06);
-    }
-    else if (jatekresz == 6)
-    {
-        frame->settx(-0.05+(cursor/9)*0.105);
-        frame->setty(0.06-(cursor%9)*0.01);
-    }
-
-
-    set_selected = true;
-    selected = cursor;
-}
-
-int Menu::getcursor()
-{
-    return cursor;
-}
-
-void Menu::setmaxcursor(int becursor)
-{
-    maxcursor = becursor;
-}
-
-void Menu::setcursor(int becursor)
-{
-    cursor = becursor;
-    setcursor();
-
-}
-
-void Menu::setcursor()
-{
-
-    /*if  (maxcursor > 9)
-    {
-        level_objects[18]->settx(-0.11+(cursor/9)*(0.125));
-        level_objects[18]->setty((cursor%9)*(-0.02)+0.08);
-    }
-    else if  (maxcursor == 9)
-        level_objects[18]->setty(cursor*(-0.02)+0.08);
-    else if (maxcursor == 8)
-        level_objects[18]->setty(cursor*(-0.02)+0.06);
-    else if  (maxcursor == 7)
-        level_objects[18]->setty(cursor*(-0.02)+0.04);
-    else if  (maxcursor == 6)
-        level_objects[18]->setty(cursor*(-0.02)+0.02);
-    else
-        level_objects[18]->setty(cursor*(-0.02));*/
-}
-
-void Menu::rendering(int & jatekresz)
-{
-    if (jatekresz == 0)
-        level_objects[0]->rendering(0);
-    if (selected == 0)
-        level_objects[10]->rendering(0);
-    else
-        level_objects[1]->rendering(0);
-    if (selected == 1)
-        level_objects[11]->rendering(0);
-    else
-        level_objects[2]->rendering(0);
-    if (selected == 2)
-        level_objects[12]->rendering(0);
-    else
-        level_objects[3]->rendering(0);
-    if (selected == 3)
-        level_objects[13]->rendering(0);
-    else
-        level_objects[4]->rendering(0);
-    if (selected == 4)
-        level_objects[14]->rendering(0);
-    else
-        level_objects[5]->rendering(0);
-    if (selected == 5)
-        level_objects[15]->rendering(0);
-    else
-        level_objects[6]->rendering(0);
-
-    if (jatekresz > 1 && jatekresz < 7)
-    {
-        if (selected == 6)
-            level_objects[16]->rendering(0);
-        else
-            level_objects[9]->rendering(0);
-    }
-
-    if (jatekresz == 4)
-        level_objects[7]->rendering(0);
-    if (jatekresz == 5)
-        level_objects[8]->rendering(0);
-    if (jatekresz == 2)
-    {
-        /*if (*enableSound)
-            sound_title->gprintf(on_title);
-        else
-            sound_title->gprintf(off_title);
-
-        if (*enableMusic)
-            music_title->gprintf(on_title);
-        else
-            music_title->gprintf(off_title);
-
-        if (*fullscreen)
-            screen_title->gprintf(on_title);
-        else
-            screen_title->gprintf(off_title);
-
-        char temp[16];
-        sprintf(temp, "%dx%d", *s_width, *s_height);
-        res_title->gprintf(temp);
-
-        if (*language == 0)
-            lang_title->gprintf("magyar");
-        else
-            lang_title->gprintf("english");*/
-
-        if (set_selected)
-            frame->rendering(0);
-
-        level_objects[18]->rendering(0);
-    }
-
-    if (jatekresz == 6)
-    {
-        /*screen_settings[0]->gprintf("320x200");
-        screen_settings[1]->gprintf("320x240");
-        screen_settings[2]->gprintf("400x300");
-        screen_settings[3]->gprintf("640x480");
-        screen_settings[4]->gprintf("800x468");
-        screen_settings[5]->gprintf("848x480");
-        screen_settings[6]->gprintf("800x600");
-        screen_settings[7]->gprintf("1024x768");
-        screen_settings[8]->gprintf("1152x864");
-        screen_settings[9]->gprintf("1280x720");
-        screen_settings[10]->gprintf("1280x800");
-        screen_settings[11]->gprintf("1280x960");
-        screen_settings[12]->gprintf("1280x1024");
-        screen_settings[13]->gprintf("1366x768");
-        screen_settings[14]->gprintf("1366x1024");
-        screen_settings[15]->gprintf("custom");*/
-        frame->rendering(0);
-    }
-
-    if (jatekresz == 3)
-    {
-        /*for (int i=0; i<10; i++)
-        {
-            char temp[7];
-            sprintf(temp, "%d", top[i].score);
-            score_titles[i]->gprintf(temp);
-            player_titles[i]->gprintf(top[i].name);
-        }*/
-        level_objects[17]->rendering(0);
-
-    }
-
-    if (jatekresz == 9)
-    {
-        for (int i=0; i<max_package; i++)
-            obj_game_titles[i]->rendering(0);
-        frame->rendering(0);
-    }
-
-
-}
-
-void Menu::rendering_res(int & jatekresz, int & setres)
-{
-    /*char temp[30];
-
-    if (jatekresz == 7)
-        level_objects[19]->gprintf("sz/1less/1g");
-    else if (jatekresz == 8)
-        level_objects[19]->gprintf("magass/0g");
-    sprintf(temp, "%d", setres);
-    level_objects[20]->gprintf(temp);*/
-}
-
-void Menu::sethangok(bool * _sound, bool * _music, bool * _fullscreen)
-{
-    enableSound = _sound;
-    enableMusic = _music;
-    fullscreen = _fullscreen;
-    if (*_music)
-        sounds.play_music("Music/s.mid");
-}
-
-void Menu::enter(int & jatekresz, int & quit, Game & Game, int & width, int & height, int & setres)
-{
-    switch (jatekresz)
-                {
-                    case 0: //fomenu
-                    {
-                        if (cursor == 0)
-                        {
-                            maxcursor = max_package;
-                            setcursor(0);
-                            jatekresz = 9;
-                            frame->settx(-0.06);
-                            frame->setty(0.06);
-                            frame->setsx(0.06);
-                            frame->setsz(0.06);
-                        }
-                        else if (cursor == 1)
-                        {
-                            maxcursor = 5;
-                            cursor = 0;
-                            jatekresz = 2;
-                            level_objects[9]->setty(-0.051);
-                            level_objects[16]->setty(-0.051);
-                            frame->settx(0.04);
-                            frame->setty(0.013);
-                            frame->setsx(0.012);
-                            frame->setsz(0.027);
-                        }
-
-                        else if (cursor == 2)
-                        {
-                            jatekresz = 3;
-                            level_objects[9]->setty(-0.065);
-                            level_objects[16]->setty(-0.065);
-                        }
-                        else if (cursor == 3)
-                        {
-                            jatekresz = 4;
-                            level_objects[9]->setty(-0.08);
-                            level_objects[16]->setty(-0.08);
-                        }
-                        else if (cursor == 4)
-                        {
-                            jatekresz = 5;
-                            level_objects[9]->setty(-0.041);
-                            level_objects[16]->setty(-0.041);
-                        }
-                        else if (cursor == 5)
-                            quit = 1;
-
-                        break;
-                    }
-                    case 2: //settings
-                    {
-                        if (cursor == 0)
-                        {
-                            if (*enableSound)
-                                *enableSound = false;
-                            else
-                                *enableSound = true;
-                        }
-                        else if (cursor == 1)
-                        {
-                            if (*enableMusic)
-                                *enableMusic = false;
-                            else
-                                *enableMusic = true;
-                        }
-                        else if (cursor == 2)
-                        {
-                            if (*fullscreen)
-                                *fullscreen = false;
-                            else
-                                *fullscreen = true;
-                        }
-                        else if (cursor == 3)
-                        {
-                            jatekresz = 6;
-                            cursor=0;
-                            maxcursor=16;
-                            frame->settx(-0.05);
-                            frame->setty(0.06);
-                            frame->setsx(0.012);
-                            frame->setsz(0.035);
-                        }
-                        else if (cursor == 4)
-                        {
-                            if (*language == 0)
-                                *language = 1;
-                            else
-                                *language = 0;
-                        }
-                        *valtozas = true;
-                        break;
-                    }
-                    case 3:
-                    case 4:
-                    case 5:
-                    {
-                        jatekresz = 0;
-                        break;
-                    }
-                    case 6: //felbontas
-                    {
-                        if (cursor == 0)
-                        {
-                            *s_width = 320;
-                            *s_height = 200;
-                        }
-
-                        if (cursor == 1)
-                        {
-                            *s_width = 320;
-                            *s_height = 240;
-                        }
-
-                        if (cursor == 2)
-                        {
-                            *s_width = 400;
-                            *s_height = 300;
-                        }
-
-                        if (cursor == 3)
-                        {
-                            *s_width = 640;
-                            *s_height = 480;
-                        }
-
-                        if (cursor == 4)
-                        {
-                            *s_width = 800;
-                            *s_height = 468;
-                        }
-
-                        if (cursor == 5)
-                        {
-                            *s_width = 848;
-                            *s_height = 480;
-                        }
-
-                        if (cursor == 6)
-                        {
-                            *s_width = 800;
-                            *s_height = 600;
-                        }
-
-                        if (cursor == 7)
-                        {
-                            *s_width = 1024;
-                            *s_height = 768;
-                        }
-
-                        if (cursor == 8)
-                        {
-                            *s_width = 1152;
-                            *s_height = 864;
-                        }
-
-                        if (cursor == 9)
-                        {
-                            *s_width = 1280;
-                            *s_height = 720;
-                        }
-
-                        if (cursor == 10)
-                        {
-                            *s_width = 1280;
-                            *s_height = 800;
-                        }
-
-                        if (cursor == 11)
-                        {
-                            *s_width = 1280;
-                            *s_height = 960;
-                        }
-
-                        if (cursor == 12)
-                        {
-                            *s_width = 1280;
-                            *s_height = 1024;
-                        }
-
-                        if (cursor == 13)
-                        {
-                            *s_width = 1366;
-                            *s_height = 768;
-                        }
-
-                        if (cursor == 14)
-                        {
-                            *s_width = 1366;
-                            *s_height = 1024;
-                        }
-
-                        if (cursor == 15)
-                            jatekresz = 7;
-
-                        if (cursor != 15)
-                        {
-                            quit = 2;
-                            cursor=0;
-                            maxcursor = 4;
-                            *valtozas = true;
-                        }
-
-
-                        break;
-                    }
-
-                    case 7:
-                    {
-                        *s_width = setres;
-                        setres = 0;
-                        jatekresz = 8;
-                        break;
-                    }
-
-                    case 8:
-                    {
-                        *s_height = setres;
-                        setres = 0;
-                        jatekresz = 6;
-                        *valtozas = true;
-                        quit = 2;
-                        break;
-                    }
-                    case 9:
-                    {
-                        sounds.stop();
-                        jatekresz = 1;
-                        Game.start(cursor*10+1);
-                        break;
-                    }
-                }
-}
-
-void Menu::mouse_event(const int & x, const int & y, int & jatekresz, Game & Game, int & quit, bool isClicked, Uint8 & isMouseMoving)
-{
-    float multipler = *s_height / 480.0;
-    int offset = (*s_width-640.0*multipler)/2.0;
-
-
-    if (x > 222.0*multipler+offset && x < 620*multipler+offset &&  y > 450.0*multipler && y < 480*multipler)
-    {
-        //start
-        if (x < 278.0*multipler+offset)
-        {
-            if (isClicked)
-            {
-                setcursor(0);
-                maxcursor = max_package;
-                jatekresz = 9;
-                frame->settx(-0.06);
-                frame->setty(0.06);
-                frame->setsx(0.06);
-                frame->setsz(0.06);
-            }
-            selected = 0;
-        }
-        //settings
-        else if (x < 355.0*multipler+offset)
-        {
-            if (isClicked)
-            {
-                jatekresz = 2;
-                level_objects[9]->setty(-0.051);
-                level_objects[16]->setty(-0.051);
-                cursor = 0;
-                maxcursor = 5;
-                frame->settx(0.04);
-                frame->setty(0.013);
-                frame->setsx(0.012);
-                frame->setsz(0.027);
-            }
-
-            selected = 1;
-        }
-        //scores
-        else if (x < 427.0*multipler+offset)
-        {
-            if (isClicked)
-            {
-                cursor = 0;
-                maxcursor = 6;
-                jatekresz = 3;
-                level_objects[9]->setty(-0.065);
-                level_objects[16]->setty(-0.065);
-            }
-
-            selected = 2;
-        }
-        //help
-        else if (x < 490.0*multipler+offset)
-        {
-            if (isClicked)
-            {
-                cursor = 0;
-                maxcursor = 6;
-                jatekresz = 4;
-                level_objects[9]->setty(-0.08);
-                level_objects[16]->setty(-0.08);
-            }
-
-            selected = 3;
-
-        }
-
-        //about
-        else if (x < 560.0*multipler+offset)
-        {
-            if (isClicked)
-            {
-                cursor = 0;
-                maxcursor = 6;
-                jatekresz = 5;
-                level_objects[9]->setty(-0.041);
-                level_objects[16]->setty(-0.041);
-            }
-            selected = 4;
-        }
-        //quit
-        else
-        {
-            if (isClicked)
-                quit = 1;
-            selected = 5;
-        }
-    }
-    //ok
-    else if (jatekresz == 4 && x > 295.0*multipler+offset && x < 337.0*multipler+offset && y > 410.0*multipler && y < 428.0*multipler ||
-             (jatekresz == 5 || jatekresz == 2 || jatekresz == 6) && x > 300.0*multipler+offset && x < 344.0*multipler+offset && y > 321.0*multipler && y < 367.0*multipler ||
-             jatekresz == 3 && x > 300.0*multipler+offset && x < 340.0*multipler+offset && y > 378.0*multipler && y < 400.0*multipler)
-    {
-        if (isClicked)
-        {
-            jatekresz = 0;
-            cursor = 0;
-            maxcursor = 6;
-        }
-
-        selected = 6;
-    }
-    else if (selected != -1 && isMouseMoving == SDL_MOUSEMOTION)
-        selected = -1;
-
-    if (jatekresz == 2 && x > 215.0*multipler+offset && x < 450.0*multipler+offset)
-    {
-        if (y > 200.0*multipler && y < 226.0*multipler)
-        {
-            if (isClicked)
-            {
-                *valtozas = true;
-                if (*enableSound)
-                    *enableSound = false;
-                else
-                    *enableSound = true;
-            }
-            set_selected=true;
-            frame->setty(0.013);
-        }
-        else if (y > 226.0*multipler && y < 252.0*multipler)
-        {
-            if (isClicked)
-            {
-                *valtozas = true;
-                if (*enableMusic)
-                    *enableMusic = false;
-                else
-                    *enableMusic = true;
-            }
-            set_selected=true;
-            frame->setty(0.0);
-        }
-
-        else if (y > 252.0*multipler && y < 278.0*multipler)
-        {
-            if (isClicked)
-            {
-                *valtozas = true;
-                if (*fullscreen)
-                    *fullscreen = false;
-                else
-                    *fullscreen = true;
-            }
-            set_selected=true;
-            frame->setty(-0.013);
-        }
-
-        else if (y > 278.0*multipler && y < 314.0*multipler)
-        {
-            if (isClicked)
-            {
-                cursor=0;
-                maxcursor=16;
-                frame->settx(-0.05);
-                frame->setty(0.06);
-                frame->setsx(0.012);
-                frame->setsz(0.035);
-                jatekresz = 6;
-            }
-
-            set_selected=true;
-            frame->setty(-0.026);
-        }
-        else if (y > 314.0*multipler && y < 340.0*multipler)
-        {
-            if (isClicked)
-            {
-                *valtozas = true;
-                if (*language == 0)
-                    *language = 1;
-                else
-                    *language = 0;
-            }
-
-            set_selected=true;
-            frame->setty(-0.039);
-        }
-        else if (isMouseMoving == SDL_MOUSEMOTION)
-            set_selected=false;
-    }
-    else if (jatekresz == 6 && x > 160.0*multipler+offset && x < 470.0*multipler+offset && y > 90.0*multipler && y < 295.0*multipler)
-    {
-        frame->settx(-0.05+(int)((-160*multipler+x+offset)/(180*multipler+offset))*0.105);
-        frame->setty(0.06-(int)((-85*multipler+y)/(25*multipler))*0.01);
-        if (x < 340.0*multipler+offset)
-        {
-            if (y > 85.0*multipler && y < 110.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 320;
-                    *s_height = 200;
-                }
-                set_selected=0;
-
-            }
-            else if (y > 110.0*multipler && y < 134.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 320;
-                    *s_height = 240;
-                }
-                set_selected=1;
-
-            }
-            else if (y > 134.0*multipler && y < 158.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 400;
-                    *s_height = 300;
-                }
-                set_selected=2;
-            }
-            else if (y > 158.0* multipler && y < 182.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 640;
-                    *s_height = 480;
-                }
-                set_selected=2;
-
-            }
-            else if (y > 182.0* multipler && y < 203.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 800;
-                    *s_height = 468;
-                }
-                set_selected=2;
-            }
-            else if (y > 203.0* multipler && y < 227.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 848;
-                    *s_height = 480;
-                }
-                set_selected=2;
-            }
-            else if (y > 227.0*multipler && y < 250.0 * multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 800;
-                    *s_height = 600;
-                }
-                set_selected=2;
-            }
-            else if (y > 250.0* multipler && y < 274.0 * multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 1024;
-                    *s_height = 768;
-                }
-                set_selected=2;
-
-            }
-            else if (y > 274.0* multipler && y < 296.0 * multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 1152;
-                    *s_height = 864;
-                }
-                set_selected=2;
-            }
-        }
-        else
-        {
-            if (y > 85.0*multipler && y < 110.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 1280;
-                    *s_height = 720;
-                }
-                set_selected=2;
-            }
-            else if (y > 110.0*multipler && y < 134.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 1280;
-                    *s_height = 800;
-                }
-                set_selected=2;
-            }
-            else if (y > 134.0*multipler && y < 158.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 1280;
-                    *s_height = 960;
-                }
-                set_selected=2;
-            }
-            else if (y > 158.0* multipler && y < 182.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 1280;
-                    *s_height = 1024;
-                }
-                set_selected=2;
-            }
-            else if (y > 182.0* multipler && y < 203.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 1366;
-                    *s_height = 768;
-                }
-                set_selected=2;
-            }
-            else if (y > 203.0* multipler && y < 227.0*multipler)
-            {
-                if (isClicked)
-                {
-                    *s_width = 1366;
-                    *s_height = 1024;
-                }
-                set_selected=2;
-            }
-            else if (y > 227.0*multipler && y < 250.0 * multipler)
-            {
-                //custom resolution
-                if (isClicked)
-                    jatekresz = 7;
-            }
-        }
-
-        if (isClicked && (y < 285.0 * multipler || y > 315.0 * multipler))
-        {
-            *valtozas = true;
-            jatekresz = 2;
-            cursor = 0;
-            maxcursor = 4;
-            quit = 2;
-        }
-
-    }
-    else if (jatekresz == 9)
-    {
-        if (x > 112.0*multipler+offset && x < 528*multipler+offset && y > 32.0*multipler && y < 447.0*multipler)
-        {
-            int temp = 3*(int)((y-31*multipler)/(139*multipler))+(x-111*multipler-offset)/(139*multipler);
-            if (isClicked)
-            {
-                //int temp = ((int)((-32*multipler+y)/139*multipler)*3+(int)((-112*multipler+offset+x)/(139*multipler+offset)))*10;
-
-                if (temp < max_package)
-                {
-                    sounds.stop();
-                    jatekresz = 1;
-                    Game.start(temp*10+1);
-                }
-            }
-
-            frame->settx(-0.06+0.06*(temp%3));
-            frame->setty(0.06-0.06*(temp/3));
-
-            /*frame->settx(-0.06+0.06*(int)((-112*multipler+offset+x)/(139*multipler+offset)));
-            frame->setty(0.06-0.06*(int)((-32*multipler+y)/(139*multipler)));*/
-
-        }
-
+        score_titles[i]->setActive(false);
+        player_titles[i]->setActive(false);
     }
 }

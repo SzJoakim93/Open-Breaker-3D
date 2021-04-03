@@ -5,6 +5,9 @@
 #include <cstring>
 #include <cstdio>
 
+#include "State.h"
+#include "UI.h"
+#include "Appsettings.h"
 #include "Ball.h"
 #include "Player.h"
 #include "Block.h"
@@ -21,21 +24,16 @@ typedef struct Top
     char name[20];
 } Top;
 
-class Game
+class Game : public State
 {
     public:
-        Game(char * level_path, Top * top, char * scorename, int * width, int * height, int * language);
-        ~Game();
+        Game(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, char * level_path, Top * top);
+        virtual ~Game();
+        virtual void rendering();
+        virtual void handleEvents();
         void load(char * path);
-        void esemenyek(int & jatekresz);
-        void leftKeyDown();
-        void rightKeyDown();
-        void leftKeyUp();
-        void rightKeyUp();
-        void enter(int & jatekresz);
-        void rendering(int & jatekresz);
-        void reset();
-        void sethangok(bool * behang, bool * bezene);
+        void enter();
+        void stop();
         void start(const int & level);
         void launch();
         int getLife();
@@ -57,22 +55,24 @@ class Game
         Ball * balls[3];
         Object * stars[3];
         
+        UI ** titles;
+        UI * life_title;
+        UI * ammo_title;
+        UI * score_title;
+        UI * level_title;
+        UI * block_title;
+        UI * best_title;
+        UI * textbox;
+        UI * text;
+
         Object * padle;
-        Object ** titles;
         Object ** bonuses;
-        Object * life_title;
-        Object * ammo_title;
-        Object * score_title;
-        Object * level_title;
-        Object * block_title;
-        Object * best_title;
         Object * ammo_fire;
         Object * gamebox;
         Object * gameover;
         Object * g_title;
         Object * r_title;
-        Object * textbox;
-        Object * text;
+        
         Sound sounds;
 
         Player * player;
@@ -80,9 +80,6 @@ class Game
         bool left_key_pressed;
         bool right_key_pressed;
         bool play_list[8];
-        bool * isSound;
-        bool * isMusic;
-        int * language;
 
         Top * top;
         char * scorename;

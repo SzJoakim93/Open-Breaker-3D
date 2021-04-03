@@ -68,6 +68,19 @@ public:
         current_num++;
     }
 
+    void remove(const T & value)
+    {
+        for (int i = 0; i < current_num; i++)
+        {
+            if (values[i] == value)
+                for (int j = i; j < current_num-1; j++)
+                    value[j] = value[j+1];
+            break;
+        }
+
+        current_num--;
+    }
+
     void replace(const int & i, const int & j)
     {
         T temp = values[i];

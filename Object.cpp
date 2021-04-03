@@ -116,36 +116,36 @@ void Object::rendering(const int & i)
     }
 }
 
-void Object::settx(const float & x)
+void Object::setTX(const float & x)
 {
     this->transform.x = x;
 }
 
-void Object::setty(const float & y)
+void Object::setTY(const float & y)
 {
 
     this->transform.y = y;
 }
 
-void Object::settz(const float & z)
+void Object::setTZ(const float & z)
 {
 
     this->transform.z = z;
 }
 
-void Object::setsx(const float & x)
+void Object::setSX(const float & x)
 {
     this->scale.x = x;
 
 }
 
-void Object::setsy(const float & y)
+void Object::setSY(const float & y)
 {
     this->scale.y = y;
 
 }
 
-void Object::setsz(const float & z)
+void Object::setSZ(const float & z)
 {
     this->scale.z = z;
 
@@ -171,17 +171,17 @@ void Object::setrCameraX(int be)
     rCameraX = be;
 }
 
-void Object::setrx(const int & x)
+void Object::setRX(const int & x)
 {
     this->rotate.x = x;
 }
 
-void Object::setry(const int & y)
+void Object::setRY(const int & y)
 {
     this->rotate.y = y;
 }
 
-void Object::setrz(const int & z)
+void Object::setRZ(const int & z)
 {
     this->rotate.z = z;
 }
@@ -277,63 +277,50 @@ void Object::rotateZ(const int & x)
         rotate.z = 0;
 }
 
-void Object::cVertical(const float & x)
+void Object::cameraTranslateZ(const float & x)
 {
     cz+=x;
 }
 
-void Object::cHorizontal(const float & x)
+void Object::cameraTranslateX(const float & x)
 {
     cx+=x;
 }
 
-void Object::cLenghtical(const float & x)
+void Object::cameraTranslateY(const float & x)
 {
     cy+=x;
 }
 
-void Object::cbalra(const int & x)
-{
-    rCameraX-=x;
-    if (rCameraX < 0)
-        rCameraX = 358;
-}
-
-void Object::cjobbra(const int & x)
+void Object::cameraRotateX(const int & x)
 {
     rCameraX+=x;
-    if (rCameraX > 358)
+    if (rCameraX < 0)
+        rCameraX = 358;
+    else if (rCameraX > 358)
         rCameraX = 0;
-
 }
 
-void Object::cfel(const int & x)
+void Object::cameraRotateY(const int & x)
 {
     if (x < 35 && (rCameraY > 290 || rCameraY < 70+(x<<1)))
         rCameraY-=x;
     if (rCameraY < 0)
         rCameraY = 358;
-}
-
-void Object::cle(const int & x)
-{
-    if (x < 35 && (rCameraY > 290-(x<<1) || rCameraY < 70))
-        rCameraY+=x;
-    if (rCameraY > 358)
+    else if (rCameraY > 358)
         rCameraY = 0;
-
 }
 
-void Object::trans_horizontal(const float & x)
+void Object::translateX(const float & x)
 {
     transform.x+=x;
 }
-void Object::trans_lengthical(const float & y)
+void Object::translateY(const float & y)
 {
     transform.y+=y;
 }
 
-void Object::trans_vertical(const float & z)
+void Object::translateZ(const float & z)
 {
     transform.z+=z;
 }

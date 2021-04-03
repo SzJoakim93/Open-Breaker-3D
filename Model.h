@@ -32,6 +32,15 @@ typedef struct eMesh
 
 class Model
 {
+public:
+    Model(char * objPath);
+    Model(float x, float y);
+    ~Model();
+    eMesh* & getMesh();
+    const int & getCountOnObject();
+    char * getModelName();
+    static Model * createModel(char * objname);
+    static void deleteModel(Model * model);
 private:
     char objname[64];
     eMesh * mesh;
@@ -42,15 +51,6 @@ private:
     void eCalcMeshNormals(eMesh *m);
     eCoord3f eCrossProduct(const eCoord3f & a, const eCoord3f & b);
     static list<Model*> global_model;
-public:
-    Model(char * objPath);
-    Model(float x, float y);
-    ~Model();
-    eMesh* & getMesh();
-    const int & getCountOnObject();
-    char * getModelName();
-    static Model * createModel(char * objname);
-    static void deleteModel(Model * model);
 };
 
 #endif //Mesh_H

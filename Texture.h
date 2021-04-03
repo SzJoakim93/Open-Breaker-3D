@@ -3,7 +3,7 @@
 
 #include <SDL/SDL.h>
 #include <GL/gl.h>
-#include <gl/glu.h>
+#include <GL/glu.h>
 
 #include "FileManager.h"
 

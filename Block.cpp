@@ -56,7 +56,7 @@ void Block::moving()
     float t_end = flags[2]/100.0;
     float moving = flags[3]/1000.0;
 
-    blockObj->trans_horizontal(moving);
+    blockObj->translateX(moving);
     if (blockObj->gettx() < t_begin || blockObj->gettx() > t_end)
         flags[3] *= -1;
 }
@@ -81,7 +81,7 @@ void Block::gravityEvents(vector<Block*> & obj_list)
     if (gravity_range > 0.0)
     {
         for (int j=1; flags[j] > -1 && j<10; j++)
-            obj_list[flags[j]]->getObj()->trans_lengthical(-0.001);
+            obj_list[flags[j]]->getObj()->translateY(-0.001);
 
         gravity_range -= 0.0005;
 

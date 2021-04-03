@@ -1,6 +1,7 @@
-#include "GL/gl.h"
-#include "SDL/SDL.h"
-#include "gl/glu.h"
+
+#include <SDL/SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #include "Application.h"
 #include "Object.h"
@@ -17,31 +18,29 @@ int main(int argc, char *argv[])
     if (argc > 1 && !strcmp(argv[1], "-editor"))
         strcpy(levelpath, argv[2]);
 
-    int quit;/* Az Application fo ciklusanak a futasat jelzi.
-        Ha az erteke igazra allitodik, akkor az Application a
-        kovetkezo iteracio elejen kilep.*/
+    ApplicationState appState; // Az Application fo ciklusanak a futasat jelzi.
 
     Application * application;
     srand(time(0));
 
 begin_prog:
 
-    application = new Application("Ball Breaker 3D v2.0beta2", levelpath); //kepernyo inicializalasa
+    application = new Application("Ball Breaker 3D v2.0beta2", levelpath, &appState); //kepernyo inicializalasa
 
-    quit = 0; //kilepes feltetele
+    appState = RUN; //kilepes feltetele
 
-    while (!quit) //a fo ciklus kezdete
+    while (appState == RUN) //a fo ciklus kezdete
     {
-        application->handleSDL2Events(quit); //az esemenyvezerlo megnyitasa (pl billentyuzetkezeles)
+        application->handleSDL2Events(); //az esemenyvezerlo megnyitasa (pl billentyuzetkezeles)
         application->render(); //kepernyo osszeallitasa
     }
 
     delete application;
-    if (quit == 2)
-    {
-        SDL_Quit();
+    if (appState == RESTART)
         goto begin_prog;
-    }
+
+    printf("Program has ended normaly");
+    SDL_Quit();
 
     return 0;
 }
