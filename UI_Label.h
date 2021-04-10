@@ -14,6 +14,7 @@ public:
     ~UI_Label();
     void rendering();
     void setText(const char * _text);
+    void setText(const int & number);
     const char * getText();
     bool clicked(const int mouse_x, const int mouse_y, const int width, const int height);
 private:

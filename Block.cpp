@@ -57,7 +57,7 @@ void Block::moving()
     float moving = flags[3]/1000.0;
 
     blockObj->translateX(moving);
-    if (blockObj->gettx() < t_begin || blockObj->gettx() > t_end)
+    if (blockObj->getTX() < t_begin || blockObj->getTX() > t_end)
         flags[3] *= -1;
 }
 
@@ -93,7 +93,7 @@ void Block::gravityEvents(vector<Block*> & obj_list)
 
 void Block::addGravityRange()
 {
-    gravity_range = blockObj->getsy();
+    gravity_range = blockObj->getSY();
 }
 
 int * Block::getflag()

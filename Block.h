@@ -6,10 +6,6 @@
 
 class Block
 {
-private:
-    Object * blockObj;
-    int * flags;
-    float gravity_range;
 public:
     Block(Object * _block, int * _flags);
     ~Block();
@@ -26,6 +22,10 @@ public:
     void addGravityRange();
     void gravityEvents(vector<Block*> & obj_list);
     int * getflag();
+private:
+    Object * blockObj;
+    int * flags;
+    float gravity_range;
 };
 
 #endif //Block_H

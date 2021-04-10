@@ -1,5 +1,10 @@
 #include "Model.h"
 
+#include <fstream>
+#include <string>
+#include <iostream>
+#include "helpers/sconvert.h"
+
 list<Model*> Model::global_model;
 
 Model::Model(char * objPath)
@@ -15,15 +20,17 @@ Model::Model(char * objPath)
 
     //get mesh numbers in one object and material names
     meshCountOnObject = 0;
-    FILE * file = fopen(*(objnames.begin()), "r");
-    while (!feof(file))
+    std::ifstream file(*(objnames.begin()));
+
+    while (file.good())
     {
-        char str[256];
-        fscanf(file, "%s", str);
-        if (!strcmp(str, "o"))
+        std::string str;
+
+        file >> str;
+        if (str == "o")
             meshCountOnObject++;
     }
-    fclose(file);
+    file.close();
 
     mesh = new eMesh[meshCountOnObject*animation_length];
 
@@ -97,14 +104,15 @@ Model::Model(float x, float y)
     );
 
     eCalcMeshNormals(mesh);
+    strcpy(objname, "rectangle");
 }
 
 Model::~Model()
 {
-    if (meshCountOnObject*animation_length > 1)
-        delete [] mesh;
-    else
+    if (strcmp(objname, "rectangle") == 0)
         delete mesh;
+    else
+        delete [] mesh;
 }
 
 Model * Model::createModel(char * objname)
@@ -156,8 +164,8 @@ eMesh* & Model::getMesh()
 
 void Model::LoadMeshFromOBJ(char *file, const int & begin)
 {
-    FILE *fd = fopen(file, "rb");
-    if (file == 0)
+    std::ifstream fd(file);
+    if (!fd.is_open())
     {
         fprintf(stderr, "Error during loading obj file: %s\n", file);
         return;
@@ -165,121 +173,121 @@ void Model::LoadMeshFromOBJ(char *file, const int & begin)
 
     int mesh_ptr=begin-1;
 
-    if (fd)
+    vector<eCoord3f> vertexlist;
+
+    int maxfacesNum=0;
+    int current_maxfacesNum=0;
+
+    while (fd.good())
     {
-        vector<eCoord3f> vertexlist;
-
-        int maxfacesNum=0;
-        int current_maxfacesNum=0;
-
-        while (!feof(fd))
+        std::string str;
+        fd >> str;
+        std::cout << str << std::endl;
+        if (fd.eof())
         {
-            char str[256];
-            fscanf(fd, "%s", str);
-            if (feof(fd))
+            break;
+        }
+
+        if (str == "o")
+        {
+            maxfacesNum = current_maxfacesNum + 1;
+            mesh_ptr++;
+
+            vertexlist.clear();
+        }
+        else if (str == "f")
+        {
+            int a, b, c;
+
+            fd >> a >> b >> c;
+            if (a > current_maxfacesNum)
+                current_maxfacesNum = a;
+            if (b > current_maxfacesNum)
+                current_maxfacesNum = b;
+            if (c > current_maxfacesNum)
+                current_maxfacesNum = c;
+
+            if (fd.eof())
             {
                 break;
             }
 
-            if (!strcmp(str, "o"))
+            a-=maxfacesNum;
+            b-=maxfacesNum;
+            c-=maxfacesNum;
+
+            Face face;
+            TexCoord texcoords;
+            Face normalcoords;
+
+            face.a = vertexlist[a];
+            face.b = vertexlist[b];
+            face.c = vertexlist[c];
+            texcoords.a.x = 1.0f;
+            texcoords.a.y = 0.0f;
+            texcoords.b.x = 1.0f;
+            texcoords.b.y = 1.0f;
+            texcoords.c.x = 0.0f;
+            texcoords.c.y = 1.0f;
+
+            mesh[mesh_ptr].faces.insert(face);
+            mesh[mesh_ptr].texcoords.insert(texcoords);
+
+            b = c;
+
+            while (fd.good())
             {
-                maxfacesNum = current_maxfacesNum+1;
-                mesh_ptr++;
-
-                vertexlist.clear();
-            }
-            else if (!strcmp(str, "f"))
-            {
-                int a, b, c;
-
-                fscanf(fd, "%d %d %d", &a, &b, &c);
-                if (a > current_maxfacesNum)
-                    current_maxfacesNum = a;
-                if (b > current_maxfacesNum)
-                    current_maxfacesNum = b;
-                if (c > current_maxfacesNum)
-                    current_maxfacesNum = c;
-
-                if (feof(fd))
+                std::string str;
+                fd >> str;
+                if (fd.eof())
                 {
                     break;
                 }
 
-                a-=maxfacesNum;
-                b-=maxfacesNum;
-                c-=maxfacesNum;
-
-                Face face;
-                TexCoord texcoords;
-                Face normalcoords;
-
-                face.a = vertexlist[a];
-                face.b = vertexlist[b];
-                face.c = vertexlist[c];
-                texcoords.a.x = 1.0f;
-                texcoords.a.y = 0.0f;
-                texcoords.b.x = 1.0f;
-                texcoords.b.y = 1.0f;
-                texcoords.c.x = 0.0f;
-                texcoords.c.y = 1.0f;
-
-                mesh[mesh_ptr].faces.insert(face);
-                mesh[mesh_ptr].texcoords.insert(texcoords);
-
-                b = c;
-
-                while (!feof(fd))
+                if (str == "f" || str == "o")
                 {
-                    char str[256];
-                    fscanf(fd, "%s", str);
-                    if (feof(fd))
-                    {
-                        break;
-                    }
-
-                    if (!strcmp(str, "f") || !strcmp(str, "o"))
-                    {
-                        int offset = -strlen(str);
-                        fseek(fd, offset, SEEK_CUR);
-                        break;
-                    }
-                    else
-                    {
-                        sscanf(str, "%d", &c);
-                        c-=maxfacesNum;
-
-                        face.a = vertexlist[a];
-                        face.b = vertexlist[b];
-                        face.c = vertexlist[c];
-                        texcoords.a.x = 1.0f;
-                        texcoords.a.y = 0.0f;
-                        texcoords.b.x = 1.0f;
-                        texcoords.b.y = 1.0f;
-                        texcoords.c.x = 0.0f;
-                        texcoords.c.y = 1.0f;
-
-                        mesh[mesh_ptr].faces.insert(face);
-                        mesh[mesh_ptr].texcoords.insert(texcoords);
-                        b = c;
-                    }
-                }
-            }
-            else if (!strcmp(str, "v"))
-            {
-                eCoord3f v;
-                fscanf(fd, "%f %f %f", &v.x, &v.y, &v.z);
-
-                if (feof(fd))
-                {
+                    int offset = -(str.length());
+                    fd.seekg(offset, fd.cur);
                     break;
                 }
+                else
+                {
+                    c = std::stoi(str);
 
-                vertexlist.insert(v);
+                    c-=maxfacesNum;
+
+                    face.a = vertexlist[a];
+                    face.b = vertexlist[b];
+                    face.c = vertexlist[c];
+                    texcoords.a.x = 1.0f;
+                    texcoords.a.y = 0.0f;
+                    texcoords.b.x = 1.0f;
+                    texcoords.b.y = 1.0f;
+                    texcoords.c.x = 0.0f;
+                    texcoords.c.y = 1.0f;
+
+                    mesh[mesh_ptr].faces.insert(face);
+                    mesh[mesh_ptr].texcoords.insert(texcoords);
+                    b = c;
+                }
             }
         }
+        else if (str == "v")
+        {
+            eCoord3f v;
+            fd >> v.x >> v.y >> v.z;
 
-        fclose(fd);
+            if (fd.eof())
+            {
+                break;
+            }
+
+            vertexlist.insert(v);
+        }
     }
+
+    fd.close();
+
 }
 
 void Model::eCalcMeshNormals(eMesh *m)

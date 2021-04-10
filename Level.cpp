@@ -91,26 +91,26 @@ void Level::load(char * path)
 void Level::rendering()
 {
     for (int i=0; i<level_objects.size(); i++)
-        level_objects[i]->getObj()->rendering(0);
+        level_objects[i]->getObj()->rendering();
 
-    aljzat->rendering(0);
-    fal1->rendering(0);
-    fal2->rendering(0);
-    fal3->rendering(0);
+    aljzat->rendering();
+    fal1->rendering();
+    fal2->rendering();
+    fal3->rendering();
     if (wall > 0 && wall < 20 || wall > 40 && wall < 60 || wall > 80 && wall < 100 || wall > 120)
-        fal4->rendering(0);
+        fal4->rendering();
 }
 
 void Level::cameraAnimation()
 {
-    if (Object::getcx() < level_x - 0.2)
-        Object::setcx(Object::getcx() + 0.2);
+    if (Object::getCX() < level_x - 0.2)
+        Object::setcx(Object::getCX() + 0.2);
 
-    if (Object::getcy() < level_y - 0.2)
-        Object::setcy(Object::getcy() + 0.2);
+    if (Object::getCY() < level_y - 0.2)
+        Object::setcy(Object::getCY() + 0.2);
 
-    if (Object::getcz() < level_z - 0.2)
-        Object::setcz(Object::getcz() + 0.2);
+    if (Object::getCZ() < level_z - 0.2)
+        Object::setcz(Object::getCZ() + 0.2);
 }
 
 

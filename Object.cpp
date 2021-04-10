@@ -42,7 +42,7 @@ Object::Object(float tx, float ty, float tz, int rx, int ry, int rz, float sx, f
 
 Object::~Object()
 {
-    if (!strncmp(objname, "rectangle", 7))
+    if (strncmp(objname, "rectangle", 7) == 0)
         delete model;
     else
         Model::deleteModel(model);
@@ -87,7 +87,7 @@ void Object::eRenderMesh()
     }
 }
 
-void Object::rendering(const int & i)
+void Object::rendering()
 {
     if (active)
     {
@@ -186,47 +186,47 @@ void Object::setRZ(const int & z)
     this->rotate.z = z;
 }
 
-float Object::gettx()
+float Object::getTX()
 {
     return transform.x;
 }
 
-float Object::getty()
+float Object::getTY()
 {
     return transform.y;
 }
 
-float Object::gettz()
+float Object::getTZ()
 {
     return transform.z;
 }
 
-float Object::getcx()
+float Object::getCX()
 {
     return cx;
 }
 
-float Object::getcy()
+float Object::getCY()
 {
     return cy;
 }
 
-float Object::getcz()
+float Object::getCZ()
 {
     return cz;
 }
 
-float Object::getsx()
+float Object::getSX()
 {
     return scale.x;
 }
 
-float Object::getsy()
+float Object::getSY()
 {
     return scale.y;
 }
 
-float Object::getsz()
+float Object::getSZ()
 {
     return scale.z;
 }
@@ -346,20 +346,20 @@ bool Object::operator ==(Object & other)
     {
         if (other.getry() == 0 || other.getry() == 180)
         {
-            if (this->gettx() + this->getsx()  > other.gettx() - (other.getsx()/* *(space/100.0)*/)  &&
-            this->gettx() - this->getsx()  < other.gettx() + (other.getsx()/* *(space/100.0)*/)  &&
-            this->gettz() + this->getsz()  > other.gettz() - (other.getsz()/* *(space/100.0)*/)  &&
-            this->gettz() - this->getsz()  < other.gettz() + (other.getsz()/* *(space/100.0)*/) )
+            if (this->getTX() + this->getSX()  > other.getTX() - (other.getSX()/* *(space/100.0)*/)  &&
+            this->getTX() - this->getSX()  < other.getTX() + (other.getSX()/* *(space/100.0)*/)  &&
+            this->getTZ() + this->getSZ()  > other.getTZ() - (other.getSZ()/* *(space/100.0)*/)  &&
+            this->getTZ() - this->getSZ()  < other.getTZ() + (other.getSZ()/* *(space/100.0)*/) )
                 return true;
             else
                 return false;
         }
         else
         {
-            if (this->gettx() + this->getsx()  > other.gettx() - (other.getsz()/* *(space/100.0)*/)  &&
-            this->gettx() - this->getsx()  < other.gettx() + (other.getsz()/* *(space/100.0)*/)  &&
-            this->gettz() + this->getsz()  > other.gettz() - (other.getsx()/* *(space/100.0)*/)  &&
-            this->gettz() - this->getsz()  < other.gettz() + (other.getsx()/* *(space/100.0)*/) )
+            if (this->getTX() + this->getSX()  > other.getTX() - (other.getSZ()/* *(space/100.0)*/)  &&
+            this->getTX() - this->getSX()  < other.getTX() + (other.getSZ()/* *(space/100.0)*/)  &&
+            this->getTZ() + this->getSZ()  > other.getTZ() - (other.getSX()/* *(space/100.0)*/)  &&
+            this->getTZ() - this->getSZ()  < other.getTZ() + (other.getSX()/* *(space/100.0)*/) )
                 return true;
             else
                 return false;

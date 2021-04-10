@@ -60,7 +60,7 @@ void doQuit(void * _menu)
     *(menu->appState) = QUIT;
 }
 
-Menu::Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top * top, ApplicationState * appState,
+Menu::Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top * top,
     void (*startGame)(void*), void* application) :
     appState(appState), sounds(appsettings), State(appsettings, event, keystates)
 {
@@ -82,39 +82,40 @@ Menu::Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top *
         strcpy(off_title, "off");
     }
 
+    mainPanel.addUI_Button(new UI_Button(-0.03, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             "Fonts/english/start.bmp;Fonts/english/start_c.bmp", &showLevels, this));
+
+    char temp[32];
+    sprintf(temp, "%s/settings.bmp;%s/settings_c.bmp", lang_path, lang_path);
+    mainPanel.addUI_Button(new UI_Button(0.0, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &showSettings, this));
+
+    sprintf(temp, "%s/scores.bmp;%s/scores_c.bmp", lang_path, lang_path);
+    mainPanel.addUI_Button(new UI_Button(0.03, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &showScores, this));
+
+    sprintf(temp, "%s/help.bmp;%s/help_c.bmp", lang_path, lang_path);
+    mainPanel.addUI_Button(new UI_Button(0.06, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &showHelp, this));
+
+    sprintf(temp, "%s/about.bmp;%s/about_c.bmp", lang_path, lang_path);
+    mainPanel.addUI_Button(new UI_Button(0.09, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &showAbout, this));
+
+    sprintf(temp, "%s/quit.bmp;%s/quit_c.bmp", lang_path, lang_path);
+    mainPanel.addUI_Button(new UI_Button(0.12, -0.098, //koordinatak
+                             0.007, 0.014, //atmeretezes
+                             temp, &doQuit, this));
+
+    
     title = new UI(0.0, 0.0, //koordinatak
                              0.0675, 0.09, //atmeretezes
                              "Textures/title.bmp", STRECH_TEXTURED);
-
-
-    mainButtons[0] = new UI_Button(-0.03, -0.098, //koordinatak
-                             0.007, 0.014, //atmeretezes
-                             "Fonts/english/start.bmp;Fonts/english/start_c.bmp", &showLevels, this);
-    char temp[32];
-    sprintf(temp, "%s/settings.bmp;%s/settings_c.bmp", lang_path, lang_path);
-    mainButtons[1] = new UI_Button(0.0, -0.098, //koordinatak
-                             0.007, 0.014, //atmeretezes
-                             temp, &showSettings, this);
-
-    sprintf(temp, "%s/scores.bmp;%s/scores_c.bmp", lang_path, lang_path);
-    mainButtons[2] = new UI_Button(0.03, -0.098, //koordinatak
-                             0.007, 0.014, //atmeretezes
-                             temp, &showScores, this);
-
-    sprintf(temp, "%s/help.bmp;%s/help_c.bmp", lang_path, lang_path);
-    mainButtons[3] = new UI_Button(0.06, -0.098, //koordinatak
-                             0.007, 0.014, //atmeretezes
-                             temp, &showHelp, this);
-
-    sprintf(temp, "%s/about.bmp;%s/about_c.bmp", lang_path, lang_path);
-    mainButtons[4] = new UI_Button(0.09, -0.098, //koordinatak
-                             0.007, 0.014, //atmeretezes
-                             temp, &showAbout, this);
-
-    sprintf(temp, "%s/quit.bmp;%s/quit_c.bmp", lang_path, lang_path);
-    mainButtons[5] = new UI_Button(0.12, -0.098, //koordinatak
-                             0.007, 0.014, //atmeretezes
-                             temp, &doQuit, this);
 
     mainButtons[6] = new UI_Button(0.0, -0.08, //koordinatak
                              0.007, 0.014, //atmeretezes
@@ -177,11 +178,11 @@ Menu::Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top *
     {
         sprintf(temp, "%d", top[i].score);
         score_titles[i] = new UI_Label(0.02, 0.053-0.0105*i, //koordinatak
-                             0.0025, 0.0012, //atmeretezes
+                             0.002, 0.002, //atmeretezes
                              "Fonts/letters", temp);
 
         player_titles[i] = new UI_Label(-0.05, 0.053-0.0105*i, //koordinatak
-                             0.0025, 0.0012, //atmeretezes
+                             0.002, 0.002, //atmeretezes
                              "Fonts/letters", top[i].name);
     }
 
@@ -230,6 +231,14 @@ void Menu::handleEvents()
 
 }
 
+void Menu::hanldeSDLEvents()
+{
+    mainPanel.handleEvents();
+
+    for (int i = 0; i < max_package; i++)
+        levelTitles[i]->buttonEvents();
+}
+
 void Menu::rendering()
 {
     for (int i=0; i<10; i++)
@@ -237,8 +246,9 @@ void Menu::rendering()
         score_titles[i]->rendering();
         player_titles[i]->rendering();
     }
-    for (int i = 0; i < 7; i++)
-        mainButtons[i]->rendering();
+    
+    mainPanel.rendering();
+
     for (int i = 0; i < 4; i++)
         panels[i]->rendering();
     title->rendering();

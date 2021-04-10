@@ -3,7 +3,7 @@
 
 #include "UI_Label.h"
 #include "UI_Button.h"
-#include "State.h"
+#include "Panel.h"
 #include "Game.h"
 #include "Sound.h"
 
@@ -16,10 +16,11 @@ struct StartGameParams
 class Menu : public State
 {
     public:
-        Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top * top, ApplicationState * appState,
+        Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top * top,
             void (*startGame)(void*),void* application);
         virtual ~Menu();
         virtual void handleEvents();
+        virtual void hanldeSDLEvents();
         virtual void rendering();
     protected:
     private:
@@ -35,6 +36,12 @@ class Menu : public State
         int max_package;
         char on_title[4];
         char off_title[4];
+        Panel mainPanel;
+        Panel levelPanel;
+        Panel settingsPanel;
+        Panel aboutPanel;
+        Panel scorePanel;
+        Panel helpPanel;
         UI_Button * mainButtons[7];
         UI * title;
         UI * panels[4];

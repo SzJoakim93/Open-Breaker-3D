@@ -31,11 +31,7 @@ Texture::Texture(char * texturePath)
 Texture::~Texture()
 {
     glDeleteTextures(texCountOnObjects, texture);
-    
-    if (texCountOnObjects > 1)
-        delete [] texture;
-    else
-        delete texture;
+    delete [] texture;
 }
 
 Texture * Texture::createTextures(char * texture)

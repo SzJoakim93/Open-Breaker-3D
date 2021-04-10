@@ -13,14 +13,6 @@
 
 class Texture
 {
-private:
-    char texname[64];
-    GLuint* texture;
-    int texCountOnObjects;
-    int texCount;
-    void loadBMPTexture(char *filename, GLuint & textureid);
-    char createTextureFromSDLSurface(SDL_Surface *surf, GLuint & textureid);    
-    static list<Texture*> global_texture;
 public:
     Texture(char * texturePath);
     ~Texture();
@@ -33,6 +25,14 @@ public:
 
     static Texture * createTextures(char * texture);
     static void deleteTexture(Texture * texture);
+private:
+    char texname[64];
+    GLuint* texture;
+    int texCountOnObjects;
+    int texCount;
+    void loadBMPTexture(char *filename, GLuint & textureid);
+    char createTextureFromSDLSurface(SDL_Surface *surf, GLuint & textureid);    
+    static list<Texture*> global_texture;
 };
 
 #endif //Texture_H

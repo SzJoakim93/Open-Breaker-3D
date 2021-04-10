@@ -10,6 +10,7 @@ OBJS = main.cpp \
 	Menu.cpp \
 	Model.cpp \
 	Object.cpp \
+	Panel.cpp \
 	Player.cpp \
 	Sound.cpp \
 	State.cpp \
@@ -26,7 +27,12 @@ CC = g++
 COMPILER_FLAGS = -w -g
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lmingw32 -lSDLmain -lSDL -lSDL_mixer -lOpenGL32 -lglu32
+
+ifeq ($(OS),Windows_NT)
+	LINKER_FLAGS = -lMingw32 -lSDLmain -lSDL -lSDL_mixer -lOpenGL32 -lglu32
+else
+	LINKER_FLAGS = -lMingw32 -lSDL -lSDL_mixer -lOpenGL32 -lGLU
+endif
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = bb

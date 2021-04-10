@@ -18,7 +18,7 @@ class Application
         Application(char *frame_title, char * levelpath, ApplicationState * appState);
         ~Application();
         void eLoadProjectionMatrix(int width, int height, float near, float far);
-        void handleSDL2Events();
+        void handleSDLEvents();
         void render();
     protected:
     private:

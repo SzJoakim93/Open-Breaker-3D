@@ -3,19 +3,17 @@
 SDL_Event * UI_Button::event;
 const int * UI_Button::width;
 const int * UI_Button::height;
-vector<UI_Button*> UI_Button::buttonList;
 
 UI_Button::UI_Button(float tx, float ty, float sx, float sy, char* texname, void (*callBack)(void*), void* object) :
     UI(tx, ty, sx, sy, texname, STRECH_TEXTURED)
 {
     this->callBack = callBack;
     this->object = object;
-    buttonList.insert(this);
 }
 
 UI_Button::~UI_Button()
 {
-    buttonList.remove(this);
+
 }
 
 bool UI_Button::mouseOver()
@@ -43,9 +41,15 @@ bool UI_Button::mouseOver()
         event->button.y > GL_to_SDL_Y(transform_absolute.y + scale.x)*screen_scaler;
 }
 
-bool UI_Button::click()
+void UI_Button::click()
 {
-    return event->button.state == SDL_BUTTON_LEFT && mouseOver();
+    callBack(object);
+}
+
+void UI_Button::setMark(const bool x)
+{
+    if (texture->getCountOnObject() > 1)
+        switchTexture(x ? 1 : 0);
 }
 
 void UI_Button::initButtonEvents(SDL_Event * _event, const int * _width, const int * _height)
@@ -57,15 +61,14 @@ void UI_Button::initButtonEvents(SDL_Event * _event, const int * _width, const i
 
 void UI_Button::buttonEvents()
 {
-    for (int i = 0; i < buttonList.size(); i++)
-        if (buttonList[i]->mouseOver())
-        {
-            if (buttonList[i]->texture->getCountOnObject() > 1 && buttonList[i]->getCurrentTexture() == 0)
-                buttonList[i]->switchTexture(1);
+    if (mouseOver())
+    {
+        if (texture->getCountOnObject() > 1 && getCurrentTexture() == 0)
+            switchTexture(1);
 
-            if (event->button.state == SDL_BUTTON_LEFT)
-                buttonList[i]->callBack(buttonList[i]->object);
-        }
-        else if (buttonList[i]->getCurrentTexture() == 1)
-            buttonList[i]->switchTexture(0);
+        if (event->button.state == SDL_BUTTON_LEFT)
+            callBack(object);
+    }
+    else if (getCurrentTexture() == 1 && event->type == SDL_MOUSEMOTION)
+        switchTexture(0);
 }

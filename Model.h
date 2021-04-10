@@ -1,8 +1,6 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <cstdio>
-
 #include "FileManager.h"
 #include "Coord.h"
 

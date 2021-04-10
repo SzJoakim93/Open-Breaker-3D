@@ -2,7 +2,9 @@
 
 void backToMenu(void* _application)
 {
-
+    Application * application = (Application*)(_application);
+    application->game->stop();
+    application->state = application->menu;
 }
 
 void startGame(void* _params)
@@ -45,9 +47,9 @@ Application::Application(char *frame_title, char * levelpath, ApplicationState *
 
     fprintf(stdout, "Top list loaded.\n");
 
-    menu = new Menu(&appsettings, &event, keystates, top, appState, &startGame, this);
+    menu = new Menu(&appsettings, &event, keystates, top, &startGame, this);
     fprintf(stdout, "Menu loaded.\n");
-    game = new Game(&appsettings, &event, keystates, levelpath, top);
+    game = new Game(&appsettings, &event, keystates, levelpath, top, &backToMenu, this);
     fprintf(stdout, "Game initialized.\n");
     state = menu;
 
@@ -83,6 +85,7 @@ Application::Application(char *frame_title, char * levelpath, ApplicationState *
     glEnable(GL_LIGHT0);
     glEnableClientState(GL_NORMAL_ARRAY);
 
+    Panel::initEvents(&event, keystates, appsettings.getWidth(), appsettings.getHeight());
     UI_Button::initButtonEvents(&event, &appsettings.getWidth(), &appsettings.getHeight());
 
     fprintf(stdout, "Framework initialized\n");
@@ -119,11 +122,10 @@ void Application::eLoadProjectionMatrix(int width, int height, float near, float
     gluPerspective(45, (float) width / (float) height, near, far);
 }
 
-void Application::handleSDL2Events()
+void Application::handleSDLEvents()
 {
     while (SDL_PollEvent(&event))
     {
-        UI_Button::buttonEvents();
         if (keystates[SDLK_ESCAPE])
         {
             if (state == menu)
@@ -135,7 +137,7 @@ void Application::handleSDL2Events()
             }
         }
 
-        UI_Button::buttonEvents();
+        state->hanldeSDLEvents();
     }
 
     state->handleEvents();

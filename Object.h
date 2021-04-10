@@ -30,7 +30,7 @@ class Object
             float sx, float sy, float sz,
             Uint32 flags, char* texname, char* objname);
         ~Object();
-        void rendering(const int & i);
+        void rendering();
         static void cameraTranslateZ(const float & x); //kamera mozgasa elore
         static void cameraTranslateX(const float & x); //kamera mozgasa oldalra
         static void cameraTranslateY(const float & x); //kamera mozgasa fel
@@ -62,15 +62,15 @@ class Object
         static void set_rCameraX(const float & x);
         static void set_rCameraY(const float & y);
         //getterek:
-        float gettx();
-        float getty();
-        float gettz();
-        static float getcx();
-        static float getcy();
-        static float getcz();
-        float getsx();
-        float getsy();
-        float getsz();
+        float getTX();
+        float getTY();
+        float getTZ();
+        static float getCX();
+        static float getCY();
+        static float getCZ();
+        float getSX();
+        float getSY();
+        float getSZ();
         int getrx();
         int getry();
         int getrz();

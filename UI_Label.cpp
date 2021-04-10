@@ -49,7 +49,6 @@ void UI_Label::rendering()
                 }
                 else if (title[i] == '.')
                     glBindTexture(GL_TEXTURE_2D, texture->getTexture(46));
-                
 
                 glDrawArrays(GL_TRIANGLES, 0, model->getMesh()[0].faces.size() * 3);
 
@@ -68,12 +67,17 @@ void UI_Label::rendering()
 
 void UI_Label::setGlobalScale()
 {
-    
+
 }
 
 void UI_Label::setText(const char * _text)
 {
     strcpy(title, _text);
+}
+
+void UI_Label::setText(const int & number)
+{
+    sprintf(title, "%d", number);
 }
 
 const char * UI_Label::getText()
@@ -89,7 +93,7 @@ bool UI_Label::clicked(const int mouse_x, const int mouse_y, const int width, co
     -0.1f -> 88
     0.0f -> 320
     0.1f -> 552
-    
+
     Y:
     -0.1f -> 472
     0.0f -> 240

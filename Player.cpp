@@ -53,11 +53,6 @@ void Player::increaseScore(const int x)
     score += x;
 }
 
-void Player::decreaseLife()
-{
-    life--;
-}
-
 void Player::increaseLife(const int x)
 {
     life += x;
@@ -66,11 +61,6 @@ void Player::increaseLife(const int x)
 void Player::increaseAmmo(const int x)
 {
     ammo += x;
-}
-
-void Player::decreaseAmmo()
-{
-    ammo--;
 }
 
 void Player::setGrip(const bool x)

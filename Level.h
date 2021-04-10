@@ -6,6 +6,22 @@
 
 class Level
 {
+public:
+    Level(const int level);
+    ~Level();
+    void load(char * path);
+    void rendering();
+    void events();
+    void cameraAnimation();
+    void manageCollision(Ball * ball, Object * ammo);
+    void decreaseBlock();
+    void setWall(const int x);
+    const float getSize();
+    const int getBlockNum();
+    const int getNum();
+    const vector<Block*> & getObjs();
+    const bool isCompleted();
+    const bool isWall();
 private:
     vector<Block*> level_objects;
     Object * aljzat;
@@ -23,23 +39,6 @@ private:
     float level_y;
     float level_z;
     int wall;
-
-public:
-    Level(const int level);
-    ~Level();
-    void load(char * path);
-    void rendering();
-    void events();
-    void cameraAnimation();
-    void manageCollision(Ball * ball, Object * ammo);
-    void decreaseBlock();
-    void setWall(const int x);
-    const float getSize();
-    const int getBlockNum();
-    const int getNum();
-    const vector<Block*> & getObjs();
-    const bool isCompleted();
-    const bool isWall();
 };
 
 #endif // LEVEL_H

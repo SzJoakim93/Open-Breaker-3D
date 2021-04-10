@@ -74,7 +74,7 @@ public:
         {
             if (values[i] == value)
                 for (int j = i; j < current_num-1; j++)
-                    value[j] = value[j+1];
+                    values[j] = values[j+1];
             break;
         }
 

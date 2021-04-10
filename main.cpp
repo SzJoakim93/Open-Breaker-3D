@@ -31,7 +31,7 @@ begin_prog:
 
     while (appState == RUN) //a fo ciklus kezdete
     {
-        application->handleSDL2Events(); //az esemenyvezerlo megnyitasa (pl billentyuzetkezeles)
+        application->handleSDLEvents(); //az esemenyvezerlo megnyitasa (pl billentyuzetkezeles)
         application->render(); //kepernyo osszeallitasa
     }
 
@@ -39,7 +39,7 @@ begin_prog:
     if (appState == RESTART)
         goto begin_prog;
 
-    printf("Program has ended normaly");
+    printf("Program has ended normally\n");
     SDL_Quit();
 
     return 0;

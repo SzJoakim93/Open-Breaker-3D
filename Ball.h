@@ -6,13 +6,6 @@
 
 class Ball
 {
-private:
-    bool active;
-    Object * ballObj;
-    float ballspeed_x;
-    float ballspeed_y;
-    float ballspeed;
-    static char active_balls;
 public:
     Ball(Object * _ball, bool _active);
     ~Ball();
@@ -39,6 +32,15 @@ public:
     void setSpeed(const float x);
     void increaseSpeed(const float x);
     static char getActiveBalls();
+    static void setSounds(Sound * _sounds);
+private:
+    bool active;
+    Object * ballObj;
+    float ballspeed_x;
+    float ballspeed_y;
+    float ballspeed;
+    static char active_balls;
+    static Sound * sounds;
 };
 
 #endif // Ball_H
