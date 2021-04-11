@@ -31,6 +31,12 @@ void Panel::handleEvents()
 
     for (int i = 0; i < buttons.size(); i++)
         buttons[i]->buttonEvents();
+}
+
+void Panel::handleKeyEvents()
+{
+    if (!active)
+        return;
 
     if (keystates[SDLK_UP])
         switchFocus(-1);
@@ -55,6 +61,11 @@ void Panel::rendering()
 bool Panel::isActive()
 {
     return active;
+}
+
+void Panel::setActive(const bool x)
+{
+    active = x;
 }
 
 void Panel::switchFocus(const int x)

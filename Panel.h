@@ -15,8 +15,10 @@ public:
     void addUI(UI* ui);
     void addUI_Button(UI_Button* button);
     void handleEvents();
+    void handleKeyEvents();
     void rendering();
     bool isActive();
+    void setActive(const bool x);
     static void initEvents(SDL_Event* _event, Uint8* _keystates, const int _width, const int _height);
 private:
     static SDL_Event * event;

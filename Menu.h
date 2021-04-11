@@ -42,6 +42,7 @@ class Menu : public State
         Panel aboutPanel;
         Panel scorePanel;
         Panel helpPanel;
+        Panel * activePanel;
         UI_Button * mainButtons[7];
         UI * title;
         UI * panels[4];

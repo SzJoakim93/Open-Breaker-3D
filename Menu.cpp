@@ -4,54 +4,41 @@ void showMain(void * _menu)
 {
     Menu * menu = (Menu*)_menu;
     menu->hideAll();
-    menu->title->setActive(true);
 }
 
 void showLevels(void* _menu)
 {
     Menu* menu = (Menu*)_menu;
     menu->hideAll();
-    menu->frame->setActive(true);
-    for (int i=0; i<menu->max_package; i++)
-        menu->levelTitles[i]->setActive(true);
+    menu->levelPanel.setActive(true);
 }
 
 void showSettings(void * _menu)
 {
     Menu* menu = (Menu*)_menu;
     menu->hideAll();
-    menu->panels[3]->setActive(true);
-    menu->mainButtons[6]->setActive(true);
+    menu->settingsPanel.setActive(true);
 }
 
 void showScores(void * _menu)
 {
     Menu* menu = (Menu*)_menu;
     menu->hideAll();
-    for (int i = 0; i < 10; i++)
-    {
-        menu->score_titles[i]->setActive(true);
-        menu->player_titles[i]->setActive(true);
-    }
-
-    menu->panels[2]->setActive(true);
-    menu->mainButtons[6]->setActive(true);
+    menu->scorePanel.setActive(true);
 }
 
 void showHelp(void * _menu)
 {
     Menu* menu = (Menu*)_menu;
     menu->hideAll();
-    menu->panels[0]->setActive(true);
-    menu->mainButtons[6]->setActive(true);
+    menu->helpPanel.setActive(true);
 }
 
 void showAbout(void * _menu)
 {
     Menu* menu = (Menu*)_menu;
     menu->hideAll();
-    menu->panels[1]->setActive(true);
-    menu->mainButtons[6]->setActive(true);
+    menu->aboutPanel.setActive(true);
 }
 
 void doQuit(void * _menu)
@@ -113,9 +100,9 @@ Menu::Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top *
                              temp, &doQuit, this));
 
     
-    title = new UI(0.0, 0.0, //koordinatak
+    mainPanel.addUI(new UI(0.0, 0.0, //koordinatak
                              0.0675, 0.09, //atmeretezes
-                             "Textures/title.bmp", STRECH_TEXTURED);
+                             "Textures/title.bmp", STRECH_TEXTURED));
 
     mainButtons[6] = new UI_Button(0.0, -0.08, //koordinatak
                              0.007, 0.014, //atmeretezes
@@ -124,24 +111,23 @@ Menu::Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top *
 
     strcpy(temp, lang_path);
     strcat(temp, "/Help_w.bmp");
-    panels[0] = new UI(0.0, 0.0, //koordinatak
+    helpPanel.addUI(new UI(0.0, 0.0, //koordinatak
                              0.11, 0.11, //atmeretezes
-                             temp, STRECH_TEXTURED);
+                             temp, STRECH_TEXTURED));
 
     strcpy(temp, lang_path);
     strcat(temp, "/About_w.bmp");
-    printf("%s\n", temp);
-    panels[1] = new UI(0.0, 0.0, //koordinatak
+    aboutPanel.addUI(new UI(0.0, 0.0, //koordinatak
                              0.055, 0.11, //atmeretezes
-                             temp, STRECH_TEXTURED);
+                             temp, STRECH_TEXTURED));
 
-    panels[2] = new UI(0.0, 0.0, //koordinatak
+    scorePanel.addUI(new UI(0.0, 0.0, //koordinatak
                              0.0775, 0.11, //atmeretezes
-                             "Fonts/english/scores_w.bmp", STRECH_TEXTURED);
+                             "Fonts/english/scores_w.bmp", STRECH_TEXTURED));
 
-    panels[3] = new UI(0.0, 0.0, //koordinatak
+    settingsPanel.addUI(new UI(0.0, 0.0, //koordinatak
                              0.11, 0.11, //atmeretezes
-                             "Fonts/english/settings_w.bmp", STRECH_TEXTURED);
+                             "Fonts/english/settings_w.bmp", STRECH_TEXTURED));
 
     frame = new UI(-0.06, 0.06, //koordinatak
                              0.03, 0.03, //atmeretezes
@@ -154,6 +140,8 @@ Menu::Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top *
                                 0.0025, 0.0012, //atmeretezes
                                 "Fonts/letters", STRECH_TEXTURED);
 
+    activePanel = &mainPanel;
+
     FILE * packages = fopen("Levels/Packages.txt", "r");
     fscanf(packages, "%d\n", &max_package);
     levelTitles = new UI_Button* [max_package];
@@ -165,9 +153,9 @@ Menu::Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top *
         startGameParams[j].application = application;
         startGameParams[j].level = (j*10)+1;
         fscanf(packages, "%s\n", char_game_titles);
-        levelTitles[j] = new UI_Button(-0.06+0.06*j, 0.06, //koordinatak
+        levelPanel.addUI_Button(new UI_Button(-0.06+0.06*j, 0.06, //koordinatak
                                 0.025, 0.025, //atmeretezes
-                                char_game_titles, startGame, &startGameParams[j]);
+                                char_game_titles, startGame, &startGameParams[j]));
     }
 
     fclose(packages);
@@ -234,42 +222,24 @@ void Menu::handleEvents()
 void Menu::hanldeSDLEvents()
 {
     mainPanel.handleEvents();
-
-    for (int i = 0; i < max_package; i++)
-        levelTitles[i]->buttonEvents();
+    levelPanel.handleEvents();
+    activePanel->handleKeyEvents();
 }
 
 void Menu::rendering()
-{
-    for (int i=0; i<10; i++)
-    {
-        score_titles[i]->rendering();
-        player_titles[i]->rendering();
-    }
-    
+{    
+    levelPanel.rendering();
+    scorePanel.rendering();
+    helpPanel.rendering();
+    aboutPanel.rendering();
+    settingsPanel.rendering();
     mainPanel.rendering();
-
-    for (int i = 0; i < 4; i++)
-        panels[i]->rendering();
-    title->rendering();
-    for (int i = 0; i < max_package; i++)
-        levelTitles[i]->rendering();
-    frame->rendering();
 }
 
 void Menu::hideAll()
 {
-    for (int i=0; i<4; i++)
-        panels[i]->setActive(false);
-    for (int i=0; i<max_package; i++)        
-        levelTitles[i]->setActive(false);
-    frame->setActive(false);
-    title->setActive(false);
-    mainButtons[6]->setActive(false);
-
-    for (int i = 0; i < 10; i++)
-    {
-        score_titles[i]->setActive(false);
-        player_titles[i]->setActive(false);
-    }
+    settingsPanel.setActive(false);
+    helpPanel.setActive(false);
+    aboutPanel.setActive(false);
+    scorePanel.setActive(false);
 }
