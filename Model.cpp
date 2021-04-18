@@ -164,7 +164,7 @@ eMesh* & Model::getMesh()
 
 void Model::LoadMeshFromOBJ(char *file, const int & begin)
 {
-    std::ifstream fd(file);
+    std::ifstream fd(file, std::ifstream::binary);
     if (!fd.is_open())
     {
         fprintf(stderr, "Error during loading obj file: %s\n", file);
@@ -182,7 +182,7 @@ void Model::LoadMeshFromOBJ(char *file, const int & begin)
     {
         std::string str;
         fd >> str;
-        std::cout << str << std::endl;
+
         if (fd.eof())
         {
             break;
@@ -246,7 +246,7 @@ void Model::LoadMeshFromOBJ(char *file, const int & begin)
 
                 if (str == "f" || str == "o")
                 {
-                    int offset = -(str.length());
+                    int offset = -str.length();
                     fd.seekg(offset, fd.cur);
                     break;
                 }

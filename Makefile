@@ -31,7 +31,7 @@ COMPILER_FLAGS = -w -g
 ifeq ($(OS),Windows_NT)
 	LINKER_FLAGS = -lMingw32 -lSDLmain -lSDL -lSDL_mixer -lOpenGL32 -lglu32
 else
-	LINKER_FLAGS = -lMingw32 -lSDL -lSDL_mixer -lOpenGL32 -lGLU
+	LINKER_FLAGS = -lSDL -lSDL_mixer -lGL -lGLU
 endif
 
 #OBJ_NAME specifies the name of our exectuable

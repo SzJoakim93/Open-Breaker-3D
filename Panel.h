@@ -13,7 +13,9 @@ public:
     Panel(/* args */);
     ~Panel();
     void addUI(UI* ui);
+    void addUI_Label(UI_Label* label);
     void addUI_Button(UI_Button* button);
+    void addFrame(UI* frame);
     void handleEvents();
     void handleKeyEvents();
     void rendering();
@@ -25,7 +27,9 @@ private:
     static Uint8* keystates;
     static int width;
     static int height;
+
     vector<UI*> elements;
+    vector<UI_Label*> labels;
     vector<UI_Button*> buttons;
     int activeBtn;
     UI* frame;

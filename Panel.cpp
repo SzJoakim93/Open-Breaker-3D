@@ -6,12 +6,18 @@ int Panel::width;
 int Panel::height;
 
 Panel::Panel(/* args */) :
-    active(true), activeBtn(-1)
+    active(true), activeBtn(0), frame(NULL)
 {
 }
 
 Panel::~Panel()
 {
+    for (int i = 0; i < elements.size(); i++)
+        delete elements[i];
+    for (int i = 0; i < labels.size(); i++)
+        delete labels[i];
+    for (int i = 0; i < buttons.size(); i++)
+        delete buttons[i];                
 }
 
 void Panel::addUI(UI* ui)
@@ -19,9 +25,22 @@ void Panel::addUI(UI* ui)
     elements.insert(ui);
 }
 
+void Panel::addUI_Label(UI_Label* label)
+{
+    labels.insert(label);
+}
+
 void Panel::addUI_Button(UI_Button* button)
 {
+    button->setFrame(frame);
     buttons.insert(button);
+}
+
+void Panel::addFrame(UI* frame)
+{
+    this->frame = frame;
+    for (int i = 0; i < buttons.size(); i++)
+        buttons[i]->setFrame(frame);
 }
 
 void Panel::handleEvents()
@@ -51,11 +70,17 @@ void Panel::rendering()
     if (!active)
         return;
 
+    for (int i = 0; i < buttons.size(); i++)
+        buttons[i]->rendering();
+
+    for (int i = 0; i < labels.size(); i++)
+        labels[i]->rendering();
+
     for (int i = 0; i < elements.size(); i++)
         elements[i]->rendering();
 
-    for (int i = 0; i < buttons.size(); i++)
-        buttons[i]->rendering();
+    if (frame)
+        frame->rendering();
 }
 
 bool Panel::isActive()
@@ -70,21 +95,21 @@ void Panel::setActive(const bool x)
 
 void Panel::switchFocus(const int x)
 {
-    if (activeBtn > -1)
-        buttons[activeBtn]->setMark(false);
-    
-    if (activeBtn == -1)
+    buttons[activeBtn]->setMark(false);
+
+    activeBtn += x;
+    if (activeBtn >= buttons.size())
         activeBtn = 0;
-    else
-    {
-        activeBtn += x;
-        if (activeBtn >= buttons.size())
-            activeBtn = 0;
-        else if (activeBtn < 0)
-            activeBtn = buttons.size() - 1;
-    }
+    else if (activeBtn < 0)
+        activeBtn = buttons.size() - 1;
 
     buttons[activeBtn]->setMark(true);
+    
+    if (frame)
+    {
+        frame->setTX(buttons[activeBtn]->getTX());
+        frame->setTY(buttons[activeBtn]->getTY());
+    }
 }
 
 void Panel::initEvents(SDL_Event* _event, Uint8* _keystates, const int _width, const int _height)

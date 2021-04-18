@@ -17,7 +17,7 @@ class Menu : public State
 {
     public:
         Menu(Appsettings * appsettings, SDL_Event * event, Uint8* keystates, Top * top,
-            void (*startGame)(void*),void* application);
+        ApplicationState& appState, void (*startGame)(void*),void* application);
         virtual ~Menu();
         virtual void handleEvents();
         virtual void hanldeSDLEvents();
@@ -26,16 +26,13 @@ class Menu : public State
     private:
         int cursor; //kurzor hanyadik menuponton van 0-tol kezdve
         int maxcursor; //maximum hany menupont van
-        //Multi_UI * level_UIs;
-        ApplicationState * appState;
+        ApplicationState& appState;
         StartGameParams * startGameParams;
         int DB;
 
         char musicList[30][18];
         char levelList[30][18];
         int max_package;
-        char on_title[4];
-        char off_title[4];
         Panel mainPanel;
         Panel levelPanel;
         Panel settingsPanel;
@@ -43,20 +40,7 @@ class Menu : public State
         Panel scorePanel;
         Panel helpPanel;
         Panel * activePanel;
-        UI_Button * mainButtons[7];
         UI * title;
-        UI * panels[4];
-        UI_Label * score_titles[10];
-        UI_Label * player_titles[10];
-        UI * sound_title;
-        UI * music_title;
-        UI ** screen_settings;
-        UI * custom_title;
-        UI * custom_res;
-        UI * frame;
-        UI_Button ** levelTitles;
-        UI * lang_title;
-        UI * res_title;
         int selected;
         bool set_selected;
         char players[10][10];

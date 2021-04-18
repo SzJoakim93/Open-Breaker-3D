@@ -47,7 +47,7 @@ Application::Application(char *frame_title, char * levelpath, ApplicationState *
 
     fprintf(stdout, "Top list loaded.\n");
 
-    menu = new Menu(&appsettings, &event, keystates, top, &startGame, this);
+    menu = new Menu(&appsettings, &event, keystates, top, *appState, &startGame, this);
     fprintf(stdout, "Menu loaded.\n");
     game = new Game(&appsettings, &event, keystates, levelpath, top, &backToMenu, this);
     fprintf(stdout, "Game initialized.\n");

@@ -5,7 +5,7 @@ const int * UI_Button::width;
 const int * UI_Button::height;
 
 UI_Button::UI_Button(float tx, float ty, float sx, float sy, char* texname, void (*callBack)(void*), void* object) :
-    UI(tx, ty, sx, sy, texname, STRECH_TEXTURED)
+    UI(tx, ty, sx, sy, texname, STRECH_TEXTURED), frame(NULL)
 {
     this->callBack = callBack;
     this->object = object;
@@ -52,6 +52,11 @@ void UI_Button::setMark(const bool x)
         switchTexture(x ? 1 : 0);
 }
 
+void UI_Button::setFrame(UI* frame)
+{
+    this->frame = frame;
+}
+
 void UI_Button::initButtonEvents(SDL_Event * _event, const int * _width, const int * _height)
 {
     event = _event;
@@ -65,6 +70,11 @@ void UI_Button::buttonEvents()
     {
         if (texture->getCountOnObject() > 1 && getCurrentTexture() == 0)
             switchTexture(1);
+        if (frame && (frame->getTX() != transform.x || frame->getTY() != transform.y))
+        {
+            frame->setTX(transform.x);
+            frame->setTY(transform.y);
+        }
 
         if (event->button.state == SDL_BUTTON_LEFT)
             callBack(object);

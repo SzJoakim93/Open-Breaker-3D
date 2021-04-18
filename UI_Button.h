@@ -11,10 +11,12 @@ public:
     void buttonEvents();
     void click();
     void setMark(const bool x);
+    void setFrame(UI* frame);
     static void initButtonEvents(SDL_Event * _event, const int * _width, const int * _height);
 private:
     void (*callBack)(void*);
     void* object;
+    UI* frame;
     bool mouseOver();
     static SDL_Event * event;
     static const int * width;
